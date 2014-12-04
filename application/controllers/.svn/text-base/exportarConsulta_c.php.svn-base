@@ -1,0 +1,175 @@
+<?php
+//$this->export->excelReporteHistorico($datos, 'nombreArchivohistorico'); 
+	class ExportarConsulta_c extends CI_Controller{
+			
+			function __construct() {
+				parent::__construct();
+				$this->config->base_url();
+				$this->load->library('export');	
+			}
+			
+			public function index()	{
+					//sin elementos			
+				}
+			function exportarBandejaConsulta($bandera){
+				switch ($bandera) {
+					case 0: $bandeja="consulta_de_indicadores";
+						break;
+					case 1: $bandeja="consulta_de_variables_de_gestion";
+						break;
+					case 2: $bandeja="consulta_historico_indicador";
+						break;
+					case 3: $bandeja="consulta_historico_variable_de_gestion";
+						break;
+				}
+				/*recuperar datos*/
+				$datos = $this->input->post('arregloDatos');
+				$datos = json_decode($datos);
+				$arrayDatos = $this->objeto_a_arreglo($datos);
+				$datosExcel = $this->extraerDatosReporte($arrayDatos,$bandera);				
+				
+				$this->export->excelExportarBandeja($datosExcel, $bandeja);
+			}
+			
+		function objeto_a_arreglo($datos) {
+		    if (is_array($datos) || is_object($datos)) {
+		        $resultado = array();
+		        foreach ($datos as $key => $value) {
+		            $resultado[$key] = $this->objeto_a_arreglo($value);
+		        }
+		        return $resultado;
+		    }
+		    return $datos;
+		}
+		
+		function extraerDatosReporte($arrayDatos,$bandera){
+			$datos=array();
+			$tabla=array();
+			if($bandera==0){
+				foreach ($arrayDatos as $key => $value) {
+					if(isset($value['identificador'])) $tabla[$key]['identificador']=$value['identificador'];
+					if(isset($value['nombreIndicador'])) $tabla[$key]['nombreIndicador']=$value['nombreIndicador'];
+					if(isset($value['tipoEvaluacion'])) $tabla[$key]['tipoEvaluacion']=$value['tipoEvaluacion'];
+					if(isset($value['nombreEvaluacion'])) $tabla[$key]['nombreEvaluacion']=$value['nombreEvaluacion'];
+					if(isset($value['periodicidad'])) $tabla[$key]['periodicidad']=$value['periodicidad'];
+					if(isset($value['estatus'])) $tabla[$key]['estatus']=$value['estatus'];
+				}
+				$datos['encabezados']= Array (
+		            'indice' => 'ID',
+		            'indicador' => 'Nombre del indicador',
+		            'tipoprog' => 'Tipo de programa',
+					'programa' => 'Nombre del programa',
+					'periodicidad'=>'Periodicidad',
+					'estatus'=>'Estatus'
+		        );
+				
+				$elemento="indicadores";
+			}
+			if($bandera==1){
+				foreach ($arrayDatos as $key => $value) {
+					if(isset($value['nombreVariableGenerica'])) $tabla[$key]['nombreVariableGenerica']=$value['nombreVariableGenerica'];
+					if(isset($value['tipoEvaluacion'])) $tabla[$key]['tipoEvaluacion']=$value['tipoEvaluacion'];
+					if(isset($value['nombreEvaluacion'])) $tabla[$key]['nombreEvaluacion']=$value['nombreEvaluacion'];
+					if(isset($value['periodicidad'])) $tabla[$key]['periodicidad']=$value['periodicidad'];
+					if(isset($value['estatusVariableGenerica'])) $tabla[$key]['estatusVariableGenerica']=$value['estatusVariableGenerica'];
+				}
+				
+				$datos['encabezados']= Array (
+		            'nombre' => 'Nombre de la variable de gestión',
+		            'tipoprog' => 'Tipo de programa',
+					'programa' => 'Nombre del programa',
+					'periodicidad'=>'Periodicidad',
+					'estatus'=>'Estatus'
+		        );
+								
+				$elemento="variables de gestión";
+			} 
+			if($bandera==2){
+				/*Encabezados*/
+				$i=1;
+				$variables=array();
+				$datos['encabezados']['morosidad']='Morosidad';
+				$datos['encabezados']['periodo']='Periodo';			
+				foreach ($arrayDatos['detalleVariablesIndicador'] as $key => $value) {
+					$datos['encabezados']['Var'.$i]=$key;
+					$variables[$i]=$key;
+					$i++;
+				} 
+				$datos['encabezados']['archivo']='Archivo';		
+				/*tabla*/
+				$j=1;		
+				foreach ($arrayDatos['historicoIndicador'] as $key => $value) {
+					if(isset($value['diasDeRetraso']) && $value['diasDeRetraso']>0){ 
+					$tabla[$j]['morosidad']="Capturado con ".$value['diasDeRetraso']." días de retraso";
+					}else{
+						if($value['diasDeRetraso']<=0 && $value['diasDeRetraso']!='' && $value['diasDeRetraso']!=null){ $tabla[$j]['morosidad']='Sin retraso'; }
+						else{ $tabla[$j]['morosidad']='No capturado'; }
+					}
+					$tabla[$j]['periodo']="'".$key."'";
+					/*valores de variables*/
+						foreach ($variables as $variable => $nombre) {
+							if(isset($value[$nombre])){
+								$tabla[$j][$nombre]=$value[$nombre]['valorVariable'];
+							}else{
+								$tabla[$j][$nombre]="*";
+							}
+						}
+					if(isset($value['url']) && $value['url']!=''){ 
+						 $tabla[$j]['archivo']=$value['url'];
+					}else{
+						 $tabla[$j]['archivo']='Sin archivo';
+					}
+
+				$j++;
+				}
+								
+				$elemento="historico de indicador";				
+			}
+			if($bandera==3){
+				$datos['encabezados']= Array (
+		            'morosidad' => 'Morosidad',
+		            'periodo' => 'Periodo',
+					'valor' => 'Valor',
+					'archivo'=>'Archivo',
+		        );	
+				/*tabla*/
+				$j=1;		
+				foreach ($arrayDatos['valorHistoricoVG'] as $key => $value) {
+					if(isset($value['retraso']) && $value['retraso']>0){ 
+					$tabla[$j]['morosidad']="Capturado con ".$value['retraso']." días de retraso";
+					}else{
+						if($value['retraso']<=0 && $value['retraso']!='' && $value['retraso']!=null){
+							 $tabla[$j]['morosidad']='Sin retraso'; 
+						}
+						else{ $tabla[$j]['retraso']='No capturado'; }
+					}
+					if(isset($value['descripcion_periodo'])) $tabla[$j]['periodo']="'".$value['descripcion_periodo']." ".$value['anio']."'";
+					/*valores de variables*/
+					if(isset($value['valor_variable_generica'])) { $tabla[$j]['valor']=$value['valor_variable_generica']; }
+					else{$tabla[$j]['valor']="*"; }
+
+					if(isset($value['url']) && $value['url']!='' && $value['url']!=0){ 
+						 $tabla[$j]['archivo']=$value['url'];
+					}else{
+						 $tabla[$j]['archivo']='Sin archivo';
+					}
+
+				$j++;
+				}
+								
+				$elemento="historico de variable de gestión";				
+				
+			}
+
+			/*Titulo del reporte*/
+			$datos['titulo']=Array (
+		            'tipo_de_reporte' => 'Consulta de ',
+		            'elemento' => $elemento,
+		        );
+			/*cuerpo del reporte*/
+		   $datos['tabla']= $tabla;
+		   
+		return $datos;
+		}
+}
+?>

@@ -1,0 +1,174 @@
+ var varsFiltroVG=null;
+function filtrarVariablesGenericas(){
+	var id_ente=$('#selectEnte').val();
+	var id_periodicidad=$('#selectPeriodicidad').val();
+	var id_tipoEvaluacion=$('#selectTipoEvaluacion').val();
+	var id_estatus=$('#selectEstatus').val();
+	var id_nomEvaluacion=$('#selectNomEvaluacion').val();
+	//var rango=$('#rango').val();
+	if(id_nomEvaluacion==null || (id_nomEvaluacion=='') || (id_nomEvaluacion==' ')){
+		id_nomEvaluacion=0;
+		}
+
+	varsFiltroVG=null;
+	varsFiltroVG=base+"index.php/variableGenerica/consultaVariablesGenericas_c/mostrarVariablesGenericas/"+id_ente+"/"+id_tipoEvaluacion+"/"+id_nomEvaluacion+"/"+id_periodicidad+"/"+id_estatus+"/0";
+	
+		var url = base+'index.php/variableGenerica/consultaVariablesGenericas_c/mostrarVariablesGenericas/'+id_ente+'/'+id_tipoEvaluacion+'/'+id_nomEvaluacion+'/'+id_periodicidad+'/'+id_estatus+'/1';
+		//var data = 'rango='+rango;
+		var data='';
+		$.ajax({
+			async: false,			
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+	        	$('#consultaVariablesGenericas').empty();
+				$('#consultaVariablesGenericas').html(data);
+				//obtenerRango(0);
+	        },        
+	        error: function(){
+	           alert("no se pudo");
+	           alert(url);
+	        }
+	    });		
+	//llamar funciones para habilitar y marcar checkboxes	
+	habilitarCheckBoxVariablesGenericas();
+	marcarCheckBox();	    
+	    	
+}
+
+
+	// variables globales,  arrayIdsVariablesMarcadas; guarda los ids seleccionados para graficar, btnGraficarNivel guarda el id del nivel que se va a graficar
+	 arrayIdsVariablesMarcadas=[];
+	// graficarNivel=null;
+
+	function habilitarCheckBoxVariablesGenericas(){//cuando se cambia de periodo se inicializa el array arrayIdsVariablesMarcadas
+		elementos=false;
+		var tamArray = arrayIdsVariablesMarcadas.length
+		if(tamArray>0)//habilito el boton configurar cuando se ha seleccionado por lo menos un elemento
+			document.getElementById('btnConfigurarGrafica').disabled = false;
+		else
+			document.getElementById('btnConfigurarGrafica').disabled = true;				
+		var periodo=$('#selectPeriodicidad').val(); //habilito los checkbox de los indicadores que correspondan al periodo seleccionado		
+		if(periodo>1){//cuando se selecciona un periodo
+			$("input:checkbox").each(function(){
+			var array = $(this).val().split("-");		
+			if(array[2]!=undefined && array[2]==periodo) {
+				elementos=true;
+				document.getElementById(array[1]).style.display = 'block';
+				document.getElementById(array[1]).disabled = false;//si el periodo seleccionado corresponde al periodo del indicador se habilita el checkbox del indicador y el checkbox "seleccionar todos"
+			}else if(array[2]!=undefined && array[2]!=periodo){
+					document.getElementById("checkSeleccionarTodosLabel").style.display = 'none';				
+					document.getElementById("checkSeleccionarTodos").style.display = 'none';
+					document.getElementById("checkSeleccionarTodos").disabled = true; 
+					document.getElementById(array[1]).style.display = 'none';
+					document.getElementById(array[1]).disabled = true;//si no corresponde se inhabilita y se deja desmarcado
+					document.getElementById(array[1]).checked=0;}
+			});
+			if(elementos==true){
+				document.getElementById("checkSeleccionarTodosLabel").style.display = 'block';
+				document.getElementById("checkSeleccionarTodos").style.display = 'block';				
+				document.getElementById("checkSeleccionarTodos").disabled = false;//si el periodo seleccionado corresponde al periodo del indicador se habilita el checkbox
+				document.getElementById("checkSeleccionarTodos").checked=0;
+			}					
+		}else { //se deshabilitan los checkbox cuando no hay periodo valido y se desmarcan
+				document.getElementById("checkSeleccionarTodosLabel").style.display = 'none';			
+				document.getElementById("checkSeleccionarTodos").style.display = 'none';
+				document.getElementById("checkSeleccionarTodos").disabled = true;
+				$("input:checkbox").each(function(){
+					var array = $(this).val().split("-");
+					if(array[2]!=undefined){ document.getElementById(array[1]).style.display = 'none';
+						document.getElementById(array[1]).disabled = true;
+					document.getElementById(array[1]).checked=0;}
+					});
+			}
+	}
+	
+
+
+	function agregarIdVariable(idMarcado){
+		var periodo=$('#selectPeriodicidad').val(); //habilito los checkbox de los indicadores que correspondan al periodo seleccionado		
+		if(idMarcado==0){//cuando se lesecciona marcar todos
+			if(document.getElementById("checkSeleccionarTodos").checked) {//valida si se marco seleccionar todos, marco todos los ids y los agrego al arreglo
+				arrayIdsVariablesMarcadas.length=0;
+				$("input:checkbox").each(function(){
+					var array = $(this).val().split("-");
+					if(array[2]!=undefined && array[2]==periodo){
+						document.getElementById(array[1]).checked=1;
+						arrayIdsVariablesMarcadas[arrayIdsVariablesMarcadas.length] = array[1]; 						
+						}
+					});				
+				}else {//cuando seleccionar todos, se desmarca, recorre los checks y los saca del arreglo
+						$("input:checkbox").each(function(){
+						var array = $(this).val().split("-");
+						if(array[2]!=undefined && array[2]==periodo){
+							document.getElementById(array[1]).checked=0;
+							var posicion = arrayIdsVariablesMarcadas.indexOf(idMarcado);
+							arrayIdsVariablesMarcadas.splice( posicion, 1 ); 						
+							}
+						});		 
+				}			
+		}else{//cuando se selecciona uno por uno	
+			var array = idMarcado.split("-");//posicion 1 del array es el id del indicador y tambien el id del checkbox	
+			if(document.getElementById(array[1]).checked) {//valida si el id se marco
+				arrayIdsVariablesMarcadas[arrayIdsVariablesMarcadas.length] = array[1]; 
+				}else {//cuando el id se desmarca, busca la posición del elemento para sacarlo
+				var posicion = arrayIdsVariablesMarcadas.indexOf(array[1]);
+				arrayIdsVariablesMarcadas.splice( posicion, 1 ); 
+				}
+		}
+		var tamArray = arrayIdsVariablesMarcadas.length
+		if(tamArray>0)//habilito el boton configurar cuando se ha seleccionado por lo menos un elemento
+			document.getElementById('btnConfigurarGrafica').disabled = false;
+		else
+			document.getElementById('btnConfigurarGrafica').disabled = true;		
+	}
+	
+	
+	function marcarCheckBox(){	//recorro los checkbox y busco en el array, si estan los habilito y los marco
+		$("input:checkbox").each(function(){
+			var array = $(this).val().split("-");
+			if(array[2]!=undefined){
+				for(i=0; i<arrayIdsVariablesMarcadas.length; i++){//recorro el array
+					var indicador = arrayIdsVariablesMarcadas[i];				
+					if(array[1]==indicador){
+						document.getElementById(array[1]).disabled = false;
+						document.getElementById(array[1]).checked=1;
+					}
+				}
+			}
+		});		
+	}
+	
+
+/*
+	function solicitarAperturaCapturaVarGenericas(idUsuario){
+		alert('Esta acción enviará un correo al administrador del sistema para solicitar que la captura de variables de gestión se habilite a este usuario.');
+		id_usuario=idUsuario;
+		//alert(id_usuario);
+		var url= base + 'index.php/variableGenerica/habilitarCapturaVariablesGenericas_c/enviaCorreo/'+id_usuario;
+		var data = '';		
+		//alert(url);
+		$.ajax({	    
+				url: url,	    
+				data: data,	      
+				type: 'POST',	                
+				success: function(data){
+				//alert(data)
+			  	switch(data) {
+				    case "1":	alerta('121','alert-info');
+				    			//alert('La petición ha sido enviada al administrador de la CGMA y se ha informado al titular de la dependencia.');
+				        break;
+				    case "0":	alerta('120','alert-error');
+				    			//alert('Error al enviar correo');
+			  			break;
+				    default: 
+				    	window.open (base+"index.php/variableGenerica/habilitarCapturaVariablesGenericas_c/mensaje2/"+id_usuario,"mywindow","resizable=0,location=1,status=1,scrollbars=1,  width=650,height=650,left=200,top=50");
+					}			
+				 },	        
+					        error: function(){
+								alert(url);
+					           	alert("no se pudo");
+					        }	    
+				    });				
+	}*/

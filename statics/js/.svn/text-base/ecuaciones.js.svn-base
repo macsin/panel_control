@@ -1,0 +1,178 @@
+/**
+ * validarExpresion Contiene un AJAX el cual hace una llamada al controlador abcEcuaciones_c en la funcion validarExpresion para validar la expresion algebraica conforme a los requerimientos en el cuadro de ayuda
+ * @return {JSON} Exito, es una badera booleana, mensaje que se mostrara al usuario.
+ * @author Efrén Valdez Jasso
+ */
+function validarExpresion (){
+	var datos = new Array();
+	datos[1] = $('#txtNombreEcuacion').val();
+	datos[2] = $('#txtExpresionAlgebraica').val();
+	datos[3] = $('#txtNumeroVariables').val();
+	if (datos[1]==null || datos[1]=="" || (/^[\s]+[a-zA-Z0-9]*$/.test(datos[1]))) {
+		alerta('60','alert-error');
+		return false;
+	};
+	if (datos[2]==null || datos[2]=="" || (/^[\s]+[a-zA-Z0-9]*$/.test(datos[2]))) {
+		alerta('61','alert-error');
+		return false;
+	};
+	if (datos[3]==null || datos[2]=="" || datos[3] < 1) {
+		alerta('62','alert-error');
+		return false;
+	};
+	var url = base + 'index.php/abcCatalogos/abcEcuaciones_c/validarExpresion';
+	var data = JSON.stringify(datos);
+	$.ajax({
+		url: url,
+		data: {misDatos: data},
+		type: 'POST',
+		success: function(data){
+			var respuesta;
+			respuesta = JSON.parse(data);
+			// alert(respuesta.mensaje);
+			if (respuesta.exito) {
+				alerta(respuesta.mensaje,'alert-success');
+				$('#txtExpresionAlgebraica').val(respuesta.valor);
+				document.getElementById("btnGuardarValido").className = document.getElementById("btnGuardarValido").className.replace(/\bdisabled\b/,'');
+				// var element = document.getElementById("btnGuardarValido");
+				// $("#btnGuardarValido").click(function(){
+				// 	if (!($("#btnGuardarValido").hasClass("disabled"))) {
+				// 		guardarEcuacion();
+				// 	};
+				// });
+				// element.classList.add("btn btn-success boton-der");
+			} else {
+				alerta(respuesta.mensaje,'alert-error');
+				 $( "#cuadroAyuda" ).animate({
+				    opacity: 0.25,
+				  }, 1000, function() {
+					  $( "#cuadroAyuda" ).animate({
+					    opacity: 1,
+					  }, 1000);
+				  });
+			};
+		},
+		error: function(){
+			alerta('63','alert-error');
+			
+		},
+	});
+}
+
+/**
+ * quitarBotonGuardar Aplica al boton de "Guardar ecuación" la clase disabled para ocultarlo de la vista.
+ * @return {String} Mensaje en consola.
+ * @author Efrén Valdez Jasso
+ */
+function quitarBotonGuardar (){
+	var element = document.getElementById("btnGuardarValido");
+	element.classList.add("disabled");
+	
+}
+
+/**
+ * guardarEcuacion Obtiene los datos del formulario y los manda al controlador via AJAX
+ * @return {JSON} Contiene el resultado de la operación realizada.
+ * @author Efrén Valdez Jasso
+ */
+function guardarEcuacion() {
+	if (!($("#btnGuardarValido").hasClass("disabled"))) {
+		var datos = new Array();
+		datos[1] = $('#txtNombreEcuacion').val();
+		datos[2] = $('#txtExpresionAlgebraica').val();
+		datos[3] =  $('#txtNumeroVariables').val();
+		var url = base + 'index.php/abcCatalogos/abcEcuaciones_c/guardarEcuacion';
+		var data = JSON.stringify(datos);
+		$.ajax({
+			url: url,
+			data: {datosEcuacion: data},
+			type: 'POST',
+			success: function(data){
+				
+				if (data == 1) {
+					alerta('64','alert-success');
+					urlRecargar = base + 'index.php/abcCatalogos/abcEcuaciones_c/consultarEcuacionesActivas';
+					cargarContenido(urlRecargar);
+				} else {
+					alerta(data,'alert-info');
+					// alert(data);
+				};
+			},
+			error: function(){
+				
+				alerta(data,'alert-error');
+				// alert(data);
+				urlRecargar = base + 'index.php/abcCatalogos/abcEcuaciones_c/consultarEcuacionesActivas';
+				cargarContenido(urlRecargar);	
+			},
+
+		});
+	};
+}
+
+function filtrarEcuaciones() {
+	var id_estatus = $('#opEstatus').val();
+	if (id_estatus != 2) {
+		var url = base + 'index.php/abcCatalogos/abcEcuaciones_c/filtrarEcuaciones/'+id_estatus;
+		var data = '';
+
+		$.ajax({
+			url: url,
+			data: data,
+			type: 'POST',
+			success: function(data) {
+				$('#consultaEcuaciones').html(data);
+				
+			},
+			error: function(data) {
+				alert('74','alert-error');
+				
+			},
+		});
+	} else {
+		alerta('73','alert-info');
+	};
+}
+
+function editarEcuacion() {
+	
+	if (!($("#btnGuardarValido").hasClass("disabled"))) {
+		var datos = new Array();
+		datos[1] = $('#txtNombreEcuacion').val();
+		datos[2] = $('#txtExpresionAlgebraica').val();
+		datos[3] = $('#txtNumeroVariables').val();
+		datos[4] = $('#txtIdCatEcuacion').val();
+		var url = base + 'index.php/abcCatalogos/abcEcuaciones_c/editarEcuacion';
+		var data = JSON.stringify(datos);
+		$.ajax({
+			url: url,
+			data: {datosEcuacion: data},
+			type: 'POST',
+			success: function(data){
+				
+				if (data == 1) {
+					alerta('82','alert-success');
+					urlRecargar = base + 'index.php/abcCatalogos/abcEcuaciones_c/consultarEcuacionesActivas';
+					cargarContenido(urlRecargar);
+				} else {
+					alerta(data,'alert-info');
+					// alert(data);
+				};
+			},
+			error: function(){
+				
+				alerta(data,'alert-error');
+				// alert(data);
+				urlRecargar = base + 'index.php/abcCatalogos/abcEcuaciones_c/consultarEcuacionesActivas';
+				cargarContenido(urlRecargar);	
+			},
+
+		});
+	};
+}
+
+function desactivarEcuacion(controlador,mensaje) {
+	if (confirm('Esta acción desactivará la ecuación "'+mensaje+'" ¿está seguro que desea continuar?')) {
+		cargarContenido(controlador);
+	};
+}

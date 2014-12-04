@@ -1,0 +1,164 @@
+function filtrarProgramas (){
+	var tipo=$('#selectTipo').val();
+	var estatus=$('#selectEstatus').val();
+	
+	if(tipo==0 && estatus==2){
+		alerta('Debe seleccionar al menos un filtro','alert-error');
+	}else{
+		var url = base+'index.php/abcCatalogos/abcProgramas_c/consultarProgramas/'+tipo+'/'+estatus+'/1';
+		var data = '';
+		$.ajax({
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+				$('#consultaProgramas').html(data);
+	        },        
+	        error: function(){
+	           alert("Error al filtrar variables");
+	           alert(url);
+	        }
+	    });	
+	}
+}
+
+
+function desactivar(idPrograma,accion){
+	if(accion==0){
+		if(confirm('Esta acción desactivará los indicadores asociados al programa y el usuario NO podrá verlos en su bandeja. ¿Desea continuar?')){
+			cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/desactivarPrograma/'+idPrograma+'/'+accion);
+		}
+	}else{
+		if(confirm('Esta acción activará los indicadores asociados al programa y el usuario podrá verlos en su bandeja. ¿Desea continuar?')){
+			cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/desactivarPrograma/'+idPrograma+'/'+accion);
+		}
+	}
+	
+}
+
+
+
+function dasactivarTipo(idAgrupacion,accion){
+		if(accion==0){
+			if(confirm('Esta acción desactivará los indicadores asociados al tipo de programa y el usuario NO podrá verlos en su bandeja. ¿Desea continuar?')){
+				cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/dasactivarTipoPrograma/'+idAgrupacion+'/'+accion);
+			}
+		}else{
+			if(confirm('Esta acción activará los indicadores asociados al tipo de programa y el usuario podrá verlos en su bandeja. ¿Desea continuar?')){
+				cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/dasactivarTipoPrograma/'+idAgrupacion+'/'+accion);
+			}
+		}
+}
+ 
+ 
+function validatipoprograma(){
+	var nombreTipoPrograma = $('#nombreTipoPrograma').val();	
+	var perfilTipoPrograma = $('#perfilTipoUsuario').val(); 
+	var idTipoPrograma = $('#idTipoPrograma').val();
+
+	if(validar(nombreTipoPrograma) && perfilTipoPrograma!=''){
+		var url = base+'index.php/abcCatalogos/abcProgramas_c/validarNombreTipoPrograma';	
+		var data = 'nombreTipoPrograma='+nombreTipoPrograma+'&perfilTipoUsuario='+perfilTipoPrograma+'&idTipoPrograma='+idTipoPrograma;
+		
+		$.ajax({	    
+	        url: url,	    
+	        data: data,	        
+	        type: 'POST',	                
+	        success: function(data){
+	        	if(data==1){
+	        		alerta('95','alert-error');
+	        	}else{
+	        		alerta('97','alert-success')
+	        		cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/consultaTipoPrograma');
+	        	}				
+	        },	        
+	        error: function(){
+				alert(url);
+	           	alert("no se pudo");
+	        }	    
+	    });
+	}else{
+		
+		if(perfilTipoPrograma==''){
+		 	$('#perfilTipoUsuario').addClass('bordeRojo');
+		}else{
+			alerta('87','alert-error');
+		}
+		
+	}		
+}
+
+//valida que no se repita un nombre de programa
+//Nohemi
+function validaPrograma(){
+	var nombrePrograma = $('#nombre').val();	
+	var tipoPrograma = $('#tipoPrograma').val();
+	var idPrograma = $('#idPrograma').val();
+
+	if(validar(nombrePrograma) && tipoPrograma!=''){
+		var url = base+'index.php/abcCatalogos/abcProgramas_c/validarNombrePrograma';	
+		var data = 'nombre='+nombrePrograma+'&tipoPrograma='+tipoPrograma+'&idPrograma='+idPrograma;
+		//alert(data);
+		$.ajax({	    
+	        url: url,	    
+	        data: data,	        
+	        type: 'POST',	                
+	        success: function(data){
+	        //alert(data);
+	        	if(data==1){
+	        		alerta('96','alert-error');
+		      	 	document.formAltaPrograma.nombre.select()//selec texto  
+		      	 	document.formAltaPrograma.nombre.focus() //colocar foco 	        		
+	        	}else{
+	        		alerta('101','alert-success')
+	        		cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/consultarProgramas');
+	        	}				
+	        },	        
+	        error: function(){
+				alert(url);
+	           	alert("no se pudo");
+	        }	    
+	    });
+	}else{
+		
+		if(tipoPrograma==''){
+		 	$('#tipoPrograma').addClass('bordeRojo');
+		}else{
+			alerta('87','alert-error');
+		}
+		
+	}		
+}
+
+ function regresarBandeja(bandeja){
+ 
+	if(bandeja==1){
+		cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/consultarProgramas');
+	}
+	if(bandeja==2){
+		cargarContenido(base+'index.php/abcCatalogos/abcProgramas_c/consultaTipoPrograma');
+	}
+}
+
+function validarCampo(idcampo){
+	var campo=$('#'+idcampo).val();
+
+	if(validar(campo)){
+		return true;
+	}else{
+		alert('Sólo se permiten caracteres alfanúmericos.')
+		return false;
+	}
+}
+
+
+function validar(campo) {
+	
+       var pattern = /^[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÜ\,\.\-\_\:\;\"\s\'\(\)]+$/; 
+       var re = new RegExp(pattern);
+ 
+        if (campo.match(re))
+            return true;
+        else 
+            return false;
+}

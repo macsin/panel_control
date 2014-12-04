@@ -1,0 +1,153 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+	 
+class PruebaAle_c extends CI_Controller {
+	
+	function __construct() {
+        
+        parent::__construct();
+		
+        $this->config->base_url();
+		
+        $this->load->helper(array('html', 'url'));
+		
+		$this->load->library(array('session','etiquetas','export'));
+		$this->load->library('email','','correo');
+		$this->load->model('prueba_m');
+		
+		      
+    }
+	
+
+	function index(){
+		$datos=array(
+			'titulo' => Array
+	        (
+	            'tipo_de_informacion' => 'Del período',
+	            'periodo' => 'Enero',
+	            'anio' => '2013',
+	            'periodicidad' => 'Mensual'
+	        ),
+	
+	    'encabezados' => Array
+	        (
+	            'id' => 'Id',
+	            'indicador' => 'Indicador',
+				'ente' => 'Ente',
+	            'avance_real' => 'Avance real',
+	            'meta' => 'Meta',
+	            'variacion' => 'Variación'
+	        ),
+	
+	    'tabla' => Array
+	        (
+	            '1' => Array
+	                (
+	                    'registro' => '1',
+	                    'id' => '1.1.1.1',
+	                    'indicador' => 'Indicador 1',
+						'ente' => 'Ente',
+	                    'avance_real' => '17',
+	                    'meta' => '25',
+	                    'variacion' => '2'
+	                ),
+	
+	            '2' => Array
+	                (
+	                    'registro' => '2',
+	                    'id' => '1.1.1.2',
+	                    'indicador' => 'Indicador 2',
+						'ente' => 'Ente',
+	                    'avance_real' => '14',
+	                    'meta' => '32',
+	                    'variacion' => '-4'
+	                ),
+	
+	            '3' => Array
+	                (
+	                    'registro' => '3',
+	                    'id' => '1.1.1.3',
+	                    'indicador' =>' Indicador 3',
+						'ente' => 'Ente',
+	                    'avance_real' => '16',
+	                    'meta' => '32',
+	                    'variacion' => '4'
+	                ),
+	
+	            '4' => Array
+	                (
+	                    'registro' =>' 4',
+	                    'id' => '1.1.1.4',
+	                    'indicador' => 'Indicador 4',
+						'ente' => 'Ente',
+	                    'avance_real' => '25',
+	                    'meta' => '12',
+	                    'variacion' => '-5'
+	                ),
+	
+	            '5' => Array
+	                (
+	                    'registro' => '5',
+	                    'id' => '1.1.1.5',
+	                    'indicador' => 'Indicador 5',
+						'ente' => 'Ente',
+	                    'avance_real' => '25',
+	                    'meta' => '25',
+	                    'variacion' => '0'
+	                )
+	
+	        ),
+	
+	    'operaciones' => Array
+	        (
+	            '1' => Array
+	                (
+	                    'nombre_operacion' => 'Promedio',
+	                    'datos' => Array
+	                        (
+	                            'avance_real' => '85',
+	                            'meta' => '36',
+	                            'variacion' => '44'
+	                        )
+	
+	                ),
+	
+	            '2' => Array
+	                (
+	                    'nombre_operacion' => 'Varianza',
+	                    'datos' => Array
+	                        (
+	                            'avance_real' => '5',
+	                            'meta' => '6',
+	                            'variacion' => '4'
+	                        )
+	
+	                ),
+	
+	            '3' => Array
+	                (
+	                    'nombre_operacion' => 'Desviación estandar',
+	                    'datos' => Array
+	                        (
+	                            'avance_real' => '185',
+	                            'meta' => '3.6',
+	                            'variacion' => '4.4'
+	                        )
+	
+	                )
+	
+	        )
+			
+		);
+		
+		$this->export->excelReporte($datos, 'nameForFile'); 
+	}
+
+	function consultaPGD(){
+		$filtro=array(
+			'objetivo'=>2
+		);
+		$datos=$this->prueba_m->consultaPGD(3,0,$filtro);
+		echo "<pre>";
+		print_r($datos);
+	}
+}?>

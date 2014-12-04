@@ -1,0 +1,11 @@
+<?php
+class Rutas{
+
+	function proyecto(){
+		$datos='sistemaMonitoreo/';
+		
+		return $datos;		
+	}
+	
+}
+?>

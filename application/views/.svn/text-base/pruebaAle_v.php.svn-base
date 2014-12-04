@@ -1,0 +1,62 @@
+<style>
+	.containerPlazos{
+		width:800px;
+	}
+	.plazoCaptura,.plazoReporte{
+		width:365px;
+	}
+	.plazoCaptura{
+		float:left;
+	}
+	.plazoReporte{
+		float:right;
+	}
+	.espacioPlazos{
+		width:50px
+	}
+	.containCaptura,.containReporte{
+		padding:10px;
+		border:1px solid #ccc;
+		-webkit-border-radius: 5px 5px 5px 5px;
+		border-radius: 5px 5px 5px 5px;
+		-webkit-box-shadow: 0 2px 2px 2px #ADADAD;
+		box-shadow: 0 2px 2px 2px #ADADAD;
+		
+	}
+	.containCaptura{
+		height:160px;
+	}
+	.containReporte{
+		padding:60px;
+		border:1px solid #ccc;
+	}
+</style>
+<div class="container">
+	Periodicidad del indicador:
+	<select>
+		<?php foreach($cat_periodicidad as $key=>$value){?>
+			<option value="<?php echo $key;?>"><?php echo $value;?></option>
+		<?php }?>
+		
+	</select>
+	<div class="containerPlazos">
+		<div class="plazoCaptura">
+			Plazo actual de captura:
+			<div class="containCaptura">
+				Fecha de inicio: <input type="date" /><br>
+				Días naturales de plazo: <input type="number" class="input-small"/><br>
+				Fecha de fin: <input type="date" />
+				<input type="button" value="Actualizar" class="btn flotar-der"/>
+			</div>
+		</div>
+		<div class="espacioPlazos"></div>
+		<div class="plazoReporte">
+			Plazo actual a reportar:
+			<div class="containReporte">
+				Fecha de inicio:<br><br>
+				Fecha de fin:
+			</div>
+		</div>		
+		<div class="clear"></div>		
+	</div>
+</div>

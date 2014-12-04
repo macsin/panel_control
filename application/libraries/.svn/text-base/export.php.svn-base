@@ -1,0 +1,221 @@
+<?php 
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class Export{
+    
+    function excelReporte($datos, $filename) {
+        header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename='.$filename.'.xls');
+		$ancho=count($datos['encabezados'])+1;
+		echo '<table><tr>';
+			echo '<td colspan="'.$ancho.'"><b><center>'.utf8_decode($datos['titulo']['tipo_de_informacion']).' '.utf8_decode($datos['titulo']['periodo'])
+				.'-'.utf8_decode($datos['titulo']['anio']).'. Periodicidad: '.utf8_decode($datos['titulo']['periodicidad']).'.</center></b></td>';
+ 		echo '</tr></table>';
+       	echo '<table border="1"><tr><th>No.</th>';
+        foreach($datos['encabezados'] as $key=>$value) {
+            $value = ucwords($value);
+            echo '<th>'.utf8_decode($value).'</th>';
+        }
+        echo '</tr>';
+        foreach($datos['tabla'] as $key=>$value){
+           	echo '<tr>';
+			foreach ($value as $id => $valor) {
+				echo '<td>'.utf8_decode($valor).'</td>';     
+			}                         
+			echo '</tr>';  
+        }
+        echo '</table>'; 
+		
+		if($datos['operaciones']){
+			echo '<table><tr><td colspan="10"></td></tr></table>';
+			unset($datos['encabezados']['id']);
+			unset($datos['encabezados']['indicador']);
+			unset($datos['encabezados']['ente']);
+			echo '<table border="1"><tr>';
+				echo '<th>'.utf8_decode('Operación').'</th>';
+				foreach ($datos['encabezados'] as $key => $value) {
+					$value = ucwords($value);
+            		echo '<th>'.utf8_decode($value).'</th>';
+					
+				}
+				foreach ($datos['operaciones'] as $indice => $elementos) {
+					echo '<tr>';	
+						echo '<td>'.utf8_decode($elementos['nombre_operacion']).'</td>'; 
+						foreach ($elementos['datos'] as $operacion => $valor) {
+							echo '<td>'.utf8_decode($valor).'</td>';  
+						}
+					echo '</tr>';  
+				}
+			echo '</tr></table>';
+		}
+    }
+
+    function excelReporteHistorico($datos, $filename) {
+        header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename='.$filename.'.xls');
+		$ancho=count($datos['encabezados'])+1;
+		echo '<table><tr>';
+			echo '<td colspan="'.$ancho.'"><b><center>';
+				foreach ($datos['titulo'] as $key => $value) {
+					$value = ucwords($value);
+					echo utf8_decode($value).' '; }	'.</center></b></td>';	echo '</tr></table>';
+       	echo '<table border="1"><tr><th>No.</th>';
+        foreach($datos['encabezados'] as $key=>$value) {
+            $value = ucwords($value);
+            echo '<th>'.utf8_decode($value).'</th>';
+        }
+        echo '</tr>'; $i=1;
+        foreach($datos['tabla'] as $key=>$value){
+           	echo '<tr>';
+			echo '<td>'.$i.'</td>';
+			foreach ($value as $id => $valor) {
+				echo '<td>'.utf8_decode($valor).'</td>';    
+			}
+			$i++; 
+			echo '</tr>';  
+        }
+        echo '</table>';
+		if(isset($datos['operaciones'])){
+			if($datos['operaciones']){
+				echo '<table><tr><td colspan="10"></td></tr></table>';
+	       		echo '<table border="1"><tr><th>No.</th>';			
+		        foreach($datos['operaciones']['encabezados'] as $key=>$value) {
+		            $value = ucwords($value);
+		            echo '<th>'.utf8_decode($value).'</th>';
+		        }			
+		        echo '</tr>'; $i=1;
+		        foreach($datos['operaciones']['tabla'] as $key=>$value){
+		           	echo '<tr>';
+					echo '<td>'.$i.'</td>';
+					foreach ($value as $id => $valor) {
+						echo '<td>'.utf8_decode($valor).'</td>';    
+					}
+					$i++;                         
+					echo '</tr>';  
+		        }
+		        echo '</table>'; 
+			}}		
+		if(isset($datos['tooltip'])){
+			if($datos['tooltip']['nombre_operacion']){
+				echo '<table><tr><td colspan="10"></td></tr></table>';
+	       		echo '<table border="1"><tr><th>No.</th>';			
+		        foreach($datos['tooltip']['nombre_operacion'] as $key=>$value) {
+		            $value = ucwords($value);
+		            echo '<th>'.utf8_decode($value).'</th>';
+		        }			
+		        echo '</tr>'; $i=1;
+		        foreach($datos['tooltip']['datos'] as $key=>$value){
+		           	echo '<tr>';
+					echo '<td>'.$i.'</td>';
+					foreach ($value as $id => $valor) {
+						echo '<td>'.utf8_decode($valor).'</td>';    
+					}
+					$i++;                         
+					echo '</tr>';  
+		        }
+		        echo '</table>'; 
+			}}	
+    }
+
+/*Genera Excel para reporte de variables genericas*/
+   function excelReportePorPeriodoVG($datos, $filename) {
+        header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename='.$filename.'.xls');
+		$ancho=count($datos['encabezados'])+1;
+		echo '<table><tr>';
+			echo '<td colspan="'.$ancho.'"><b><center>';
+				foreach ($datos['titulo'] as $key => $value) {
+					$value = ucwords($value);
+					echo utf8_decode($value).' '; }	'.</center></b></td>';	echo '</tr></table>';
+       	echo '<table border="1"><tr><th>No.</th>';
+        foreach($datos['encabezados'] as $key=>$value) {
+            $value = ucwords($value);
+            echo '<th>'.utf8_decode($value).'</th>';
+        }
+        echo '</tr>'; $i=1;
+        foreach($datos['tabla'] as $key=>$value){
+           	echo '<tr>';
+			echo '<td>'.$i.'</td>';
+			foreach ($value as $id => $valor) {
+				if($valor===FALSE)
+					$valor="*";
+				echo '<td style="text-align: right">'.utf8_decode($valor).'</td>';    
+			}
+			$i++; 
+			echo '</tr>';  
+        }
+        echo '</table>';
+		if(isset($datos['operaciones']) && $datos['operaciones']!=FALSE){
+			if($datos['operaciones']){
+				echo '<table><tr><td colspan="10"></td></tr></table>';
+	       		echo '<table border="1"><tr><th>No.</th>';
+				echo '<th>'.utf8_decode('Operación').'</th>';	
+				echo '<th>Resultado</th>';							
+		        echo '</tr>'; $i=1;
+				
+		        foreach($datos['operaciones'] as $key=>$value){
+		        	if($datos['operaciones'][$key]['datos']['valor'] === FALSE)
+						$datos['operaciones'][$key]['datos']['valor']="*";
+		           	echo '<tr>';
+					echo '<td>'.$i.'</td>';
+					echo '<td>'.utf8_decode($datos['operaciones'][$key]['nombre_operacion']).'</td>';
+					echo '<td style="text-align: right">'.utf8_decode($datos['operaciones'][$key]['datos']['valor']).'</td>';
+					$i++;                         
+					echo '</tr>';  
+		        }
+		        echo '</table>'; 
+			}}
+		
+		if(isset($datos['tooltip']) && $datos['tooltip']!=FALSE){
+			if($datos['tooltip']['nombre_operacion']){
+				echo '<table><tr><td colspan="10"></td></tr></table>';
+	       		echo '<table border="1"><tr><th>No.</th>';			
+		        foreach($datos['tooltip']['nombre_operacion'] as $key=>$value) {
+		            $value = ucwords($value);
+		            echo '<th>'.utf8_decode($value).'</th>';
+		        }			
+		        echo '</tr>'; $i=1;
+		        foreach($datos['tooltip']['datos'] as $key=>$value){
+		           	echo '<tr>';
+					echo '<td>'.$i.'</td>';
+					foreach ($value as $id => $valor) {
+						echo '<td>'.utf8_decode($valor).'</td>';    
+					}
+					$i++;                         
+					echo '</tr>';  
+		        }
+		        echo '</table>'; 
+			}}					
+
+    }
+
+	/*Exportar consulta de indicadores y variables genericas*/
+	function excelExportarBandeja($datos, $filename){
+		header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename='.$filename.'.xls');
+		$ancho=count($datos['encabezados'])+1;
+		echo '<table><tr>';
+		echo '<td colspan="'.$ancho.'"><b><center>';
+		foreach ($datos['titulo'] as $key => $value) {
+				$value = ucwords($value);
+				echo utf8_decode($value).' '; }	'.</center></b></td>';	echo '</tr></table>';
+       	echo '<table border="1"><tr><th>No.</th>';
+        foreach($datos['encabezados'] as $key=>$value) {
+            $value = ucwords($value);
+            echo '<th>'.utf8_decode($value).'</th>';
+        }
+        echo '</tr>'; $i=1;
+        foreach($datos['tabla'] as $key=>$value){
+           	echo '<tr>';
+			echo '<td>'.$i.'</td>';
+			foreach ($value as $id => $valor) {
+				echo '<td style="text-align: right">'.utf8_decode($valor).'</td>';    
+			}
+			$i++; 
+			echo '</tr>';  
+        }
+        echo '</table>';
+	}
+
+}
+?>

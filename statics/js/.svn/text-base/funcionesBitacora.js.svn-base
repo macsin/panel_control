@@ -1,0 +1,104 @@
+function cargarAccion(id,idMatch,idAccion)
+{	
+	var dataJson = eval(id);
+	var dataJsonMatch = eval(idMatch);
+	var auxiliar=[];
+	var auxiliar2=[];
+	$('#accion').empty();
+	$.each(dataJson[dataJsonMatch[idAccion]], function (ind, elem) { 
+		auxiliar[ind]=elem;
+		auxiliar2[elem]=ind; 
+	});
+	auxiliar.sort();
+	$.each(auxiliar,function (ind, elem){
+		if(elem != undefined){
+			if(elem ==='Seleccione')
+			{
+				var elemSinEspacios = elem.replace(/_/g, " ");
+				$('#accion').append("<option value='"+auxiliar2[elem]+"' selected>"+elemSinEspacios+"</option>");
+			}
+			else
+			{
+				var elemSinEspacios = elem.replace(/_/g, " ");
+				$('#accion').append("<option value='"+auxiliar2[elem]+"'>"+elemSinEspacios+"</option>");
+			}
+	
+		}
+	});
+}
+
+function consultaBitacora()
+{
+	var usuario = $('input:radio[name=usuarios]:checked').val(); //-1 Cualquiera
+	var entidad = $('#entidad').val();//Seleccione -> cualquiera
+	var accion = $('#accion').val();//0 -> Cualquiera
+	var fechInicio = $('#inicio').val();
+	var fechFin = $('#fin').val();
+	if(fechInicio == '' || fechFin =='')
+	{
+		alerta('157', 'alert-info');
+	}
+	else
+	{
+		if(usuario == '-1' && entidad == '0' && accion =='0')
+		{
+			alerta('156', 'alert-info');
+		}
+		else
+		{
+				if(entidad == '0'){
+					entidad = '-1';
+				}
+				if(accion == '0'){
+					accion = '-1';
+				}
+				
+			var parametros= new Object();
+			var parametrosAux= new Array();
+			parametros.usuario=usuario;
+			parametros.accion=accion;
+			parametros.entidad=entidad;
+			parametros.fechInicio=fechInicio;
+			parametros.fechFin=fechFin;
+			parametrosAux[0]='usuario';
+			parametrosAux[1]='accion';
+			parametrosAux[2]='entidad';
+			parametrosAux[3]='fechInicio';
+			parametrosAux[4]='fechFin';
+			parametrosJson = JSON.stringify(parametros,parametrosAux,"\t");
+			var url=base+'index.php/bitacora/bitacoraDeEventos_c/obtenerDatosConsulta'; 
+			
+			$.ajax({
+			        url: url,
+			        data: { 
+				       		datos:parametrosJson
+				       		},
+					type: 'POST',
+					async:true,           
+					success: function(data){											
+							        		if(data != 0)
+							        		{
+							        			$('#parametrosConsultaBitacora').removeClass('mostrar');
+							        			$('#parametrosConsultaBitacora').addClass('ocultar');
+							        			$('#resultadoConsultaBitacora').html(data);	
+							        		}
+											else
+											{
+												alerta('No se encontraron resultados para la consulta', 'alert-info');
+											}
+						        		},
+					error: function(){
+						           alert("no se pudo");
+						           alert(url);
+						        }
+					});			//Aqui va lo chidoliro
+		}
+	}	
+}
+
+function mostrarConsultaBitacora()
+{
+	$('#parametrosConsultaBitacora').removeClass('ocultar');
+	$('#parametrosConsultaBitacora').addClass('mostrar');
+	$('#resultadoConsultaBitacora').html("");
+}

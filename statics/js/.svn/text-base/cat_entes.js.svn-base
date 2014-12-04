@@ -1,0 +1,165 @@
+function filtrarEntes(){
+	var estatus=$('#selectEstatus').val();
+	
+	if(estatus==2){
+		alerta('Debe seleccionar al menos un filtro','alert-error');
+		var url = base+'index.php/abcCatalogos/abcEntes_c/consultarEntes/2/1';
+
+	}else{
+		var url = base+'index.php/abcCatalogos/abcEntes_c/consultarEntes/'+estatus+'/1';
+		
+	}
+	
+	var data = '';
+		$.ajax({
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+				$('#consultaEntes').html(data);
+	        },        
+	        error: function(){
+	           alert("Error al filtrar entes");
+	           alert(url);
+	        }
+	    });	
+}
+/*para regresar a bandeja de consulta de entes si se presiona el btn cancelar en el atla de entes*/
+ function regresarBandejaEnte(bandeja){
+	if(bandeja==7){
+		cargarContenido(base+'index.php/abcCatalogos/abcEntes_c/consultarEntes');
+	}
+}
+
+
+function validaNombreEnte(){
+	var existeEnte = 1;
+	var existeAcronimo = 1; 
+	var existeMail = 1;
+	var nombreEnte = $('#nombreEnte').val();
+	var nombreEnteEnBase = $('#nombreEnteEnBase').val();
+	var acronimoEnte = $('#acronimoEnte').val();
+		acronimoEnte = acronimoEnte.toUpperCase();
+	var acronimoEnBase = $('#acronimoEnBase').val();
+	var nombreTitular = $('#nombreTitular').val();
+	var emailTitular = $('#emailTitular').val();
+	var emailEnBase = $('#emailEnBase').val();
+
+	
+	if(nombreEnteEnBase==nombreEnte && acronimoEnte==acronimoEnBase && emailTitular==emailEnBase){
+		if(validar(nombreTitular)){	return true;}
+		else{ alerta('139','alert-error');
+				return false;	}
+	}else{
+		if(nombreEnteEnBase!=nombreEnte){
+			if(validar(nombreEnte)){
+				var url = base+'index.php/abcCatalogos/abcEntes_c/validarNombreEnte';	
+				var data = 'nombreEnte='+nombreEnte;
+						//alert(data);
+							$.ajax({
+								async: false,	    
+					        	url: url,	    
+					        	data: data,	      
+					        	type: 'POST',	                
+					        	success: function(data){
+						        	//alert(data)
+						        	if(data==1){//si el nombre ya existe
+							      	 	 existeEnte = 1;        		
+						        	}else{	
+						        		 existeEnte = 0;		
+						        	}			
+						        },	        
+						        error: function(){
+									alert(url);
+						           	alert("no se pudo");
+						        }	    
+					    });
+				}else{
+					alerta('87','alert-error');
+					document.formularioEnte.nombreEnte.select()//selec texto  
+					 document.formularioEnte.nombreEnte.focus() //colocar foco
+					return false;
+				}
+			}else existeEnte = 0;
+			
+		if(acronimoEnte!=acronimoEnBase){
+			if(validar(acronimoEnte)){
+				var url = base+'index.php/abcCatalogos/abcEntes_c/validarAcronimoEnte';	
+				var data = 'acronimoEnte='+acronimoEnte;
+						//alert(data);
+							$.ajax({
+								async: false,	    
+					        	url: url,	    
+					        	data: data,	      
+					        	type: 'POST',	                
+					        	success: function(data){
+						        	//alert(data)
+						        	if(data==1){//si el nombre ya existe
+							      	 	 existeAcronimo = 1;        		
+						        	}else{	
+						        		 existeAcronimo = 0;		
+						        	}			
+						        },	        
+						        error: function(){
+									alert(url);
+						           	alert("no se pudo");
+						        }	    
+					    });
+				}else{
+					alerta('87','alert-error');
+					document.formularioEnte.acronimoEnte.select()//selec texto  
+					document.formularioEnte.acronimoEnte.focus() //colocar foco
+					return false;
+				}
+			} else  existeAcronimo = 0;
+
+		if(emailTitular!=emailEnBase){
+			var url = base+'index.php/abcCatalogos/abcEntes_c/validarEmailTitularEnte';	
+			var data = 'emailTitular='+emailTitular;
+					//alert(data);
+						$.ajax({
+							async: false,	    
+				        	url: url,	    
+				        	data: data,	      
+				        	type: 'POST',	                
+				        	success: function(data){
+					        	//alert(data)
+					        	if(data==1){//si el nombre ya existe
+						      	 	 existeMail = 1;        		
+					        	}else{	
+					        		 existeMail = 0;		
+					        	}			
+					        },	        
+					        error: function(){
+								alert(url);
+					           	alert("no se pudo");
+					        }	    
+				    });
+			} else existeMail = 0;
+					
+			if(existeEnte==1){
+					 alerta('140','alert-error');
+					 document.formularioEnte.nombreEnte.select()//selec texto  
+					 document.formularioEnte.nombreEnte.focus() //colocar foco
+			}
+			else {
+				if(existeAcronimo==1){
+				alerta('141','alert-error');
+				document.formularioEnte.acronimoEnte.select()//selec texto  
+				document.formularioEnte.acronimoEnte.focus() //colocar foco
+			 	}else{ 
+			 		if(existeMail==1){
+					alerta('142','alert-error');
+					document.formularioEnte.emailTitular.select()//selec texto  
+					document.formularioEnte.emailTitular.focus() //colocar foco
+					}
+				}
+		}		
+		if(existeEnte==0 && existeAcronimo==0 && existeMail==0){
+			return true
+		}else{
+			return false
+			}
+	}
+}
+

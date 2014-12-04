@@ -1,0 +1,811 @@
+body {
+	margin: 0 auto;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #787878;
+}
+textarea { 
+    resize: none; 
+}
+legend {
+	color: #003876 !important;
+	border-bottom: 1px solid #8BB7E9 !important;
+}
+.login{
+	background-image:url('../images/back_loggin.jpg');
+	width: 521px;
+	/*height:210px;*/
+	margin: 0 auto;
+	padding: 15px;
+	margin-top:10%;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 5px 0px 0px;
+	-webkit-box-shadow: 2px 2px 2px 2px #B3B3B3;
+	box-shadow: 2px 2px 2px 2px #B3B3B3;
+	color: #003876;
+}
+
+.form-login{
+	width: 433px;
+	margin-left: 40px;
+}
+.boton-der{
+	float:right;
+}
+
+.boton-pdf {
+	padding-left: 45%;
+}
+.header,.footer{
+	/*background:#B3B3B3 !important;*/
+}
+.wrapper,.header,.footer{
+	margin: 0 auto;
+	width:1100px;
+	-webkit-box-shadow: 2px 2px 2px 2px #B3B3B3;
+	box-shadow: 2px 2px 2px 2px #B3B3B3;
+
+}
+.header{
+	margin-top:30px;
+}
+.wrapper{
+	margin: 0 auto;
+	border: 1px solid #ccc;
+	padding:15px;
+	width:1068px;
+}
+.menu-left{
+	width:200px;
+	float:left;
+	font-size: 17px !important;
+}
+
+.contenido{
+	width: 1005px;
+	padding:30px;
+	float:right;	
+	border:1px solid #ccc;
+	-webkit-box-shadow: 1px 1px 1px 1px #B3B3B3;
+	box-shadow: 1px 1px 1px 1px #B3B3B3;
+}
+
+.clear{
+	clear: both
+}
+.en-construccion{
+	text-align:center;
+	color:rgb(81, 95, 255);
+}
+
+.footer-log{
+	margin: 0 auto;
+	width:553px;
+}
+.footer-log img{
+	width:554px;
+	-webkit-box-shadow: 2px 2px 2px 2px #B3B3B3;
+	box-shadow: 2px 2px 2px 2px #B3B3B3;
+}
+
+.dataTables_length,.dataTables_info{
+	width: 717px;
+	float: left;
+}
+
+/* CSS Modulo de Registro de Fichas*/
+.ocultar {
+	display: none;	
+	visibility:hidden;
+}
+
+.mostrar{
+	display: block;
+	visibility:visible;
+}
+
+.panelIzquierdo{
+	float:left;
+	width:410px;
+	
+	}
+
+.panelDerecho{
+	float:right;
+	width:410px;
+	
+	}
+	
+#contenedorRegistroFichas{
+	margin: 0 auto;
+	}
+	
+#contenedorRegistroGenericas{
+	margin: 0 auto;
+	}
+	
+.contenedorDatosGenerales{
+	margin: 0 auto;
+	width:845px;	
+}
+
+#contenedorAlineacionSectorialInstitucional{
+	margin: 0 auto;
+	width:845px;
+}
+
+.definicionVariables{
+	margin: 0 auto;
+	width:845px;
+}
+#contenedorAlineacionEspecial{
+	margin: 0 auto;
+	width:845px;
+	}
+	
+#contenedorVariables{
+	margin: 0 auto;
+	width:845px;
+	}
+	
+.contenedorMetasGeneral{
+	
+}
+
+#ecuReferencia{
+	alignment-baseline:central;
+	text-align: center; 
+	width: 845px;
+	background:#CCCCCC;
+	color:#002166;
+	padding: 0px 0px 10px 0px;
+}
+
+.entesDinamicos{
+	float: left;
+	padding: 30px 27px;
+	margin-bottom: 10px;
+	width: 943px;	
+}
+
+.contenedorEnteLineaBase{
+	float:left;
+	padding-top:20px;
+	padding-left:20px
+}
+
+#botonMasEntes{
+	float:right;
+}
+
+.valoresEnteMeta{
+
+	display:block;
+	margin: 0 auto;
+	float:left;
+}
+
+.metasDinamicas{
+	float:left;
+	padding-left:20px
+}
+
+#botonMasMetas{
+
+	display:block;
+	margin: 0 auto;
+	width:90px;
+	float:right;
+}
+
+.labelChar{
+	margin-right: 5px;
+	width: 33px;
+	float:left;
+	
+}
+
+.leyendaCampo{
+margin-left: 36px;
+}
+
+.panel-info {
+	border-color: #FFCC49;
+}
+
+.panel-info-head{
+	background: #FDEFA5;
+	font-weight: bold;
+	font-size: 15px;
+}
+.panel-info-head a{
+	color:#D17C01; 
+}
+.flotar-der{
+	float:right;
+}
+
+.label-form{
+	text-align:right;
+	padding-right:7px;
+}
+
+.barra{
+	border-bottom: 4px solid #ccc;
+	clear: both;
+	padding: 10px;
+	margin-bottom:15px;
+}
+
+
+.inactivo{
+	opacity:0.8;
+}
+
+.inactivo:hover{
+	opacity:1;
+	cursor:hand !important;
+}
+
+a.btn-icono{
+	text-decoration:none;
+}
+
+.consultaIndicador{
+	width:1000;
+}
+a:hover{
+	cursor:hand !important;
+}
+
+.subir-img{
+	margin-top:-10px;
+}
+
+.btn:hover{
+	opacity:0.8px;
+	cursor:hand
+}
+
+#indicadores_next{
+	padding-left: 30px;
+}
+
+.mensajeForm{
+	font-size:13px;
+	float:right;
+	font-style: italic;
+
+}
+
+.resaltarLabel{
+	font-size:21px;
+	font-weight:bold;
+	color:red;
+}
+.containerPlazos{
+		width: 450px;
+		padding-top: 25px;
+	}
+	.plazoCaptura,.plazoReporte{
+		width:392px;
+	}
+	.plazoCaptura{
+		float:left;
+	}
+	.plazoReporte{
+		float:right;
+	}
+	.containCaptura,.containReporte{
+		border:1px solid #ccc;
+		-webkit-border-radius: 5px 5px 5px 5px;
+		border-radius: 5px 5px 5px 5px;
+		-webkit-box-shadow: 0 2px 2px 2px #ADADAD;
+		box-shadow: 0 2px 2px 2px #ADADAD;
+		padding: 17px;
+	}
+	.containCaptura{
+		height:260px;
+	}
+	.containReporte{
+		padding:60px;
+		border:1px solid #ccc;
+	}
+.bordeRojo
+{
+	border: solid 1px red !important;
+}
+
+.tablePerPasados{
+	width: 900px;
+	float: right;
+}
+
+
+.labelPeriodo{
+	margin-bottom: 33px;
+	border-bottom: 1px solid #ccc;
+	width: 535px;
+}
+
+#tablePeriodos_wrapper{
+	width: 900px;
+}
+
+.dropdown-menu{
+	text-align:left !important;
+}
+
+.alert{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.mensaje{
+	padding:15px;
+	margin-top: 20px;
+}
+.border-alert-info{
+	border-top:1px solid #3a87ad;
+	border-bottom:1px solid #3a87ad;
+}
+.border-alert-success{
+	border-top:1px solid #468847;
+	border-bottom:1px solid #468847;
+}
+.border-alert-error{
+	border-top:1px solid #b94a48;
+	border-bottom:1px solid #b94a48;
+}
+.imgOrder{
+	width: 10px; margin: 3px;
+}
+
+.paginate_enabled_next,.paginate_disabled_next{
+	padding-left:15px;
+}
+
+.formAltaPrograma{
+	width: 500px;
+	margin-left: 240px;
+}
+
+.bienvenido{
+	background: #003876;
+	color: white;
+	padding: 5px 20px;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.comentarCampoBox{
+	margin-top:20px;
+	margin-bottom:20px;
+	margin-left:30px;
+	width: 870px;
+}
+
+#forMensaje{
+	float: left;
+	margin-left:20px;
+}
+
+.campoComentario{
+	text-align:center;
+}
+
+.btn-gris{
+	background:#E0E0E0;
+	border:1px solid #B1B1B1;
+}
+
+.btn-gris:hover{
+	background:#CCCCCC;
+}
+
+/* leyenda en boton accion para usuario dependencia,  */
+a#Ntooltip,a#Ntooltip1,a#Ntooltip2,a#Ntooltip3,a#Ntooltip4,a#Ntooltip5,a#Ntooltip6,td#Ntooltip1,div#Ntooltip2 {
+position: relative; 
+text-decoration: none !important; 
+}
+
+a#Ntooltip:hover,a#Ntooltip1:hover,a#Ntooltip2:hover
+,a#Ntooltip3:hover,a#Ntooltip4:hover,a#Ntooltip5:hover,a#Ntooltip6:hover,td#Ntooltip1:hover,div#Ntooltip2:hover {
+z-index:999;
+}
+
+a#Ntooltip span.accion,a#Ntooltip1 span.accion,a#Ntooltip2 span.accion, 
+a#Ntooltip3 span.accion,a#Ntooltip4 span.accion,a#Ntooltip5 span.accion,a#Ntooltip6 span.accion,td#Ntooltip1 span.accion, div#Ntooltip2 span.accion {
+display: none;
+}
+
+a#Ntooltip:hover span.accion,a#Ntooltip1:hover span.accion,a#Ntooltip2:hover span.accion,
+a#Ntooltip3:hover span.accion ,a#Ntooltip4:hover span.accion,a#Ntooltip5:hover span.accion,a#Ntooltip6:hover span.accion,
+ td#Ntooltip1:hover span.accion, div#Ntooltip2:hover span.accion{
+display: block;
+position: absolute; 
+top:2em; left:2em; 
+width:160px; 
+padding:1px; 
+background-color: #CCCCCC; 
+color: #000000;
+}
+/* encabezados bandeja de fichas*/
+.headTable{
+	font-size: 14px;
+	color:#787878;
+}
+
+
+.obligatorio{
+	color: red;
+}
+
+.titleAdmin{
+	font-size:19px;
+	font-weight: bold;
+}
+
+.labelWelcome{
+	width:760px;
+	float:left;
+}
+
+.closeSession{
+	width: 300px;
+	text-align:right;
+	float:right;
+}
+
+#mensajeValidacion{
+	width: 300px;
+}
+
+td,th{
+	padding:5px 10px !important;
+}
+
+th{
+	text-align:center;
+}
+
+.tableMSectorial{
+	text-align: right;
+	width: 952px;
+}
+.tdborde{
+	border-left: 1px solid #ccc;
+}
+.bordebottom{
+	border-bottom: 1px solid #ccc;
+	padding: 25px 5px !important;
+}
+
+.tipoSelectStyle{
+	width:735px;
+}
+
+.contenedorCapturaVariables{
+	margin: 0 auto;
+	width:1020px;
+}
+.rutaNavegacion{
+	
+}
+.detallePeriodos{
+	margin: 0px auto;
+	width:1020px;
+	
+}
+.detallePeriodosVG{
+	margin: 0px auto;
+	width:600px;
+	float:left;
+	
+}
+.descripcionIndicador{	
+	width:840px;
+
+}
+.contenedorVariablesComentario{
+	margin: 5px auto;
+	width:900px;
+}
+.contenedorVariablesComentarioVG{
+	margin: 5px auto;
+	width:400px;
+	float:right;
+}
+.divVariables
+{
+	margin: 10px 0px 0px 0px;
+	float:left;
+	width:350px;
+	/*border:solid 1px;*/
+}
+.divVariablesVG
+{
+	margin: 10px 0px 0px 0px;
+	float:left;
+	width:350px;
+	/*border:solid 1px;*/
+}
+.contenedorPeriodos
+{
+	margin:0px auto;
+	width:1020px;
+	
+}
+.contenedorPeriodosVG
+{
+	margin:0px auto;
+	width:600px;
+	float:left;
+	
+}
+.divComentarios
+{
+	margin: 10px 0px 0px 0px;
+	float:right;
+	width:450px;
+	/*border:solid 1px;*/
+}
+.divComentariosVG
+{
+	margin: 10px 0px 0px 0px;
+	float:right;
+	width:400px;
+	/*border:solid 1px;*/
+}
+.divBotones
+{
+	text-align: center;
+	margin: 40px auto;
+	width:800px;
+}
+
+.descripcionVariables
+{
+	margin: 5px auto;
+	width:800px;
+}
+.tableVariables{
+	text-align: right;
+	width: 915px;
+}
+
+.boxPeriodos{
+	width: 490px;
+	margin: 0 auto;
+}
+
+#renglonConsulta {
+	margin-left: 40%;
+}
+
+#columnaGraficar {
+	width: 20px;
+	text-align: center;
+}
+
+#columnaNum {
+	width: 20px;
+}
+
+.grafPGD{
+	margin-left:345px;
+}
+.deshabilitado{
+	opacity:0.3;
+	width: 20px;
+}
+.resaltarbtn{
+	opacity:0.7;
+	width: 20px;
+}
+.resaltarbtn:hover{
+	opacity:1;
+}
+
+
+/*tooltip para btn configurar consulta*/
+#btnConfigurarGrafica {outline:none; }
+#btnConfigurarGrafica strong {line-height:30px;}
+#btnConfigurarGrafica:hover {text-decoration:none;} 
+#btnConfigurarGrafica span {
+    z-index:999;display:none; font-size: 12px; 
+    padding:2px 6px;
+    margin-top:4px; margin-left:55px;
+    width:150px; line-height:16px;
+}
+#btnConfigurarGrafica:hover span{
+    display:inline; position:absolute; color:#000000;
+    top:20px; left:20px; 
+    background:#ABABAB;}
+.callout {z-index:2;position:relative;top:0px;border:0;left:0px;}
+    
+/*tooltip informacion entes*/
+#leyenda_ente{  
+    width: 50px; 
+    position: fixed;
+    float: right;     
+}
+#leyenda_ente {outline:none; }
+#leyenda_ente strong {line-height:30px;}
+#leyenda_ente:hover {text-decoration:none;} 
+#leyenda_ente span {
+    z-index:500;display:none; font-size: 12px; text-align:left; 
+    padding:2px 6px;
+    margin-top:4px; margin-left:55px;
+    width:150px; line-height:16px;
+}
+#leyenda_ente:hover span{
+    display:inline; position:absolute; color:#000000; 
+    top:50px; right:-50px; 
+    background:#ABABAB;}
+    
+.callout {z-index:2;position:relative;top:0px;border:0;left:0px;}
+
+.esconder {
+	display: none;
+}
+/*Estilos para la vista de la bitacora*/
+.contenidoConsultaBitacora
+{
+	margin:0px auto;
+	width:1000px;
+	overflow: hidden;
+}
+
+#divPeriodo
+{
+	margin: 10px 0px 0px 0px;
+	width:300px;
+	float: left;
+}
+
+#divEntidadAccion
+{
+	width:500px;
+	float:right;
+}
+
+#divBoton
+{
+	clear:both;
+	float: right;
+}
+
+#divParametros
+{
+	margin: 10px auto;	
+}
+
+    
+/*tooltip para btn enviar correo*/
+#btnHabilitarCaptura {outline:none; }
+#btnHabilitarCaptura strong {line-height:30px;}
+#btnHabilitarCaptura:hover {text-decoration:none;} 
+#btnHabilitarCaptura span {
+    z-index:999;display:none; font-size: 12px; 
+    padding:2px 6px;
+    margin-top:5; margin-left:247px;
+    width:565px; line-height:15px;
+    position:relative;
+}
+#btnHabilitarCaptura:hover span{
+    display:inline; position:absolute; color:#000000;
+    top:470px; left:20px; 
+    background:#ABABAB;}
+.callout {z-index:2;position:relative;top:0px;border:0;left:0px;}
+
+.listaIndices{
+	width:700px;
+	margin:0 auto;
+	padding-bottom:40px;
+	color:#AAA4A4;
+}
+
+.txtEncolumnas {
+    -webkit-column-count: 18; /* Chrome, Safari, Opera */
+    -moz-column-count: 18; /* Firefox */
+    column-count: 3;
+    column-width: 3px;
+    
+}
+/*tooltip informacion prefijo del tipo de programa*/
+#leyenda_prefijo{  
+    width: 50px; 
+    position: fixed;
+    float: right;     
+}
+#leyenda_prefijo {outline:none; }
+#leyenda_prefijo strong {line-height:30px;}
+#leyenda_prefijo:hover {text-decoration:none;} 
+#leyenda_prefijo span {
+    z-index:500;display:none; font-size: 12px; text-align:left; 
+    padding:2px 6px;
+    margin-top:-46px; margin-left:55px; margin-right: -133px;
+    width:150px; line-height:16px;
+}
+#leyenda_prefijo:hover span{
+    display:inline; position:absolute; color:#000000; 
+    top:0px; right:0px; 
+    background:#ABABAB;}
+    
+
+/*tooltip informacion para numero de programa*/
+#leyenda_programa{  
+    width: 50px; 
+    position: fixed;
+    float: right;     
+}
+#leyenda_programa {outline:none; }
+#leyenda_programa strong {line-height:30px;}
+#leyenda_programa:hover {text-decoration:none;} 
+#leyenda_programa span {
+    z-index:500;display:none; font-size: 12px; text-align:left; 
+    padding:2px 6px;
+    margin-top:-46px; margin-left:55px; margin-right: -133px;
+    width:150px; line-height:16px;
+}
+#leyenda_programa:hover span{
+    display:inline; position:absolute; color:#000000; 
+    top:50px; right:-50px; 
+    background:#ABABAB;}
+    
+/*tooltip informacion para bandeja de metas sectoriales, ayuda para alta de meta institucional*/
+
+div#leyenda_meta{
+	width: 50px; position: relative;
+	margin-left:-222px;
+}
+div#leyenda_meta img{
+		margin-left:-222px;
+}   
+#leyenda_meta{  
+    width: 50px; 
+    position: fixed;
+    float: right;     
+}
+#leyenda_meta {outline:none; }
+#leyenda_meta strong {line-height:30px;}
+#leyenda_meta:hover {text-decoration:none;} 
+#leyenda_meta span {
+    z-index:500;display:none; font-size: 12px; text-align:left; 
+    padding:2px 6px;
+    margin-top:-46px; margin-left:55px; margin-right: -133px;
+    width:150px; line-height:16px;
+}
+#leyenda_meta:hover span{
+    display:inline; position:absolute; color:#000000; 
+    top:5px; right:215px;  
+    background:#ABABAB;}
+
+/*tooltip para btn Imprimir_ ayuda para guardar grafica como PDF*/
+#ayudaGuardar {outline:none; }
+#ayudaGuardar strong {line-height:30px;}
+#ayudaGuardar:hover {text-decoration:none;} 
+#ayudaGuardar span {
+    z-index:999;display:none; font-size: 12px; 
+    padding:2px 6px;
+    margin-top:4px; margin-left:55px;
+    width:150px; line-height:16px;
+}
+#ayudaGuardar:hover span{
+    display:inline; position:absolute; color:#000000;
+    top:-2px; left:602px;/*mover la caja*/ 
+    background:#ABABAB;}
+.callout {z-index:2;position:absolute;top:0px;border:0;left:0px;}
+
+#tableUsuarios th, #indicadores th, #variablesGenericas th, #tableProgramas th, #tableTipoProgramas th, #tableMetas th, #tablaEntes th {
+	text-align:center;
+}
+
+.tablaConfigConsulta
+{
+	overflow-x:scroll;
+}

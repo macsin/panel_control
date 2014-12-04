@@ -1,0 +1,205 @@
+	/**
+	 * filtrarIndicadores actualiza la vista consultaIndicadores_v en la clase .consultaIndicador.
+	 * @param  entero recupera de la vista los valores: id_cat_ente= del elemento #selectEnte, id_cat_periodicidad= del elemento #selectPeriodicidad,
+	 * id_cat_tipo_evaluacion= del elemento #selectTipoEvaluacion, id_estatus= del elemento #selectEstatus, id_cat_evaluacion= del elemento #selectNomEvaluacion
+	 * @return id_ente, id_tipoEvaluacion, id_nomEvaluacion, id_periodicidad, id_estatus (datos tipo entero)
+	 * @author  Nohemi
+	 */
+function filtrarVariables (){
+	var id_ente=$('#opEnte').val();
+	var id_estatus=$('#opEstatus').val();
+	var esGenerica = $('#tipoVariable').val();
+	
+	var rango=$('#opRango').val();
+	if(rango==null || rango==''){
+		rango=0;
+	}
+	var url = base+'index.php/abcCatalogos/abcVariables_c/filtrarVariables/'+id_ente+'/'+id_estatus+'/'+esGenerica+'/'+rango;
+	var data = '';
+		$.ajax({
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+				$('#consultaVariables').html(data);
+				obtenerRangoVariable();
+	        },        
+	        error: function(){
+	        	alerta('65','alert-error');
+	           // alert("Error al filtrar variables");
+	        }
+	    });	
+}
+
+
+function agregarOpEnte(listaEntes) {
+	numeroEntes++;
+	var ente = '';
+	ente = '<div class="control-group" id="grupoEnte'+numeroEntes+'">';
+	ente += '<label class="control-label">Ente<label class="resaltarLabel">*</label>:&nbsp;</label>';
+	// ente += '<div class="controls">';
+	ente += '<select name="opEnte'+numeroEntes+'" id="opEnte'+numeroEntes+'" class="input-xxlarge">';
+	ente += '<option value="1">Seleccione un ente</option>';
+	ente += '<option value="-1">Asignar a todos los entes</option>';
+	for (var i = 1; i < listaEntes.length - 1; i++) {
+		objEnte = JSON.parse(listaEntes[i]);
+		ente += '<option value='+objEnte.id_cat_ente+'>'+objEnte.descripcion+'</option>';
+	};
+	ente += '</select><a class="btn-icono" onclick="eliminarElementoEnte('+"'grupoEnte"+numeroEntes+"'"+',0,0,0)" title="Eliminar ente"> <img width="30" class="inactivo subir-img" src="'+base+'/statics/images/minus.png"/></a>';
+	// ente += '</div>';
+	ente += '</div>';
+	$("#listaEntes").append(ente);
+}
+
+function eliminarElementoEnte(idElemento,div,idBD,valor){
+	
+	if(numeroEntes2 > 0) //Si el numero de entes es mayor a uno, deshabilitamos boton enviar a revision y habilitamos boton publicar. 
+	{
+		$("#"+idElemento).remove();
+	}	
+}
+
+function agregarOpEnte2(listaEntes) {
+	numeroEntes2++;
+	var ente2 = '';
+	ente2 = '<div class="control-group" id="grupoEnte'+numeroEntes2+'">';
+	ente2 += '<label class="control-label">Ente:&nbsp;</label>';
+	// ente2 += '<div class="controls">';
+	ente2 += '<select name="opEnte'+numeroEntes2+'" id="opEnte'+numeroEntes2+'" class="input-xxlarge">>';
+	ente2 += '<option value="1">Seleccione un ente</option>';
+	// ente2 += '<option value="-1">Asignar a todos los entes</option>';
+	for (var i = 1; i < listaEntes.length - 1; i++) {
+		objEnte = JSON.parse(listaEntes[i]);
+		ente2 += '<option value='+objEnte.id_cat_ente+'>'+objEnte.descripcion+'</option>';
+	};
+	ente2 += '</select><a class="btn-icono" onclick="eliminarElementoEnte('+"'grupoEnte"+numeroEntes2+"'"+',0,0,0)" title="Eliminar ente"> <img width="30" class="inactivo subir-img" src="'+base+'/statics/images/minus.png"/></a>';
+	// ente2 += '</div>';
+	ente2 += '</div>';
+	$("#listaEntes").append(ente2);
+}
+
+
+function guardarVariable(numeroEntes) {
+	// $('#opMesInicio').removeClass('bordeRojo');
+	// $('#opAnioInicio').removeClass('bordeRojo');
+	// $('#opMesFin').removeClass('bordeRojo');
+	// $('#opAnioFin').removeClass('bordeRojo');
+	// var tipoVariable = $( "input:checked").val();
+	var variables = new Array();
+	for (var i = 1; i <= numeroEntes; i++) {
+		var campo = 'opEnte'+i;		
+		if (!($('#'+campo).val() === undefined)) {
+			variables[i] = $('#'+campo).val();
+		};
+	};
+	if ($('#txtNombre').val()==null || $('#txtNombre').val()=="" || (/^[\s]+[a-zA-Z0-9]*$/.test($('#txtNombre').val()))){
+		$('#txtNombre').addClass('bordeRojo');
+		$('#controlNombre').html('Campo obligatorio.');
+		return false;
+	} else {
+		var nomTratado = validar2($('#txtNombre').val());
+		if (nomTratado) {
+			if($('#opEnte1').val()==1){
+				$('#opEnte1').addClass('bordeRojo');
+				$('#controlEnte').html('Campo obligatorio.');
+			}else{
+				variables[i] = nomTratado;
+				
+				var url = base+'index.php/abcCatalogos/abcVariables_c/guardarVariable';
+				var data = JSON.stringify(variables);
+					$.ajax({
+				        url: url,
+				        data: { miDato: data },
+				        type: 'POST',               
+				        success: function(data){
+				        	
+				        	// alerta('66','alert-success');
+							$('#lugarVariables').html(data);
+				        },        
+				        error: function(){
+				        	alerta('67','alert-error');
+				           // alert("Error al filtrar variables para hacer la asociacion");
+				        }
+				    });
+			}
+		} else {
+			alerta('87','alert-error');
+		};
+	}
+}
+
+function guardarVariable2(numeroEntes) {
+	var variables = new Array();
+	for (var i = 1; i <= numeroEntes; i++) {
+		var campo = 'opEnte'+i;
+		
+		if (!($('#'+campo).val() === undefined)) {
+			variables[i] = $('#'+campo).val();
+		};
+		// variables[i] = $('#'+campo).val();		
+	};
+	variables[i] = idVariable;
+	
+	var url = base+'index.php/abcCatalogos/abcVariables_c/vincularVariableEnte';
+	var data = JSON.stringify(variables);
+		$.ajax({
+	        url: url,
+	        data: { miDato: data },
+	        type: 'POST',               
+	        success: function(data){
+	        	
+	        	alerta('66','alert-success');
+				location.reload();
+				//$('#registrarVariable').html(data);
+	        },        
+	        error: function(){
+	        	alerta('68','alert-error');
+	           // alert("Error al filtrar variables");
+	        }
+	    });	
+}
+
+function cargarContenido2(ruta){
+	var url = ruta;
+	var data = '';
+	$.ajax({
+        url: url,
+        data: data,
+        type: 'POST',               
+        success: function(data){
+			$('#body_principal').html(data);
+			location.reload();
+        },        
+        error: function(){
+        	alerta('69','alert-error');
+        }
+    });
+}
+
+function desactivarVariable(controlador,mensaje) {
+	if (confirm('Esta acción desactivará la variable "'+mensaje+'" ¿está seguro que desea continuar?')) {
+		cargarContenido(controlador);
+	};
+}
+
+function desvincularEnteVariable(controlador,mensaje,nombreVariable) {
+	if (confirm('Esta acción desvinculará el ente "'+mensaje+'" de la variable "'+nombreVariable+'" ¿está seguro que desea continuar?')) {
+		cargarContenido2(controlador);
+	};
+}
+
+function validar2(campo) {
+	//var pattern = /^[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÜ\,\=\!\¡\?\¿\.\*\-\_\:\;\"\s\'\(\)]+$/;
+	var pattern = /^[0-9a-zA-Z\xf1\xd1\xe1\xe9\xed\xf3\xfa\xfc\xc1\xc9\xcd\xd3\xda\xdc\,\=\%\/\<\>\!\xa1\?\xbf\.\*\-\_\:\;\"\s\'\(\)]+$/;        
+	var re = new RegExp(pattern);
+	if (campo.match(re)) {
+		return campo.trim();
+	} else {
+		return false;
+	}
+}
+
+
+
+
+		

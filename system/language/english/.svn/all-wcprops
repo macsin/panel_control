@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english
+END
+number_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/number_lang.php
+END
+calendar_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/calendar_lang.php
+END
+ftp_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/ftp_lang.php
+END
+migration_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/migration_lang.php
+END
+date_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/date_lang.php
+END
+form_validation_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/form_validation_lang.php
+END
+unit_test_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/unit_test_lang.php
+END
+profiler_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/profiler_lang.php
+END
+imglib_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/imglib_lang.php
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/index.html
+END
+upload_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/upload_lang.php
+END
+db_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/db_lang.php
+END
+email_lang.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/sistemaMonitoreo/!svn/ver/7/sistemaMonitoreo/system/language/english/email_lang.php
+END

@@ -1,0 +1,130 @@
+function obtenerRango(){
+	var ente=$('#selectEnte').val();
+	var rango=$('#rango').val();
+	var evaluacion=$('#selectTipoEvaluacion').val();
+	var nombre=$('#selectNomEvaluacion').val();
+	var periodo=$('#selectPeriodicidad').val();
+	var estatus=$('#selectEstatus').val();
+	var url = base+'index.php/abcIndicadores/consultaIndicador_c/traerRangos';
+
+	if(ente==1){
+		ente=0;
+	}	
+	if(periodo==1){
+		periodo=0;
+	}
+	if(rango==null){
+		rango=0;
+	}
+	
+	var data = 'rango='+rango+'&ente='+ente+'&tipoEvaluacion='+evaluacion+'&nombre='+nombre+'&periodo='+periodo+'&estatus='+estatus;
+
+	$.ajax({
+    
+        url: url,
+    
+        data: data,
+        
+        type: 'POST',
+                
+        success: function(data){  
+       
+        	var cadena=data.split('|');
+			$('#rango').html(cadena[0]);
+			$('#totalLabel').html('<br>Total de registros del filtro: '+cadena[1]);			
+        },
+        
+        error: function(){
+		//alert(url);
+          // alert("no se pudo");
+        }
+    
+    });
+	
+}
+
+function obtenerRangoVariable(){
+	
+	var ente=$('#opEnte').val();
+	var estatus=$('#opEstatus').val();
+	var rango=$('#opRango').val();
+	
+
+	if(ente==1){
+		ente=0;
+	}	
+	if(rango==null || rango==''){
+		rango=0;
+	}
+	var url = base+'index.php/abcCatalogos/abcVariables_c/traerRangosVariables/'+rango+'/'+ente+'/'+estatus;
+	var data = '';
+
+	$.ajax({
+    
+        url: url,
+    
+        data: data,
+        
+        type: 'POST',
+                
+        success: function(data){ 
+        	var cadena=data.split('|');
+			$('#opRango').html(cadena[0]);
+			$('#totalLabel').html('<br>Total de registros del filtro: '+cadena[1]);			
+        },
+        
+        error: function(){
+			alert(url);
+          alert("no se pudo");
+        }
+    
+    });
+}
+
+
+function obtenerRangoPGD(){
+
+	var ente=$('#selectEnte').val();
+	var rango=$('#rango').val();
+	var eje=$('#idCatEje').val();
+	var aOportunidad=$('#areaOportunidad').val();
+	var objetivo=$('#objetivo').val();
+	var metaPGD=$('#meta').val();
+	var metaSectorial=$('#metaSectorial').val();
+	var periodo=$('#selectPeriodicidad').val();
+	
+	var url = base+'index.php/abcIndicadores/consultaIndicador_c/traerRangos/1';
+
+	if(ente==1){
+		ente=0;
+	}	
+	if(periodo==1){
+		periodo=0;
+	}
+	if(rango==null){
+		rango=0;
+	}
+	
+	var data = 'rango='+rango+'&ente='+ente+'&eje='+eje+'&aOportunidad='+aOportunidad
+	+'&periodo='+periodo+'&objetivo='+objetivo+'&metaPGD='+metaPGD+'&metaSectorial='+metaSectorial;
+
+	$.ajax({
+    
+        url: url,
+    
+        data: data,
+        
+        type: 'POST',
+                
+        success: function(data){   
+        	var cadena=data.split('|');
+			$('#rangoPGD').html(cadena[0]);
+			$('#totalLabelPGD').html('<br>Total de registros del filtro: '+cadena[1]);			
+        },
+        
+        error: function(){
+        }
+    
+    });
+	
+}

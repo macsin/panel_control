@@ -1,0 +1,475 @@
+function filtrarMetaSectorial (){
+	var programa=$('#selectPrograma').val();
+	//var meta=$('#selectMeta').val();
+	var meta=0;
+	var estatus=$('#selectEstatus').val();
+	
+	if(programa==0 && meta==0 && estatus==2){
+		alerta('Debe seleccionar al menos un filtro','alert-error');
+		var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/consultarMetasSectoriales/0/0/2/1';
+
+	}else{
+		var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/consultarMetasSectoriales/'+programa+'/'+meta+'/'+estatus+'/1';
+		
+	}
+	
+	var data = '';
+		$.ajax({
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+				$('#consultaMetas').html(data);
+	        },        
+	        error: function(){
+	           alert("Error al filtrar metas");
+	           alert(url);
+	        }
+	    });	
+}
+
+function filtrarMetaInstitucional (){
+	var estatus=$('#selectEstatus').val();
+	var idMetaSec=$('#idMetaSec').val();
+	if(estatus==2){
+		alerta('Debe seleccionar un filtro valido','alert-error');
+		var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/consultarMetasInstitucionales/'+idMetaSec+'/1/2';
+	}else{
+		var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/consultarMetasInstitucionales/'+idMetaSec+'/1/'+estatus;
+	}
+	var data = '';
+		$.ajax({
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+				$('#consultaMetas').html(data);
+	        },        
+	        error: function(){
+	           alert("Error al filtrar");
+	           alert(url);
+	        }
+	    });	
+}
+
+function desactivarMetasSec(idMeta,accion){
+	if(accion==0){
+		if(confirm('Esta acción desactivará la meta sectorial y no podrá verla en el catálogo. ¿Desea continuar?')){
+			cargarContenido(base+'index.php/abcCatalogos/abcMetasSectoriales_c/desactivarMetaSectorial/'+idMeta+'/'+accion);
+		}
+	}else{
+		if(confirm('Esta acción activará la meta sectorial. ¿Desea continuar?')){
+			cargarContenido(base+'index.php/abcCatalogos/abcMetasSectoriales_c/desactivarMetaSectorial/'+idMeta+'/'+accion);
+		}
+	}
+	
+}
+
+function desactivarMetasIns(idMeta,accion,idPadre){
+	if(accion==0){
+		if(confirm('Esta acción desactivará la meta institucional. ¿Desea continuar?')){
+			cargarContenido(base+'index.php/abcCatalogos/abcMetasSectoriales_c/desactivarMetaInstitucional/'+idMeta+'/'+accion+'/'+idPadre);
+		}
+	}else{
+		if(confirm('Esta acción activará la meta institucional. ¿Desea continuar?')){
+			cargarContenido(base+'index.php/abcCatalogos/abcMetasSectoriales_c/desactivarMetaInstitucional/'+idMeta+'/'+accion+'/'+idPadre);
+		}
+	}
+	
+}
+
+function traerDescripcion(metas,idMetas){
+	var id=$("#selectMeta").val();
+	
+	
+	for(var i=0;i<metas.length;i++){ 
+		if(idMetas[i]==id){
+				$("#desc_meta").html(metas[i]);
+		}
+	}	
+}
+
+/*nohemi*/
+ function regresarBandeja(bandeja){
+	if(bandeja==3){
+		cargarContenido(base+'index.php/abcCatalogos/abcMetasSectoriales_c/consultarMetasSectoriales');
+	}
+}
+	
+//validar que un dato sea entero mayor que 0
+function validarEntero(valor){ 
+    valor = parseInt(valor)//se convierte a entero 
+    if (isNaN(valor)) { //se valida si no es numero 
+       return "" 
+    }else{//Si es número validamos que sea mayor a cero 
+    	 if(valor>0)
+       		return valor
+       	else
+       		return ""  
+    } 
+}
+
+//comprobar que un indice no se haya dado de alta antes
+function compruebaValidoEntero(editarIndice){
+	var idEvaluacion = $('#idEvaluacion').val();	
+	var evaluacionAsociada = $('#idEvaluacionAsociada').val();//en caso de alta es cero, en caso de edicion es el id que trajo de DB	
+	var metaPGD = $('#meta').val();
+	var indiceAEditar = $('#numeroMeta').val();
+	var metaPGDAsociada = $('#idMetaPGDAsociada').val();//en caso de alta es cero, en caso de edicion es el id que trajo de DB
+	if(editarIndice==indiceAEditar && metaPGD==metaPGDAsociada && idEvaluacion==evaluacionAsociada){}else{
+	   	if (idEvaluacion == ""){ //si ni se ha seleccionado una meta
+	      	 alerta('131','alert-error');//¡Primero debe seleccionar un programa! 
+	      	 document.formularioMetaSectorial.idEvaluacion.focus() //coloco el foco en meta PGD 
+	      	 document.formularioMetaSectorial.indiceMetaSectorial.value = "" //borro el valor que se coloco en meta sectorial 
+	   	}else{
+			 if (metaPGD == ""){ //si ni se ha seleccionado una meta
+		      	 alerta('94','alert-error');//¡Primero debe seleccionar una meta! 
+		      	 document.formularioMetaSectorial.meta.focus() //coloco el foco en meta PGD 
+		      	 document.formularioMetaSectorial.indiceMetaSectorial.value = "" //borro el valor que se coloco en meta sectorial	   		
+		   		}
+	   		 else{
+		   		enteroValidado = validarEntero(document.formularioMetaSectorial.indiceMetaSectorial.value)//valida si el indice es un entero mayor a 0 
+			   	if (enteroValidado == ""){ 
+			      	 alerta('92','alert-error'); //cuando el valor no es un numero
+			      	 document.formularioMetaSectorial.indiceMetaSectorial.select()//selecciono el texto  
+			      	 document.formularioMetaSectorial.indiceMetaSectorial.focus() //coloco otra vez el foco 
+			   	}else{//si el dato es numero mayor a cero se realiza la consulta en la BD para determinar si aun no se asocia a la meta y al programa seleccionado	   		 
+					jQuery.ajax({
+					  url: base + 'index.php/abcCatalogos/abcMetasSectoriales_c/validarIndiceSectorial',
+					  type: 'POST',
+					  data: {indiceAValidar: enteroValidado, metaPGDAsociada: metaPGD, evaluacionAsociada: idEvaluacion},
+					  success: function(data) {
+					  	if (data == -1) {//si el indice existe
+					  		alerta('93','alert-error');
+				      	 	document.formularioMetaSectorial.indiceMetaSectorial.value = "" 
+				      	 	document.formularioMetaSectorial.indiceMetaSectorial.focus() //coloco otra vez el foco 
+					  	} else {//si el indice no existe
+							document.formularioMetaSectorial.indiceMetaSectorial.value = enteroValidado
+					  	};
+					  },
+					  error: function() {
+					    console.log('Error JS validar indice Meta Sectorial');
+					  }
+					});
+			 	}	
+			 }	
+		}
+	}
+} 
+
+/*comprobar si el nombre de una meta sectorial existe en bd, solo se permite guardar cuando se esta editando y el nombre se queda igual pero si es nuevo regitro o se edita el nombre, no se permite guardar si ya existe*/
+function validaNombreMetaSectorial(nombreMeta)
+{
+	var resp = false;
+	var nombreMetaSectorial = $('#nombreMetaSectorial').val();
+	if(nombreMeta==nombreMetaSectorial){
+		return true;}
+	else{
+		if(validar(nombreMetaSectorial)){
+			  		var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/validarNombreMetaSectorial';	
+					var data = 'nombreMetaSectorial='+nombreMetaSectorial;
+					//alert(data);
+						$.ajax({
+							async: false,	    
+				        	url: url,	    
+				        	data: data,	      
+				        	type: 'POST',	                
+				        	success: function(data){
+					        	//alert(data)
+					        	if(data==1){//si el nombre ya existe
+					        		alerta('110','alert-error');
+						      	 	document.formularioMetaSectorial.nombreMetaSectorial.select()//selec texto  
+						      	 	document.formularioMetaSectorial.nombreMetaSectorial.focus() //colocar foco
+						      	 	resp = false;        		
+					        	}else{	
+					        		resp = true;		
+					        	}			
+					        },	        
+					        error: function(){
+								alert(url);
+					           	alert("no se pudo");
+					        }	    
+				    });
+	 			 return resp;
+			}
+			else{
+				if(nombreMetaSectorial=='')
+					alerta('130','alert-error');
+				else alerta('87','alert-error');
+				return false;
+			}
+	}				
+}
+
+function actualizarIndicesExistentes(){
+	idEvaluacion = $('#idEvaluacion').val();
+	idMetaPGD = $('#meta').val();
+	if ( document.getElementById("numeroMeta")) {//para alta-edicion de metas sectoriales
+		     document.formularioMetaSectorial.indiceMetaSectorial.value = "";//borrar indice sectorial para que se ingrese nuevamente   
+		}	
+	if(idMetaPGD>1 && idEvaluacion>0){
+		var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/traerIndicesSectoriales/'+idEvaluacion+'/'+idMetaPGD;
+		var data='';	
+		$.ajax({	    
+			   	url: url,	    
+				data: data,	      
+				type: 'POST',	                
+				success: function(data){
+					$('#indiceSectorialExistente').empty();	
+					jsonR=$.parseJSON(data);
+					$.each(jsonR,function(){
+					$('#indiceSectorialExistente').append(this.meta+"\x20"+"\t"+"\x20");
+					});
+		        },	        
+		        error: function(){
+						alert(url);
+			           	alert("no se pudo");
+			        }	    
+	    });		
+		
+	}else $('#indiceSectorialExistente').empty();	
+}
+
+function compruebaIndice(){
+	indiceSectorial = $('#numeroMeta').val();
+	if(indiceSectorial==''){
+   	 	document.formularioMetaSectorial.indiceMetaSectorial.select()//selecciono el texto  
+   	 	document.formularioMetaSectorial.indiceMetaSectorial.focus() //coloco otra vez el foco		
+	}
+}
+
+function validarIndiceInstitucional2(idMetaPadre, indiceMI, idPrograma,idMetaInstitucional)//No toma en cuenta el de la evaluacion
+{
+	var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/validaIndiceInstitucional/1/'+idMetaInstitucional;
+			$.ajax({
+				async: false,
+		        url: url,
+		         data: { 
+		        		idMetaPadre:idMetaPadre,
+		        		indiceMI:indiceMI,
+		        		idPrograma:idPrograma
+		        		},
+		        type: 'POST',               
+		        success: function(data){
+		        	if(data == 0)
+						resp = true;
+					else{
+						resp = false;						
+					}
+		        },
+		        error: function(){
+		           alert("Error al filtrar");
+		           alert(url);
+		        }
+		    });
+	return resp;
+}
+
+function validarIndiceInstitucional(idMetaPadre, indiceMI, idPrograma)
+{
+	var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/validaIndiceInstitucional/';
+			$.ajax({
+				async: false,
+		        url: url,
+		         data: { 
+		        		idMetaPadre:idMetaPadre,
+		        		indiceMI:indiceMI,
+		        		idPrograma:idPrograma
+		        		},
+		        type: 'POST',               
+		        success: function(data){
+		        	if(data == 0)
+						resp = true;
+					else{
+						resp = false;						
+					}
+		        },
+		        error: function(){
+		           alert("Error al filtrar");
+		           alert(url);
+		        }
+		    });
+	return resp;
+}
+
+function validarNombreInstitucional(nombreMetaInstitucional)
+{
+	var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/validaNombreInstitucional/';
+			$.ajax({
+				async: false,
+		        url: url,
+		         data: { 
+		        		nombreMeta:nombreMetaInstitucional
+		        		},
+		        type: 'POST',               
+		        success: function(data){
+		        	if(data == 0)
+						resp = true;
+					else{
+						resp = false;						
+					}
+		        },
+		        error: function(){
+		           alert("Error al filtrar");
+		           alert(url);
+		        }
+		    });
+	return resp;
+}
+
+function validarNombreInstitucional2(nombreMetaInstitucional,idMetaInstitucional)
+{
+	var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/validaNombreInstitucional/1/'+idMetaInstitucional;
+			$.ajax({
+				async: false,
+		        url: url,
+		         data: { 
+		        		nombreMeta:nombreMetaInstitucional
+		        		},
+		        type: 'POST',               
+		        success: function(data){
+		        	if(data == 0)
+						resp = true;
+					else{
+						resp = false;						
+					}
+		        },
+		        error: function(){
+		           alert("Error al filtrar");
+		           alert(url);
+		        }
+		    });
+	return resp;
+}
+
+function altaMetaInstitucional(idMetaPadre)
+{
+	var idProgramaIns = $('#idProgInst').val();
+	
+	var indiceMI = $('#indiceMI').val();
+	var nombreMI = $('#nombreMI').val();
+	if(validar(nombreMI))
+	{
+		if(validarIndiceInstitucional(idMetaPadre,indiceMI,idProgramaIns))
+		{
+			if(validarNombreInstitucional(nombreMI))
+			{
+				var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/altaMetaInstitucional/'+idMetaPadre;
+				$.ajax({
+			        url: url,
+			         data: { 
+			        		idProgramaIns:idProgramaIns,
+			        		indiceMI:indiceMI,
+			        		nombreMI:nombreMI
+			        		},
+			        type: 'POST',               
+			        success: function(data){
+			        	if(data != '0'){
+							$('#body_principal').html(data);
+							alerta('Meta institucional guardada con éxito','alert-success');
+			        	}
+						else{
+							alerta('Error al insertar la meta institucional','alert-error');						
+						}
+	
+			        },
+			        error: function(){
+			           alert("Error al guardar la meta institucional. Url: "+url);
+			        }
+			    });
+			}
+			else
+			{
+				alerta('El nombre de la meta ya existe, proporcione otro','alert-error');
+			}
+				
+		}
+		else
+		{
+			alerta('El indice ya existe para el programa institucional, seleccione otro','alert-error');
+		}
+	}
+	else
+	{
+		alerta('El nombre de la meta, contiene caracteres no aceptados','alert-error');
+	}	
+}
+
+
+function edicionMetaInstitucional(idMetaPadre,idMetaInstitucional)
+{
+	var idProgramaIns = $('#idProgInst').val();
+	var indiceMI = $('#indiceMI').val();
+	var nombreMI = $('#nombreMI').val();
+	if(validar(nombreMI))
+	{
+		if(validarIndiceInstitucional2(idMetaPadre,indiceMI,idProgramaIns,idMetaInstitucional))
+		{
+			if(validarNombreInstitucional2(nombreMI,idMetaInstitucional))
+			{
+				var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/actualizarMetaInstitucional/'+idMetaInstitucional+'/'+idMetaPadre;
+				$.ajax({
+			        url: url,
+			         data: { 
+			        		idProgramaIns:idProgramaIns,
+			        		indiceMI:indiceMI,
+			        		nombreMI:nombreMI
+			        		},
+			        type: 'POST',               
+			        success: function(data){
+			        	if(data != '0')
+			        	{
+							$('#body_principal').html(data);
+							alerta('Meta institucional actualizada con éxito','alert-success');
+			        	}
+						else{
+							alerta('Error al actualizar la meta institucional','alert-error');						
+						}
+			        },
+			        error: function(){
+			           alert("Error al filtrar");
+			           alert(url);
+			        }
+			    });	
+			}
+			else
+			{
+				alerta('El nombre de la meta ya existe, proporcione otro','alert-error');
+			}
+				
+		}
+		else
+		{
+			alerta('El indice ya existe para el programa institucional, seleccione otro','alert-error');
+		}
+	}
+	else
+	{
+		alerta('El nombre de la meta, contiene caracteres no aceptados','alert-error');
+	}	
+}
+
+function actualizaIndicesInstitucionales()
+{
+	var idMetaPadre = $('#idMetaSec').val();
+	var idEvaluacion = $('#idProgInst').val();
+	if(idEvaluacion == '')
+		idEvaluacion = 0;	
+	var url = base+'index.php/abcCatalogos/abcMetasSectoriales_c/traerIndicesMI/'+idMetaPadre+'/'+idEvaluacion;
+	$.ajax({
+        url: url,
+         data: { 
+        		idEvaluacion:idEvaluacion
+        		},
+        type: 'POST',               
+        success: function(data){
+			$('#indicesMI').empty();	
+			$('#indicesMI').append(data);
+        },
+        error: function(){
+           alert("Error al consultar indices. Url: "+url);
+        }
+    });	
+}
+
+

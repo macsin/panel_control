@@ -1,0 +1,103 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Prueba_m extends CI_Model {
+	public function __construct() {
+		parent::__construct();
+		$this->load->database();
+	}
+	public function obtenerTipoUsuario() {
+        $customQuery = "SELECT id_cat_tipo_usuario, descripcion, estatus FROM monitoreo.cat_tipo_usuario;";
+        $query = $this->db->query($customQuery);
+        if ($query->num_rows()!=0) {
+            foreach ($query->result_array() as $value) {
+                $noticias[$value['id_cat_tipo_usuario']] = $value;
+            }
+        } else {
+            $noticias = "FALSE";
+        }
+
+        echo "<pre> hola";
+        print_r($noticias);
+        echo "</pre>";
+    }
+	
+	function traerPeriodicidad(){
+		$periodicidad = "SELECT * FROM cat_periodicidad";
+        $query = $this->db->query($periodicidad);
+        if ($query->num_rows()!=0) {
+            foreach ($query->result_array() as $value) {
+                $cat[$value['id_periodicidad']] = $value['descripcion'];
+            }
+        } else{
+        	$cat=array();
+        }
+		return $cat;
+	}
+	
+	function consultaPGD($nivel,$ente,$filtro){
+		$query="select indi.* ";
+		
+		if(isset($filtro['eje'])){
+			$query.=',area.id_cat_area_oportunidad as id_grupo, area.descripcion as grupo ';
+		}else if(isset($filtro['area'])){
+			$query.=',obj.id_cat_objetivo as id_grupo, obj.descripcion as grupo ';
+		}else if(isset($filtro['objetivo'])){
+			$query.=',meta.id_cat_meta as id_grupo, meta.descripcion as grupo ';
+		}else if(isset($filtro['meta'])){
+			$query.=',ms.id_meta_sectorial as id_grupo, ms.descripcion as grupo ';
+		}else{
+			$query.=',eje.id_cat_eje as id_grupo, eje.descripcion as grupo ';
+		}
+		
+		$query.=" from ficha_indicador indi
+				left join cat_ente_has_indicador ente_indi on ente_indi.id_cat_indicador=indi.id_cat_indicador";
+			
+			
+			$join=" left join cat_meta_sectorial ms on ms.id_meta_sectorial=indi.id_meta_sectorial ";
+			
+			if($nivel==4 || $nivel==3 || $nivel==2 || $nivel==1){
+				$join.=" left join cat_meta meta on meta.id_cat_meta=ms.id_cat_meta ";
+			}
+			if($nivel==3 || $nivel==2 || $nivel==1){
+				$join.=" left join cat_objetivo obj on obj.id_cat_objetivo=meta.id_cat_objetivo ";
+			}			
+			if($nivel==2 || $nivel==1){
+				$join.=" left join cat_area_oportunidad area on area.id_cat_area_oportunidad=obj.id_cat_area_oportunidad ";
+			}	
+			if($nivel==1 ){
+				$join.=" left join cat_eje eje on eje.id_cat_eje=area.id_cat_eje";
+			}
+			
+			$where=" where indi.id_cat_indicador>0";
+			if($ente!=0){
+				$where.=" and ente_indi.id_cat_ente=$ente";
+			}
+			if(isset($filtro['eje'])){
+				$where.=" and area.id_cat_eje=".$filtro['eje'];
+			}
+			
+			if(isset($filtro['area'])){
+				$where.=" and obj.id_cat_area_oportunidad=".$filtro['area'];
+			}
+			if(isset($filtro['objetivo'])){
+				$where.=" and meta.id_cat_objetivo=".$filtro['objetivo'];
+			}
+			if(isset($filtro['meta'])){
+				$where.=" and ms.id_cat_meta=".$filtro['meta'];
+			}
+			
+			$result = $this->db->query($query.$join.$where);	
+			
+			if ($result->num_rows()!=0) {
+				$i=1;
+	            foreach ($result->result_array() as $value) {
+	                $datos[$value['id_grupo'].'_'.utf8_decode($value['grupo'])][$i]=$value['id_cat_indicador'];
+					$i++;
+	            }
+	        }
+	        return $datos;
+	}
+}
+
+/* End of file prueba_m.php */
+/* Location: ./application/models/prueba_m.php */

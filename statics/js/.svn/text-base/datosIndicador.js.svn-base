@@ -1,0 +1,443 @@
+/**
+ * @author jmavalos
+ */
+
+var ctePrograma = new Array();
+
+ctePrograma['Sectorial'] = '1';
+ctePrograma['Especial'] = '2';
+ctePrograma['Institucional'] = '3';
+
+
+function actualizarMetaSectorial(idTipoEvaluacion)//Programa
+{	
+	tipoEvaluacion = $('#idCatTipoEvaluacion').val();//Tipo de programa
+	$('#descripcionMetaSectorial').val('');
+	if( tipoEvaluacion == ctePrograma['Sectorial'])
+	{		
+		idCatEvaluacion = $('#'+idTipoEvaluacion).val();
+		var url=base+'index.php/abcIndicadores/altaIndicador_c/actualizarMetaSectorial/'+idCatEvaluacion;			
+		var metasSectoriales=$.ajax({
+			url:url,
+			type:'POST',
+			async:false
+		});
+		datos = metasSectoriales.responseText; // guarda los datos en la varibale "datos" que recibe del servidor
+		metasSectoriales.onreadystatechange = actualizarDatos(datos,tipoEvaluacion);		
+	}
+	else if(tipoEvaluacion == ctePrograma['Institucional'])
+	{
+		idCatEvaluacion = $('#'+idTipoEvaluacion).val();
+		var url=base+'index.php/abcIndicadores/altaIndicador_c/actualizarMetaInstitucional/'+idCatEvaluacion;			
+		var metasSectoriales=$.ajax({
+			url:url,
+			type:'POST',
+			async:false
+		});
+		datos = metasSectoriales.responseText; // guarda los datos en la varibale "datos" que recibe del servidor
+		metasSectoriales.onreadystatechange = actualizarDatos(datos,tipoEvaluacion);		
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function actualizarDatos(datos,tipoEvaluacion)
+{		
+	switch (tipoEvaluacion)
+	{
+		case '1':
+		$('#metaSectorial').empty();
+		jsonR=$.parseJSON(datos);
+				$.each(jsonR,function(){						
+						if(this.id == '1' || this.id == '')
+							$('#metaSectorial').append("<option value='"+this.id+"'>"+this.texto+"</option>");
+						else
+							$('#metaSectorial').append("<option value='"+this.id+"'>Meta "+this.texto+"</option>");
+				});
+		break;
+		case '3':
+		$('#metaInstitucional').empty();
+		jsonR=$.parseJSON(datos);
+				$.each(jsonR,function(){						
+						if(this.id == '1' || this.id == '')
+							$('#metaInstitucional').append("<option value='"+this.id+"'>"+this.texto+"</option>");
+						else
+							$('#metaInstitucional').append("<option value='"+this.id+"'>Meta "+this.texto+"</option>");
+				});
+		break;
+		default:
+			break;
+	} 
+}
+
+function actualizarDescripcionMetaSectorial(idMetaSectorial)
+{
+	var idCatMeta=$('#'+idMetaSectorial).val();
+	var url=base+'index.php/abcIndicadores/altaIndicador_c/actualizarDescripcionMetaSectorial/'+idCatMeta;
+	var descripcionMeta=$.ajax({
+		url:url,
+		type:'POST',
+		async:false
+		});
+		
+	datos = descripcionMeta.responseText; // guarda los datos en la varibale "datos" que recibe del servidor 
+	descripcionMeta.onreadystatechange = insertarDescripcionMetaSectorial(datos);
+}
+
+function insertarDescripcionMetaSectorial(datos)
+{
+	jsonR=$.parseJSON(datos);
+				$.each(jsonR,function(){
+					var dato= this.texto.replace(/&quot;/g,'"').replace(/&#039;/g,"'");
+						$('#descripcionMetaSectorial').val(dato);});
+}
+
+function actualizarDescripcionMetaInstitucional(idMetaInstitucional)
+{
+	var idCatMeta=$('#'+idMetaInstitucional).val();
+	var url=base+'index.php/abcIndicadores/altaIndicador_c/actualizarDescripcionMetaInstitucional/'+idCatMeta;
+	var descripcionMeta=$.ajax({
+		url:url,
+		type:'POST',
+		async:false
+		});
+		
+	datos = descripcionMeta.responseText; // guarda los datos en la varibale "datos" que recibe del servidor 
+	descripcionMeta.onreadystatechange = insertarDescripcionMetaInstitucional(datos);
+}
+
+function insertarDescripcionMetaInstitucional(datos)
+{
+	jsonR=$.parseJSON(datos);
+				$.each(jsonR,function(){
+						$('#descripcionMetaInstitucional').val(this.texto);});
+}
+function obtenerPeriodos(){
+	var i=1;
+	var tipoPeriodicidad = $('#fichaIndicador_idCatPeriodicidad').val();
+	var url=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodos/'+tipoPeriodicidad;
+			
+	var periodos=$.ajax({
+				url:url,
+				type:'POST',
+				async:false,
+			});
+	datos = periodos.responseText; 
+	
+	var urlAnio=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodosAnio/'+tipoPeriodicidad;
+			
+	var anios=$.ajax({
+				url:urlAnio,
+				type:'POST',
+				async:false,
+			});
+	arregloAnios = anios.responseText; 
+	
+	for(i=1;i<=numEntes;i++){	
+		$('#metas_periodoInicio'+i).empty();
+		$('#metas_periodoInicio'+i).html("<option value=''>Seleccione periodo</option>");
+		$('#metas_periodoFin'+i).empty();
+		$('#metas_periodoFin'+i).html("<option value=''>Seleccione periodo</option>");
+		$('#metas_anioInicio'+i).empty();
+		$('#metas_anioInicio'+i).html("<option value=''>Seleccione periodo</option>");
+		$('#metas_anioFin'+i).empty();
+		$('#metas_anioFin'+i).html("<option value=''>Seleccione periodo</option>");
+		jsonR=$.parseJSON(datos);
+		$.each(jsonR,function(){
+			$('#metas_periodoInicio'+i).append("<option value='"+this.valor+"'>"+this.valor+"</option>");	
+			$('#metas_periodoFin'+i).append("<option value='"+this.valor+"'>"+this.valor+"</option>");	
+		});
+		
+		//alert(arregloAnios);
+		jsonR2=$.parseJSON(arregloAnios);
+		$.each(jsonR2,function(){
+			$('#metas_anioInicio'+i).append("<option value='"+this.anio+"'>"+this.anio+"</option>");	
+			$('#metas_anioFin'+i).append("<option value='"+this.anio+"'>"+this.anio+"</option>");	
+		}); 
+		//Actualiza el valor del select
+		//Cambio de peridicidad por lo que el avance planeado y pComprendidos se resetea 
+		$("#metas_pComprendidos"+i).val('');
+		$("#metas_aPlaneado"+i).val('');
+		//Ocultamos el año en caso de seleccionar biannual
+		if($("#fichaIndicador_idCatPeriodicidad").val() == '8')//esta seleccionada Bianual
+		{		
+			$("#ocultarBianualInicio"+i).removeClass("mostrar");
+			$("#ocultarBianualFin"+i).removeClass("mostrar");
+			$("#ocultarBianualInicio"+i).addClass("ocultar");
+			$("#ocultarBianualFin"+i).addClass("ocultar");
+		}
+		else
+		{
+			$("#ocultarBianualInicio"+i).removeClass("ocultar");
+			$("#ocultarBianualFin"+i).removeClass("ocultar");
+			$("#ocultarBianualInicio"+i).addClass("mostrar");
+			$("#ocultarBianualFin"+i).addClass("mostrar");
+		}		
+	}
+		
+}
+
+//Funcion que se encarga de validar que la Meta sea mayor a la Linea base. 
+
+function validarMeta(identificador, idConsecutivo)
+{
+	//alert(identificador+" "+idConsecutivo);
+
+		switch (identificador)
+		{
+			case 'metas_realLinea'://Verificamos que sea menor que  metas_realMeta1
+				valorLineaBase = $('#metas_realLinea'+idConsecutivo).val();
+				valorMeta = $('#metas_realMeta'+idConsecutivo).val();
+				valorTotal = $('#metas_realTotal'+idConsecutivo).val();
+				if(valorMeta != '' && valorLineaBase != '')
+				{
+					valorMeta = parseFloat(valorMeta);
+					valorLineaBase = parseFloat(valorLineaBase);
+					if(valorMeta == valorLineaBase)
+					{
+						alerta("El valor de la Linea Base, debe ser diferente a la Meta","alert-error");
+						$('#metas_realLinea'+idConsecutivo).val('');
+						$('#metas_realLinea'+idConsecutivo).focus();
+					}
+					if(valorTotal != '' && valorLineaBase != '')
+					{
+						valorTotal = parseFloat(valorTotal);
+						if(valorTotal <= valorLineaBase)
+						{
+							alerta("El valor de la Linea Base, debe ser menor al valor total","alert-error");
+							$('#metas_realLinea'+idConsecutivo).val('');
+							$('#metas_realLinea'+idConsecutivo).focus();
+						}							
+					}
+				}
+				else
+					if(valorTotal != '' && valorLineaBase != '')
+					{
+						valorLineaBase = parseFloat(valorLineaBase);
+						valorTotal = parseFloat(valorTotal);
+						if(valorTotal <= valorLineaBase)
+						{
+							alerta("El valor de la Linea Base, debe ser menor al valor total","alert-error");
+							$('#metas_realLinea'+idConsecutivo).val('');
+							$('#metas_realLinea'+idConsecutivo).focus();
+						}							
+					}
+				break;
+			case 'metas_porcentualLinea':
+				porcentajeLineaBase = $('#metas_porcentualLinea'+idConsecutivo).val();
+				porcentajeMeta = $('#metas_porcentualMeta'+idConsecutivo).val();
+				porcentajeTotal = $('#metas_porcentualTotal'+idConsecutivo).val();
+				if(porcentajeMeta != '' && porcentajeLineaBase != '')
+				{
+					porcentajeMeta = parseFloat(porcentajeMeta);
+					porcentajeLineaBase = parseFloat(porcentajeLineaBase);
+					if(porcentajeMeta == porcentajeLineaBase)
+					{
+						alerta("El porcentaje de la Linea Base, debe ser diferente al porcentaje de la Meta","alert-error");
+						$('#metas_porcentualLinea'+idConsecutivo).val('');
+						$('#metas_porcentualLinea'+idConsecutivo).focus();
+					}
+					if(porcentajeTotal != '' && porcentajeLineaBase != '')
+					{
+						porcentajeTotal = parseFloat(porcentajeTotal);
+						if(porcentajeTotal <= porcentajeLineaBase )
+						{
+							alerta("El porcentaje de la Linea Base, debe ser menor al porcentaje total","alert-error");
+							$('#metas_porcentualLinea'+idConsecutivo).val('');
+							$('#metas_porcentualLinea'+idConsecutivo).focus();
+						}
+					}
+				}
+				else
+					if(porcentajeTotal != '' && porcentajeLineaBase != '')
+					{
+						porcentajeLineaBase = parseFloat(porcentajeLineaBase);
+						porcentajeTotal = parseFloat(porcentajeTotal);
+						if(porcentajeTotal <= porcentajeLineaBase )
+						{
+							alerta("El porcentaje de la Linea Base, debe ser menor al porcentaje total","alert-error");
+							$('#metas_porcentualLinea'+idConsecutivo).val('');
+							$('#metas_porcentualLinea'+idConsecutivo).focus();
+						}
+					}
+
+				break;
+			case 'metas_realMeta':
+				realLineaBase = $('#metas_realLinea'+idConsecutivo).val();
+				realMeta = $('#metas_realMeta'+idConsecutivo).val();
+				realTotal = $('#metas_realTotal'+idConsecutivo).val();
+				if(realMeta != '' && realLineaBase != '')
+				{
+					realMeta = parseFloat(realMeta);					
+					realLineaBase = parseFloat(realLineaBase);
+					if(realMeta == realLineaBase)
+					{
+						alerta("El valor de la Meta, debe ser diferente a la Linea Base","alert-error");
+						$('#metas_realMeta'+idConsecutivo).val('');
+						$('#metas_realMeta'+idConsecutivo).focus();
+					}
+					if (realMeta != '' && realTotal != '') 
+					{
+						realTotal = parseFloat(realTotal);
+						if(realMeta > realTotal)
+						{
+							alerta("El valor de la Meta, no puede ser mayor al valor total","alert-error");
+							$('#metas_realMeta'+idConsecutivo).val('');
+							$('#metas_realMeta'+idConsecutivo).focus();
+						}						
+					}
+				}
+				else
+				{
+					if (realMeta != '' && realTotal != '') 
+					{
+						realMeta = parseFloat(realMeta);
+						realTotal = parseFloat(realTotal);
+						if(realMeta > realTotal)
+						{
+							alerta("El valor de la Meta, no puede ser mayor al valor total","alert-error");
+							$('#metas_realMeta'+idConsecutivo).val('');
+							$('#metas_realMeta'+idConsecutivo).focus();
+						}						
+					}
+				}
+				break;
+			case 'metas_porcentualMeta':
+				porcentajeLineaBase = $('#metas_porcentualLinea'+idConsecutivo).val();
+				porcentajeMeta = $('#metas_porcentualMeta'+idConsecutivo).val();
+				porcentajeTotal = $('#metas_porcentualTotal'+idConsecutivo).val();
+				if(porcentajeMeta != '' && porcentajeLineaBase != '')
+				{
+					porcentajeMeta = parseFloat(porcentajeMeta);
+					porcentajeLineaBase = parseFloat(porcentajeLineaBase);
+					if(porcentajeMeta == porcentajeLineaBase)
+					{
+						alerta("El porcentaje de la Meta, debe ser diferente al porcentaje de la Linea Base","alert-error");
+						$('#metas_porcentualMeta'+idConsecutivo).val('');
+						$('#metas_porcentualMeta'+idConsecutivo).focus();
+					}
+					if(porcentajeMeta != '' && porcentajeTotal != '')
+					{
+						porcentajeTotal = parseFloat(porcentajeTotal);
+						if(porcentajeMeta > porcentajeTotal)
+						{
+							alerta("El porcentaje de la Meta, no puede ser mayor al porcentaje total","alert-error");
+							$('#metas_porcentualMeta'+idConsecutivo).val('');
+							$('#metas_porcentualMeta'+idConsecutivo).focus();
+						}	
+					}
+				}
+				else
+					if(porcentajeMeta != '' && porcentajeTotal != '')
+					{
+							porcentajeTotal = parseFloat(porcentajeTotal);
+							porcentajeMeta = parseFloat(porcentajeMeta);
+							if(porcentajeMeta > porcentajeTotal)
+							{
+								alerta("El porcentaje de la Meta, no puede ser mayor al porcentaje total","alert-error");
+								$('#metas_porcentualMeta'+idConsecutivo).val('');
+								$('#metas_porcentualMeta'+idConsecutivo).focus();
+							}	
+				}
+				break;
+			case 'metas_realTotal':
+				realMeta = $('#metas_realMeta'+idConsecutivo).val();
+				realTotal = $('#metas_realTotal'+idConsecutivo).val();
+				realLineaBase = $('#metas_realLinea'+idConsecutivo).val();
+				if (realMeta != '' && realTotal != '') 
+					{
+						realTotal = parseFloat(realTotal);
+						realMeta = parseFloat(realMeta);
+						if(realMeta > realTotal)
+						{
+							alerta("El valor total, no puede ser menor a la meta","alert-error");
+							$('#metas_realTotal'+idConsecutivo).val('');
+							$('#metas_realTotal'+idConsecutivo).focus();
+						}
+						if(realTotal != '' && realLineaBase != '')
+						{
+							realLineaBase = parseFloat(realLineaBase);
+							if(realTotal <= realLineaBase)
+							{
+								alerta("El valor total, debe ser mayor al valor de la linea base","alert-error");
+								$('#metas_realTotal'+idConsecutivo).val('');
+								$('#metas_realTotal'+idConsecutivo).focus();
+							}							
+						}						
+					}
+					else
+						if(realTotal != '' && realLineaBase != '')
+							{
+								realTotal = parseFloat(realTotal);
+								realLineaBase = parseFloat(realLineaBase);
+								if(realTotal <= realLineaBase)
+								{
+									alerta("El valor total, debe ser mayoral valor de la linea base","alert-error");
+									$('#metas_realTotal'+idConsecutivo).val('');
+									$('#metas_realTotal'+idConsecutivo).focus();
+								}							
+							}
+				break;
+			default :
+				break;
+		}
+	
+}
+
+//Funcion que se encarga de calculor los valores porcentuales dependiendo de los valores dados en la parte de metas en valor total.
+
+function calculoValorPorcentual(id)
+{
+	bandera = 0;//Cambia a 1 si se hizo algun calculo, nos sirve para mandar mensaje en caso de que esten la linea base y la meta vacios.
+	valorTotal = $('#metas_realTotal'+id).val();
+	valorLinea = $('#metas_realLinea'+id).val();
+	valorMeta = $('#metas_realMeta'+id).val();
+		
+	 if(valorTotal == '' )//Si no ha introducido el valor total se mandan un mensaje de alerta y se pone el focus
+	 {
+	 	alerta("Necesita introducir el valor total","alert-error");
+		$('#metas_realTotal'+id).val('');
+		$('#metas_realTotal'+id).focus();
+	 }
+	 else
+	 {	
+	 	valorTotal = parseFloat(valorTotal);
+	 	if(valorTotal == 0)
+	 	{
+	 		alerta("Introducir el valor total diferente de 0","alert-error");
+	 	}
+	 	else
+	 	{
+		 	if(valorLinea != '')//Si el valor de Linea Base es diferente de Vacio se hacen los calculos para la linea base
+			 {
+			 	valorLinea = parseFloat(valorLinea);
+			 	porcentaje = (valorLinea*100)/valorTotal;
+			 	$('#metas_porcentualLinea'+id).val(porcentaje.toFixed(2));
+			 	bandera =1;
+			 }
+			 else
+			 {
+			 	$('#metas_porcentualLinea'+id).val('');
+			 	bandera =0;
+			 }
+			 if(valorMeta != '' && bandera != 0)//Si el valor de Meta es diferente de Vacio se hacen los calculos para Meta
+			 {
+			 	valorMeta = parseFloat(valorMeta);
+			 	porcentaje = (valorMeta*100)/valorTotal;
+			 	$('#metas_porcentualMeta'+id).val(porcentaje.toFixed(2));
+			 	bandera =1;
+			 }
+			 else
+			 {
+			 	$('#metas_porcentualMeta'+id).val('');
+			 	bandera =0;
+			 }
+			 if(bandera == 0)
+			 {
+			 	alerta("Es necesario introducir valores en Linea Base y Meta","alert-error");
+			 }	
+	 	}	 	
+	 }
+}

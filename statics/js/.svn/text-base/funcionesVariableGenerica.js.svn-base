@@ -1,0 +1,1402 @@
+function obtenerPeriodosVG(){
+	var i=1;
+	var tipoPeriodicidad = $('#idCatPeriodicidad').val();
+	var url=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodos/'+tipoPeriodicidad;
+	var periodos=$.ajax({
+				url:url,
+				type:'POST',
+				async:false,
+			});
+	datos = periodos.responseText; 
+	var urlAnio=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodosAnio/'+tipoPeriodicidad;
+	var anios=$.ajax({
+				url:urlAnio,
+				type:'POST',
+				async:false,
+			});
+	arregloAnios = anios.responseText; 
+		$('#periodoInicio').empty();
+		$('#periodoInicio').html("<option value=''>Seleccione periodo</option>");
+		$('#periodoFin').empty();
+		$('#periodoFin').html("<option value=''>Seleccione periodo</option>");
+		$('#anioInicio').empty();
+		$('#anioInicio').html("<option value=''>Seleccione periodo</option>");
+		$('#anioFin').empty();
+		$('#anioFin').html("<option value=''>Seleccione periodo</option>");
+		jsonR=$.parseJSON(datos);
+		$.each(jsonR,function(){
+			if(periodoInicio != this.valor)
+				$('#periodoInicio').append("<option value='"+this.valor+"'>"+this.valor+"</option>");	
+			else
+				$('#periodoInicio').append("<option value='"+this.valor+"' selected>"+this.valor+"</option>");
+			if(periodoFin != this.valor)
+				$('#periodoFin').append("<option value='"+this.valor+"'>"+this.valor+"</option>");	
+			else
+				$('#periodoFin').append("<option value='"+this.valor+"' selected>"+this.valor+"</option>");
+				
+		});
+		jsonR2=$.parseJSON(arregloAnios);
+		$.each(jsonR2,function(){
+			if(anioInicio != this.anio)
+				$('#anioInicio').append("<option value='"+this.anio+"'>"+this.anio+"</option>");
+			else
+				$('#anioInicio').append("<option value='"+this.anio+"' selected>"+this.anio+"</option>");
+			if(anioFin != this.anio)	
+				$('#anioFin').append("<option value='"+this.anio+"'>"+this.anio+"</option>");
+			else
+				$('#anioFin').append("<option value='"+this.anio+"' selected>"+this.anio+"</option>");
+				
+		});
+		
+		if($("#idCatPeriodicidad").val() == '8')//esta seleccionada Bianual
+		{		
+			$("#ocultarBianualInicio").removeClass("mostrar");
+			$("#ocultarBianualFin").removeClass("mostrar");
+			$("#ocultarBianualInicio").addClass("ocultar");
+			$("#ocultarBianualFin").addClass("ocultar");
+		}
+		else
+		{
+			$("#ocultarBianualInicio").removeClass("ocultar");
+			$("#ocultarBianualFin").removeClass("ocultar");
+			$("#ocultarBianualInicio").addClass("mostrar");
+			$("#ocultarBianualFin").addClass("mostrar");
+		}
+		
+		 
+		obtenerFechaVG(0);
+}
+
+
+function obtenerFechaVG(id, nombreID){
+	
+	var tipoPeriodicidad = $('#idCatPeriodicidad').val();
+	//var idCatVariable = $('#idCatVG').val();
+
+	var anioPeriodoBianual = new Array();
+	//Arreglo que nos sirve para cambiar de forma dinamica la selección de los periodos y años
+	anioPeriodoBianual['2013-2014'] = 2014;
+	anioPeriodoBianual['2014-2015'] = 2015;
+	anioPeriodoBianual['2015-2016'] = 2016;
+	anioPeriodoBianual['2016-2017'] = 2017;
+	anioPeriodoBianual['2017-2018'] = 2018;
+	/*anioPeriodoBianual['2018-2019'] = 2019;
+	anioPeriodoBianual['2019-2020'] = 2020;
+	anioPeriodoBianual['2020-2021'] = 2021;
+	anioPeriodoBianual['2021-2022'] = 2022;
+	anioPeriodoBianual['2022-2023'] = 2023;
+	anioPeriodoBianual['2023-2024'] = 2024;
+	anioPeriodoBianual['2024-2025'] = 2025;*/
+
+	if ($('#idCatPeriodicidad').val() == 8 && nombreID != undefined ) {
+		
+		var periodoInicio=$("#periodoInicio").val();
+		var periodosPares=new Array();
+		var periodosImpares=new Array();
+
+		periodosPares[0] = "2013-2014";
+		periodosPares[1] = "2015-2016";
+		periodosPares[2] = "2017-2018";
+		/*periodosPares[3] = "2019-2020";
+		periodosPares[4] = "2021-2022";
+		periodosPares[5] = "2023-2024";*/
+
+		periodosImpares[0] = "2014-2015";
+		periodosImpares[1] = "2016-2017";
+		/*periodosImpares[2] = "2018-2019";
+		periodosImpares[3] = "2020-2021";
+		periodosImpares[4] = "2022-2023";
+		periodosImpares[5] = "2024-2025";*/
+
+		$('#periodoFin').html('');
+		$('#periodoFin').append('<option value = "" selected>Seleccionar</option>');
+		if (periodoInicio == "2013-2014" || periodoInicio == "2015-2016" || periodoInicio == "2017-2018" || periodoInicio == "2019-2020" || periodoInicio == "2021-2022" || periodoInicio == "2023-2024") {
+			for (var i = 0; i < periodosPares.length; i++) {
+				$('#periodoFin').append('<option value="'+periodosPares[i]+'">'+periodosPares[i]+'</option>');
+			}
+			$('#pComprendidos').val('');
+		} else {
+			for (var i = 0; i < periodosImpares.length; i++) {
+				$('#periodoFin').append('<option value="'+periodosImpares[i]+'">'+periodosImpares[i]+'</option>');
+			}
+			$('#pComprendidos').val('');
+		}
+	}
+	
+	var periodoInicio = $("#periodoInicio").val();
+	var periodoFin = $("#periodoFin").val();
+	
+	if ($("#idCatPeriodicidad").val() == '8')//esta seleccionada Bianual	
+	{
+		var anioInicio = anioPeriodoBianual[periodoInicio];
+		var anioFin = anioPeriodoBianual[periodoFin];
+		$("#anioInicio").val(anioInicio);
+		$("#anioFin").val(anioFin);
+	} else {
+		var anioInicio = $("#anioInicio").val();
+		var anioFin = $("#anioFin").val();
+	}
+	
+	
+	if(periodoInicio != '' && anioInicio != '' && periodoFin != '' && anioFin != '' )
+	{
+		var urlCalculaIdInicio = base+'index.php/abcIndicadores/altaIndicador_c/traerIdPeridoJS/'+periodoInicio+'/'+anioInicio;
+		var urlCalculaIdFin = base+'index.php/abcIndicadores/altaIndicador_c/traerIdPeridoJS/'+periodoFin+'/'+anioFin;
+		var respIdInicio=$.ajax({
+					url:urlCalculaIdInicio,
+					type:'POST',
+					async:false,
+				});
+		jsonIdInicio = respIdInicio.responseText;
+		jsonRInicio=$.parseJSON(jsonIdInicio);
+		$.each(jsonRInicio,function(){
+			idPeriodoInicio = this.idPeriodo;
+		});
+		var respIdFin=$.ajax({
+					url:urlCalculaIdFin,
+					type:'POST',
+					async:false,
+				});
+		jsonIdFin = respIdFin.responseText;
+		jsonRFin=$.parseJSON(jsonIdFin);
+		$.each(jsonRFin,function(){
+			idPeriodoFin = this.idPeriodo;
+		});
+		if(idPeriodoFin!=-1 && idPeriodoInicio!= -1 && idPeriodoFin>=idPeriodoInicio)
+		{
+			diferencia = (idPeriodoFin-idPeriodoInicio)+1;				
+			$('#pComprendidos').val(diferencia);
+		}
+		if(idPeriodoFin<idPeriodoInicio){
+	    	alerta('El periodo inicio debe ser mayor o igual que el periodo final','alert-error');
+	    	$('#pComprendidos').val('');
+			$('#aPlaneado').val('');
+	    }
+	}
+	else
+	{
+		$('#pComprendidos').val('');
+	}
+}
+
+function validaPublicacionVG(elemento, idFichaVariableGenerica)
+{
+	switch(elemento)
+	{
+		case 'borrador':
+				if(validarObligatorios())
+				{
+					if(idFichaVariableGenerica == 0)// Se inserta por primera vez la ficha de la variable generica.
+						var url=base+'index.php/variableGenerica/altaVariableGenerica_c/altaFichaVariableGenerica/1'; //1--> Borrador
+					else //Actualizamos los datos de la variable generica.
+						var url=base+'index.php/variableGenerica/altaVariableGenerica_c/actualizarFichaVariableGenerica/'+idFichaVariableGenerica+'/1';//1--> Borrador
+					//Obtenemos las variables del formulario para insertar.
+					var objetivoVG=$('#objetivoVG').val();
+					var idCatTipoEvaluacion =$('#idCatTipoEvaluacion').val();
+					var idCatEvaluacion = $('#catEvaluacion_idCatEvaluacion').val();
+					var idCatPeriodicidad = $('#idCatPeriodicidad').val();
+					var objetivoVG = $('#objetivoVG').val();
+					var idCatVG = $('#idCatVG').val();
+					var selectValorNumerico = $('#selectValorNumerico').val();
+					var selectCarga = $('#selectCarga').val();
+					if(idCatVG == '')
+						idCatVG = null;
+					if($("#rango").is(':checked')){
+						var limiteInferior = $('#limiteInferior').val();
+						var limiteSuperior = $('#limiteSuperior').val();}
+					else{
+						var limiteInferior = '';
+						var limiteSuperior = '';}
+					if($('#selectValorNumerico').val() == 2){
+						var numeroDecimales = $('#numeroDecimales').val();}
+					else{
+						var numeroDecimales = '';}
+											
+					var periodoInicio = $('#periodoInicio').val();
+					var periodoFin = $('#periodoFin').val();
+					var anioInicio = $('#anioInicio').val();
+					var anioFin = $('#anioFin').val();
+
+					$.ajax({
+				        url: url,
+				        data: { 
+				        		objetivoVG:objetivoVG,
+				        		idCatTipoEvaluacion:idCatTipoEvaluacion,
+				        		idCatEvaluacion:idCatEvaluacion,
+				        		idCatPeriodicidad:idCatPeriodicidad,
+				        		objetivoVG:objetivoVG,
+				        		idCatVG:idCatVG,
+				        		selectValorNumerico:selectValorNumerico,
+				        		selectCarga:selectCarga,
+				        		limiteInferior:limiteInferior,
+				        		limiteSuperior:limiteSuperior,
+				        		numeroDecimales:numeroDecimales,
+				        		periodoInicio:periodoInicio,
+				        		periodoFin:periodoFin,
+				        		anioInicio:anioInicio,
+				        		anioFin:anioFin
+				        		},
+				        type: 'POST',
+				        async:true,           
+				        success: function(data){
+					        if(data != 0)//Cero si no se han podido insertar los datos en la tabla
+					        {
+					        	$('#body_principal').html(data);	
+					        }
+							else
+							{
+								alerta('Error al guardar el borrador, intentelo nuevamente', 'alert-info');
+							}
+				        },
+				        error: function(){
+				           alert("no se pudo");
+				           alert(url);
+				        }
+				    });					
+				}
+				else
+				{
+					alerta('143', 'alert-error');
+				}
+			break;
+		case 'publicar'://Todos los campos son obligatorios
+			if(validarCamposPublicarVG())
+			{
+				if(idFichaVariableGenerica == 0)// Se inserta por primera vez la ficha de la variable generica.
+						var url=base+'index.php/variableGenerica/altaVariableGenerica_c/altaFichaVariableGenerica/2'; //2--> Publicado
+					else //Actualizamos los datos de la variable generica.
+						var url=base+'index.php/variableGenerica/altaVariableGenerica_c/actualizarFichaVariableGenerica/'+idFichaVariableGenerica+'/2';//2--> Publicado
+					//Obtenemos las variables del formulario para insertar.
+					var objetivoVG=$('#objetivoVG').val();
+					var idCatTipoEvaluacion =$('#idCatTipoEvaluacion').val();
+					var idCatEvaluacion = $('#catEvaluacion_idCatEvaluacion').val();
+					var idCatPeriodicidad = $('#idCatPeriodicidad').val();
+					var objetivoVG = $('#objetivoVG').val();
+					var idCatVG = $('#idCatVG').val();
+					var selectValorNumerico = $('#selectValorNumerico').val();
+					var selectCarga = $('#selectCarga').val();
+					if(idCatVG == '')
+						idCatVG = null;
+					if($("#rango").is(':checked')){
+						var limiteInferior = $('#limiteInferior').val();
+						var limiteSuperior = $('#limiteSuperior').val();}
+					else{
+						var limiteInferior = '';
+						var limiteSuperior = '';}
+					
+					if($('#selectValorNumerico').val() == 2){
+						var numeroDecimales = $('#numeroDecimales').val();}
+					else{
+						var numeroDecimales = '';}
+											
+					var periodoInicio = $('#periodoInicio').val();
+					var periodoFin = $('#periodoFin').val();
+					var anioInicio = $('#anioInicio').val();
+					var anioFin = $('#anioFin').val();
+
+					$.ajax({
+				        url: url,
+				        data: { 
+				        		objetivoVG:objetivoVG,
+				        		idCatTipoEvaluacion:idCatTipoEvaluacion,
+				        		idCatEvaluacion:idCatEvaluacion,
+				        		idCatPeriodicidad:idCatPeriodicidad,
+				        		objetivoVG:objetivoVG,
+				        		idCatVG:idCatVG,
+				        		selectValorNumerico:selectValorNumerico,
+				        		selectCarga:selectCarga,
+				        		limiteInferior:limiteInferior,
+				        		limiteSuperior:limiteSuperior,
+				        		numeroDecimales:numeroDecimales,
+				        		periodoInicio:periodoInicio,
+				        		periodoFin:periodoFin,
+				        		anioInicio:anioInicio,
+				        		anioFin:anioFin
+				        		},
+				        type: 'POST',
+				        async:true,           
+				        success: function(data){
+					        if(data != 0)
+					        {
+					        	$('#body_principal').html(data);	
+					        }
+							else
+							{
+								alerta('Error al dar de alta la variable, intentelo nuevamente', 'alert-info');
+							}
+				        },
+				        error: function(){
+				           alert("no se pudo");
+				           alert(url);
+				        }
+				    });			
+			}
+			break;
+		case 'actualizar'://Todos los campos son obligatorios
+			if(validarCamposPublicarVG())
+			{
+				if(idFichaVariableGenerica == 0)// Se inserta por primera vez la ficha de la variable generica.
+						var url=base+'index.php/variableGenerica/altaVariableGenerica_c/altaFichaVariableGenerica/2'; //2--> Publicado
+					else //Actualizamos los datos de la variable generica.
+						var url=base+'index.php/variableGenerica/altaVariableGenerica_c/actualizarFichaVariableGenerica/'+idFichaVariableGenerica+'/3';//3--> Actualizar
+					//Obtenemos las variables del formulario para insertar.
+					var objetivoVG=$('#objetivoVG').val();
+					var idCatTipoEvaluacion =$('#idCatTipoEvaluacion').val();
+					var idCatEvaluacion = $('#catEvaluacion_idCatEvaluacion').val();
+					var idCatPeriodicidad = $('#idCatPeriodicidad').val();
+					var objetivoVG = $('#objetivoVG').val();
+					var idCatVG = $('#idCatVG').val();
+					var selectValorNumerico = $('#selectValorNumerico').val();
+					var selectCarga = $('#selectCarga').val();
+					if(idCatVG == '')
+						idCatVG = null;
+					if($("#rango").is(':checked')){
+						var limiteInferior = $('#limiteInferior').val();
+						var limiteSuperior = $('#limiteSuperior').val();}
+					else{
+						var limiteInferior = '';
+						var limiteSuperior = '';}
+					
+					if($('#selectValorNumerico').val() == 2){
+						var numeroDecimales = $('#numeroDecimales').val();}
+					else{
+						var numeroDecimales = '';}
+											
+					var periodoInicio = $('#periodoInicio').val();
+					var periodoFin = $('#periodoFin').val();
+					var anioInicio = $('#anioInicio').val();
+					var anioFin = $('#anioFin').val();
+
+					$.ajax({
+				        url: url,
+				        data: { 
+				        		objetivoVG:objetivoVG,
+				        		idCatTipoEvaluacion:idCatTipoEvaluacion,
+				        		idCatEvaluacion:idCatEvaluacion,
+				        		idCatPeriodicidad:idCatPeriodicidad,
+				        		objetivoVG:objetivoVG,
+				        		idCatVG:idCatVG,
+				        		selectValorNumerico:selectValorNumerico,
+				        		selectCarga:selectCarga,
+				        		limiteInferior:limiteInferior,
+				        		limiteSuperior:limiteSuperior,
+				        		numeroDecimales:numeroDecimales,
+				        		periodoInicio:periodoInicio,
+				        		periodoFin:periodoFin,
+				        		anioInicio:anioInicio,
+				        		anioFin:anioFin
+				        		},
+				        type: 'POST',
+				        async:true,           
+				        success: function(data){
+					        if(data != 0)
+					        {
+					        	$('#body_principal').html(data);	
+					        }
+							else
+							{
+								alerta('Error al dar de alta la variable, intentelo nuevamente', 'alert-info');
+							}
+				        },
+				        error: function(){
+				           alert("no se pudo");
+				           alert(url);
+				        }
+				    });			
+			}
+			break;
+		default:
+			break;
+	}
+}
+
+function validarObligatorios()
+{
+	idCatTipoEvaluacion = $('#idCatTipoEvaluacion').val();
+	idNombreEvaluacion = $('#catEvaluacion_idCatEvaluacion').val();
+	if(idCatTipoEvaluacion != '' && idNombreEvaluacion != '')
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
+
+function validarCamposPublicarVG()
+{
+	var bandera = 0;
+	var mensaje = '';
+	var pComprendidos = $('#pComprendidos').val();
+	var idCatTipoEvaluacion =$('#idCatTipoEvaluacion').val();
+	var idCatEvaluacion = $('#catEvaluacion_idCatEvaluacion').val();
+	var idCatPeriodicidad = $('#idCatPeriodicidad').val();
+	var objetivoVG = $('#objetivoVG').val();
+	var idCatVG = $('#idCatVG').val();
+	var selectValorNumerico = $('#selectValorNumerico').val();
+	var selectCarga = $('#selectCarga').val();
+	if($("#rango").is(':checked')){
+		var limiteInferior = $('#limiteInferior').val();
+		var limiteSuperior = $('#limiteSuperior').val();}
+	else{
+		var limiteInferior = '';
+		var limiteSuperior = '';}
+	if($('#selectValorNumerico').val() == 2){
+		var numeroDecimales = $('#numeroDecimales').val();}
+	else{
+		var numeroDecimales = '';}
+	var periodoInicio = $('#periodoInicio').val();
+	var periodoFin = $('#periodoFin').val();
+	var anioInicio = $('#anioInicio').val();
+	var anioFin = $('#anioFin').val();	
+	//Validacion de Datos Generales	
+	if(idCatTipoEvaluacion == ''){mensaje ="83"; $('#idCatTipoEvaluacion').addClass('bordeRojo'); bandera = 1;}else {$('#idCatTipoEvaluacion').removeClass('bordeRojo');}
+	if(idCatEvaluacion == '' ){mensaje ="83"; $('#catEvaluacion_idCatEvaluacion').addClass('bordeRojo'); bandera = 1;}else {$('#catEvaluacion_idCatEvaluacion').removeClass('bordeRojo');}
+	if(idCatPeriodicidad == '1'){mensaje ="83"; $('#idCatPeriodicidad').addClass('bordeRojo'); bandera = 1;}else {$('#idCatPeriodicidad').removeClass('bordeRojo');}
+	if(objetivoVG != '')
+		if(!validar(objetivoVG)){mensaje = 'Caracteres invalidos en el campo de observaciones'; $('#objetivoVG').addClass('bordeRojo'); bandera = 1;}else {$('#objetivoVG').removeClass('bordeRojo');}
+	//Validacion de Variable Generica
+	//if(idCatVG == '' && bandera =='0'){mensaje = "Seleccione variable genérica"; $('#idCatVG').addClass('bordeRojo'); bandera = 1;}else {$('#idCatVG').removeClass('bordeRojo');}
+	//Validacion de Restricciones	
+	if(selectValorNumerico == '1' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Restricciones"; $('#selectValorNumerico').addClass('bordeRojo'); bandera = 1;}
+	else if(selectValorNumerico == '2' && bandera =='0')
+	{	$('#selectValorNumerico').removeClass('bordeRojo');
+		if(numeroDecimales == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Restricciones numero decimales"; $('#numeroDecimales').addClass('bordeRojo'); bandera = 1;}else {$('#numeroDecimales').removeClass('bordeRojo');}
+		if(numeroDecimales <= 0 || numeroDecimales > 10 && bandera =='0'){mensaje = "El número de decimales debe ser mayor a cero y menor a 10"; $('#numeroDecimales').addClass('bordeRojo'); bandera = 1;}else {$('#numeroDecimales').removeClass('bordeRojo');}
+	}
+	if(selectCarga == '1' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Restricciones"; $('#selectCarga').addClass('bordeRojo'); bandera = 1;}else {$('#selectCarga').removeClass('bordeRojo');}
+	if($("#rango").is(':checked')){
+		if(limiteInferior == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Restricciones"; $('#limiteInferior').addClass('bordeRojo'); bandera = 1;}else {$('#limiteInferior').removeClass('bordeRojo');}
+		if(limiteSuperior == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Restricciones"; $('#limiteSuperior').addClass('bordeRojo'); bandera = 1;}else {$('#limiteSuperior').removeClass('bordeRojo');}
+		if(selectValorNumerico == '2' && limiteInferior != '' && limiteSuperior != '' && bandera =='0')
+		{
+			if(!decimalesCorrectos($('#limiteSuperior').val(), $('#limiteInferior').val(), $('#numeroDecimales').val()))
+				{
+					$('#limiteSuperior').addClass('bordeRojo');
+					$('#limiteInferior').addClass('bordeRojo');
+					bandera = 1;
+					mensaje = 'El numero de decimales en los limites no coincide con el especificado';
+				}
+				else
+				{
+					$('#limiteSuperior').removeClass('bordeRojo');
+					$('#limiteInferior').removeClass('bordeRojo');
+				}	
+		}
+	}
+	else
+	{
+		$('#limiteInferior').removeClass('bordeRojo');
+		$('#limiteSuperior').removeClass('bordeRojo');	
+	}
+	//Validamos la carga, positiva negativa o ambas
+	if(limiteSuperior != '' && limiteInferior != '' && bandera == '0')
+	{
+		if($('#limiteSuperior').val() == $('#limiteInferior').val())
+		{
+			$('#limiteSuperior').addClass('bordeRojo');	
+			$('#limiteInferior').addClass('bordeRojo');
+			bandera = 1;
+			mensaje = 'Los limites no deben ser iguales';
+		}
+		else
+			{
+				$('#limiteSuperior').removeClass('bordeRojo');	
+				$('#limiteInferior').removeClass('bordeRojo');
+			}
+		if(parseFloat($('#limiteSuperior').val()) <= parseFloat($('#limiteInferior').val()) && bandera =='0')
+		{
+			$('#limiteSuperior').addClass('bordeRojo');	
+			$('#limiteInferior').addClass('bordeRojo');	
+			bandera = 1;
+			mensaje = 'Limite Superior debe ser mayor a Limite Inferior';					
+		}
+		else
+			{
+				$('#limiteSuperior').removeClass('bordeRojo');	
+				$('#limiteInferior').removeClass('bordeRojo');
+			}
+		if($('#selectCarga').val() == 2  && bandera =='0')//Positivos
+		{
+			if(parseFloat($('#limiteSuperior').val()) < 0 || parseFloat($('#limiteInferior').val()) < 0)
+			{
+				$('#limiteSuperior').addClass('bordeRojo');	
+				$('#limiteInferior').addClass('bordeRojo');
+				bandera = 1;
+				mensaje = 'Los limites deben de ser mayores o iguales a 0 debido que selecciono Positivos';			
+			}
+			else
+			{
+				$('#limiteSuperior').removeClass('bordeRojo');	
+				$('#limiteInferior').removeClass('bordeRojo');
+			}
+		}
+		if($('#selectCarga').val() == 3 && bandera =='0')//Negativos
+		{
+			if(parseFloat($('#limiteSuperior').val()) >= 0 || parseFloat($('#limiteInferior').val()) >= 0)
+			{
+				$('#limiteSuperior'+i).addClass('bordeRojo');
+				$('#limiteInferior'+i).addClass('bordeRojo');
+				bandera = 1;
+				mensaje = 'Los limites deben de ser menores a 0 debido que selecciono Negativos';
+			}
+			else
+			{
+				$('#limiteSuperior').removeClass('bordeRojo');	
+				$('#limiteInferior').removeClass('bordeRojo');
+			}
+		}
+		if($('#selectValorNumerico').val() == 3 && bandera =='0')//Entero
+			if(!isEntero($('#limiteSuperior').val()) || !isEntero($('#limiteInferior').val()) )
+			{
+				$('#limiteSuperior').addClass('bordeRojo');	
+				$('#limiteInferior').addClass('bordeRojo');
+				bandera = 1;
+				mensaje = 'Los limites deben ser enteros';
+			}
+			else
+			{
+				$('#limiteSuperior').removeClass('bordeRojo');	
+				$('#limiteInferior').removeClass('bordeRojo');
+			}
+	}
+	//Validacion periodos a reportar
+	if(periodoInicio == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Periodos a reportar"; $('#periodoInicio').addClass('bordeRojo'); bandera = 1;}else {$('#periodoInicio').removeClass('bordeRojo');} 
+	if(anioInicio == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Periodos a reportar"; $('#anioInicio').addClass('bordeRojo'); bandera = 1;}else {$('#anioInicio').removeClass('bordeRojo');}
+	if(periodoFin == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Periodos a reportar"; $('#periodoFin').addClass('bordeRojo'); bandera = 1;}else {$('#periodoFin').removeClass('bordeRojo');} 
+	if(anioFin == '' && bandera =='0'){mensaje = "Existen datos sin llenar en la sección de Periodos a reportar"; $('#anioFin').addClass('bordeRojo'); bandera = 1;}else {$('#anioFin').removeClass('bordeRojo');}
+	if(pComprendidos == '' && bandera == '0'){mensaje = "La fecha inicio debe ser menor o igual a fecha final en la seccion de periodos a reportar"; $('#periodoInicio').addClass('bordeRojo'); bandera = 1;}else {$('#periodoInicio').removeClass('bordeRojo');}
+	if(bandera == 0)
+		return  1;
+	else{
+		alerta(mensaje, 'alert-error');
+		return 0;}
+}
+
+function activarNumeroDecimalesVG(id) {
+	if ($('#' + id).val() == 2) {
+		$('#boxNumeroDecimales').removeClass('ocultar');
+		$('#boxNumeroDecimales').removeClass('bordeRojo');
+		$('#boxNumeroDecimales').addClass('mostrar');
+		$('#numeroDecimales').addClass('required');
+	} else {
+		$('#boxNumeroDecimales').removeClass('mostrar');
+		$('#numeroDecimales').removeClass('required');
+		$('#boxNumeroDecimales').addClass('ocultar');
+		$('#numeroDecimales').val('');
+	}
+}
+
+function activarLimitesVG() {
+	if ($('#rango').attr('checked')) {
+		$('#limiteSuperior').removeAttr('disabled');
+		$('#limiteInferior').removeAttr('disabled');
+	} else {
+		$('#limiteSuperior').attr('disabled', 'disabled');
+		$('#limiteInferior').attr('disabled', 'disabled');
+		$('#limiteSuperior').attr('value', '');
+		$('#limiteInferior').attr('value', '');
+	}
+}
+
+
+function obtenerPeriodoVariable(idCatVariable, periodicidad)
+{
+	var url=base+'index.php/variableGenerica/altaVariableGenerica_c/obtenerPeriodosVariable/'+idCatVariable+'/'+periodicidad;
+	var periodos=$.ajax({
+				url:url,
+				type:'POST',
+				async:false,
+			});
+	datos = periodos.responseText;
+	return datos;
+}
+
+function agregarOpEnteVG(listaEntesVG) {
+	numeroEntesVG++;
+	var ente = '';
+	ente = '<div class="control-group" id="grupoEnte'+numeroEntesVG+'">';
+	ente += '<label class="control-label">Ente<label class="resaltarLabel">*</label>:&nbsp;</label>';
+	// ente += '<div class="controls">';
+	ente += '<select name="opEnte'+numeroEntesVG+'" id="opEnte'+numeroEntesVG+'" class="input-xxlarge" onchange="verificarEnteVG(this.id)">';
+	ente += '<option value="1">Seleccione un ente</option>';
+	ente += '<option value="-2">Asignar a todos los entes</option>';
+	for (var i = 0; i < listaEntesVG.length - 1; i++) {
+		objEnte = JSON.parse(listaEntesVG[i]);
+		ente += '<option value='+objEnte.id_cat_ente+'>'+objEnte.descripcion+'</option>';
+	};
+	ente += '</select><a class="btn-icono" onclick="eliminarElementoEnteVG('+"'grupoEnte"+numeroEntesVG+"'"+',0,0,0)" title="Eliminar ente"> <img width="30" class="inactivo subir-img" src="'+base+'/statics/images/minus.png"/></a>';
+	// ente += '</div>';
+	ente += '</div>';
+	$("#listaEntes").append(ente);
+}
+
+function eliminarElementoEnteVG(idElemento,div,idBD,valor){
+	if(numeroEntesVG > 0) //Si el numero de entes es mayor a uno, deshabilitamos boton enviar a revision y habilitamos boton publicar. 
+	{
+		$("#"+idElemento).remove();
+	}	
+}
+
+function guardarVariableVG(numeroEntesVG, idBoton, bandera) 
+{
+	var auxNombre = $('#txtNombre').val();
+	$('#txtNombre').val(auxNombre.trim());
+	switch(idBoton)
+	{
+		case 'borrador':
+			if(validarObligatorios())
+			{
+				var variables = new Array();
+				for (var i = 1; i <= numeroEntesVG; i++) {
+					var campo = 'opEnte'+i;		
+					if (!($('#'+campo).val() === undefined)) {
+						if($('#'+campo).val() != '1')
+							variables[i] = $('#'+campo).val();
+					};
+				};
+				if ($('#txtNombre').val()==null || $('#txtNombre').val()=="" )
+				{
+					$('#txtNombre').addClass('bordeRojo');
+					$('#controlNombre').html('Campo obligatorio.');
+					alerta('143', 'alert-error');
+					return false;
+				}
+				else 
+				{
+					$('#txtNombre').removeClass('bordeRojo');
+					$('#controlNombre').html('');
+					if($('#opEnte1').val()==1)
+					{
+						$('#opEnte1').addClass('bordeRojo');
+						$('#controlEnte').html('Campo obligatorio.');
+						 alerta('143', 'alert-error');
+					}
+					else
+					{
+						$('#opEnte1').removeClass('bordeRojo');
+						$('#controlEnte').html('');
+						variables[i] = $('#txtNombre').val();
+						var periodoConcatenar = obtenerPeriodoConcatenar();
+						variables[i+1] = periodoConcatenar;
+						var url = base+'index.php/abcCatalogos/abcVariables_c/guardarVariableGenerica';
+						var data = JSON.stringify(variables);
+							$.ajax({
+						        url: url,
+						        data: { miDato: data },
+						        type: 'POST',
+						        success: function(idVG){
+						        	/* Si guardado = 1 entonces la variable generica ha sido guardada exitosamente */
+						        	if (idVG > 0) {
+						        		$('#idCatVG').val(idVG);//Asignamos el id de la variable generica insertada
+						        		/* Aqui se procedera a guardar la ficha asociada a la variable generica*/
+						        		validaPublicacionVG(idBoton,bandera);
+						        	} else
+						        		if (idVG == -4) 
+						        		{
+						        			alerta("146", "alert-error");
+						        		}
+						        		else
+						        		{
+						        			alerta("135", "alert-error");
+						        		}
+						        },
+						        error: function(e){
+						           // Programar y lanzar una excepcion e
+						           alert("Error");
+						        }
+					    	});
+					}
+				}
+				
+			}
+			else
+				{
+					alerta('143', 'alert-error');
+				}
+			break;
+		case 'publicar':
+			if(validarCamposPublicarVG())
+			{
+				var variables = new Array();
+				for (var i = 1; i <= numeroEntesVG; i++) {
+					var campo = 'opEnte'+i;		
+					if (!($('#'+campo).val() === undefined)) {
+						if($('#'+campo).val() != '1')
+							variables[i] = $('#'+campo).val();
+					};
+				};
+				if ($('#txtNombre').val()==null || $('#txtNombre').val()=="" )
+				{
+					$('#txtNombre').addClass('bordeRojo');
+					$('#controlNombre').html('Campo obligatorio.');
+					alerta('143', 'alert-error');
+					return false;
+				}
+				else 
+				{
+					$('#txtNombre').removeClass('bordeRojo');
+					$('#controlNombre').html('');
+					if($('#opEnte1').val()==1)
+					{
+						$('#opEnte1').addClass('bordeRojo');
+						$('#controlEnte').html('Campo obligatorio.');
+						 alerta('143', 'alert-error');
+					}
+					else
+					{
+						$('#opEnte1').removeClass('bordeRojo');
+						$('#controlEnte').html('');
+						variables[i] = $('#txtNombre').val();
+						var periodoConcatenar = obtenerPeriodoConcatenar();
+						variables[i+1] = periodoConcatenar;
+						var url = base+'index.php/abcCatalogos/abcVariables_c/guardarVariableGenerica';
+						var data = JSON.stringify(variables);
+							$.ajax({
+						        url: url,
+						        data: { miDato: data },
+						        type: 'POST',
+						        success: function(idVG){
+						        	/* Si guardado = 1 entonces la variable generica ha sido guardada exitosamente */
+						        	if (idVG > 0) {
+						        		$('#idCatVG').val(idVG);//Asignamos el id de la variable generica insertada
+						        		/* Aqui se procedera a guardar la ficha asociada a la variable generica*/
+						        		validaPublicacionVG(idBoton,bandera);
+						        	} else
+						        		if (idVG == -4) 
+						        		{
+						        			alerta("146", "alert-error");
+						        		}
+						        		else
+						        		{
+						        			alerta("135", "alert-error");
+						        		}
+						        },
+						        error: function(e){
+						           // Programar y lanzar una excepcion e
+						           alert("Error");
+						        }
+					    	});
+					}
+				}				
+			}
+			break;
+		case 'actualizar':
+			if(validarCamposPublicarVG())
+			{
+				
+			}
+			else
+				{
+					alerta('143', 'alert-error');
+				}
+			break;
+		default:
+			break;
+	}
+		//Bandera nos indica con 0 que es un borrador, con un numero mayor a cero que es el id de la ficha.	
+}
+
+function obtenerPeriodoConcatenar()
+{
+	
+	var anioPeriodoBianual = new Array();
+	
+	anioPeriodoBianual['2013-2014'] = 2014;
+	anioPeriodoBianual['2014-2015'] = 2015;
+	anioPeriodoBianual['2015-2016'] = 2016;
+	anioPeriodoBianual['2016-2017'] = 2017;
+	anioPeriodoBianual['2017-2018'] = 2018;
+	
+	
+	var periodoInicio = $('#periodoInicio').val();
+	var periodoFin = $('#periodoFin').val();
+	
+	if($("#idCatPeriodicidad").val() == 8)
+	{
+		var anioInicio = anioPeriodoBianual[periodoInicio];
+		var anioFin = anioPeriodoBianual[periodoFin];
+	}
+	else
+	{
+		var anioInicio = $('#anioInicio').val();
+		var anioFin = $('#anioFin').val();
+	}
+		//console.log("anio inicio "+periodoInicio);
+		//console.log("anio fin "+periodoFin);
+	var periodoAConcatenar = "-1";
+	
+	if(periodoInicio == '' || periodoFin =='' || anioInicio == '' || anioFin =='')
+	{
+		periodoAConcatenar = "-1";
+	}
+	else
+	{
+		if($("#idCatPeriodicidad").val() == 8)
+		{
+			periodoAConcatenar = periodoInicio+" a "+periodoFin;
+		}
+		else
+		
+			if(periodoInicio.indexOf("-") !=-1 || periodoFin.indexOf("-")!=-1)
+			{
+				//alert(" no es mensual");
+	    		var resInicio = periodoInicio.split("-");
+	    		var resFin = periodoFin.split("-");
+	    		periodoAConcatenar = resInicio[0]+" "+anioInicio+" a "+resFin[1]+" "+anioFin;
+			}
+			else
+			{
+				//alert("es mensual");
+				periodoAConcatenar = periodoInicio+" "+anioInicio+" a "+periodoFin+" "+anioFin;
+			}	
+	}
+	return periodoAConcatenar;
+}
+
+function verificarEnteVG(idEnteSelect)
+{
+	valorActual = $('#'+idEnteSelect).val();
+	for(i=1; i<=numeroEntesVG; i++)
+	{
+		idListaEntesAct = 'opEnte'+i;
+		//alert('Select='+idEnteSelect+' Actual='+idListaEntesAct);
+		if (idEnteSelect != idListaEntesAct)
+		{
+			aux= $('#'+idListaEntesAct).val();
+			//alert('AUX= '+aux+' Actual= '+idListaEntesAct)
+			if(aux == valorActual)
+			{				
+				alerta('144','alert-error');
+				$('#'+idEnteSelect).val('1');
+				break;
+			}			
+		}
+	}
+}
+
+function actualizarVariableVG(numeroEntesVG, entesAsociados, idBoton, idFichaVG) 
+{
+	entesActualizarVG = new Array();
+	entesActualizarVGAux = new Array();
+	entesNuevosVG = new Array();
+	entesEliminarVG = new Array();
+	entesEliminarVGAux = new Array();
+	j=0;
+	k=0;
+	for (var i = 1; i <= numeroEntesVG; i++) 
+	{
+		var campo = 'opEnte'+i;		
+		if (!($('#'+campo).val() === undefined)) {
+			if(!isNaN($("#"+campo).attr("name")))
+			{
+				entesActualizarVG[$("#"+campo).attr("name")] = $('#'+campo).val();
+			}
+			else
+			{
+				if($('#'+campo).val() != '1')
+				{
+					entesNuevosVG[j] = $('#'+campo).val();
+					j++;	
+				}
+			}
+		}
+	}
+	
+	if(j ==0)
+	{
+		entesNuevosVG[0] =0;
+	}
+	
+   	for(i=0; i<entesAsociados.length; i++)
+   	{
+   		entesEliminarVG[i]=entesAsociados[i];
+   	}
+
+	for (id in entesActualizarVG) 
+	{
+		idEnteVariable = parseInt(id);
+		entesActualizarVGAux[k]=id+'*'+entesActualizarVG[id];
+		k++;
+		index = entesAsociados.indexOf(idEnteVariable);
+		if(index != -1)
+		{
+			entesEliminarVG[index]=0;//Si no existen elementos a eliminar este arreglo solo lleva 0
+			//los elementos a eliminar aparecen en la lista.
+		}
+	}
+	
+	var l=0;
+	for(i=0; i<entesEliminarVG.length; i++)
+	{
+		if(entesEliminarVG[i] != 0)
+		{
+			entesEliminarVGAux[l] = entesEliminarVG[i];
+			l++;
+		}
+		if (l==0)
+		{
+			entesEliminarVGAux[0] =0;
+		}
+	}
+
+   	if ($('#txtNombre').val()==null || $('#txtNombre').val()=="" )
+		{
+			$('#txtNombre').addClass('bordeRojo');
+			$('#controlNombre').html('Campo obligatorio.');
+			alerta('143', 'alert-error');
+		} 
+		else 
+		{
+			$('#txtNombre').removeClass('bordeRojo');
+			$('#controlNombre').html('');
+			if($('#opEnte1').val()==1)
+			{
+				$('#opEnte1').addClass('bordeRojo');
+				$('#controlEnte').html('Campo obligatorio.');
+				alerta('143', 'alert-error');
+			}
+			else
+			{
+				var periodoConcatenar = obtenerPeriodoConcatenar();
+				
+				$('#opEnte1').removeClass('bordeRojo');
+				$('#controlEnte').html('');
+				
+				nombreVG = $('#txtNombre').val();
+				idVG = $('#idCatVG').val();
+				//console.log("idcatVG"+idVG);
+				periodoConcatenarVG = periodoConcatenar;
+
+				var url=base+'index.php/variableGenerica/altaVariableGenerica_c/actualizarVariableGenerica/'+idVG;
+				var jsonEntesActualizarVG = JSON.stringify(entesActualizarVGAux);
+				var jsonEntesNuevosVG = JSON.stringify(entesNuevosVG);
+				var jsonEntesEliminarVG = JSON.stringify(entesEliminarVGAux);
+				
+					$.ajax({
+				        url: url,
+				        data: {
+				        		idFichaVG: idFichaVG,
+				        		nombreVG: nombreVG,
+				        		concatenarVG: periodoConcatenarVG,
+				        		actualizarVG: jsonEntesActualizarVG,
+				        		nuevosVG: jsonEntesNuevosVG,
+				        		eliminarVG: jsonEntesEliminarVG
+				        	 },
+				        type: 'POST',
+				        success: function(result){
+				        	if (result > 0) {
+				        		validaPublicacionVG(idBoton,idFichaVG);
+				        	} else
+				        		 if(result == -1) //Ya existe
+				        		{
+				        			//console.log("alerta 146");
+					        		alerta("146", "alert-error");
+					        	}
+					        	else
+					        		if(result == -2)//No se pudo insertar
+					        		{
+					        			//console.log("alerta 135");
+					        			alerta("135", "alert-error");
+					        		}
+				        },
+				        error: function(e){
+				           // Programar y lanzar una excepcion e
+				        }
+				    });
+			}
+		}   	
+}
+
+function cargaEdicionValorVG(idValorHistoricoVG, idFichaVG, descPeriodo, bandera)
+{
+	var url=base+'index.php/variableGenerica/capturaValoresVariableGenerica_c/cargaEdicionVG/';
+	$.ajax({
+	       url: url,
+	       data: {
+	       		idFichaVG: idFichaVG,
+	       		idValorHistoricoVG: idValorHistoricoVG,
+	       		descPeriodo: descPeriodo
+	       	 },
+	       type: 'POST',
+	      success: function(result){
+	      		$("#contenedorVariablesComentarioVG").empty();
+				$("#contenedorVariablesComentarioVG").append(result);
+				if(bandera == 1)
+				{
+					$("#divBotones").empty();
+					$("#divBotones").append('<a href="#" class = "btn btn-gris" onclick="guardarValoresVG('+idValorHistoricoVG+', '+idFichaVG+',1)">Guardar</a></div>');
+					//$("#divBotones").append('<a href="#" class = "btn btn-gris" onclick="cargarContenido(\''+base+'index.php/variableGenerica/consultaVariablesGenericas_c/mostrarVariablesGenericas\')">Consultar variables genericas</a></div>');
+				}
+				else
+				{
+					$("#divBotones").empty();
+					$("#divBotones").append('<a href="#" class = "btn btn-gris" onclick="guardarValoresVG('+idValorHistoricoVG+', '+idFichaVG+',2)">Actualizar</a></div>');
+				//	$("#divBotones").append('<a href="#" class = "btn btn-gris" onclick="cargarContenido(\''+base+'index.php/variableGenerica/consultaVariablesGenericas_c/mostrarVariablesGenericas\')">Consultar variables genericas</a></div>');
+				}
+	        },
+	       error: function(e){
+	         // Programar y lanzar una excepcion e
+	       }
+	   });
+}
+
+function guardarValoresVG(idValorHistoricoVG,idFichaVG,bandera)
+{
+	if (confirm("Se guardarán los datos, ¿Desea continuar?") == true)
+	{ 
+		var valorVG  = $('#valorVG').val();
+		var banderaValidacion =validarValorVG(idFichaVG,valorVG); 
+		//alert(banderaValidacion);
+		if(banderaValidacion > 0)
+		{
+			var valorVG  = $('#valorVG').val();
+			var url=base+'index.php/variableGenerica/capturaValoresVariableGenerica_c/altaValorVG/'+bandera;
+			var valorVG  = $('#valorVG').val();
+			var comentarioVG  = $('#comentarioVariable').val();
+			var acronimoEnte  = $('#acronimoEnteArch').val();
+			var nombreVarArch  = $('#nombreVarArch').val();
+			var tiempoVarArch  = $('#tiempoVarArch').val();
+			var idEnte  = $('#idEnte').val();
+			
+			var formData = new FormData($(".formulario")[0]);
+			formData.append('nombreVarArch',nombreVarArch);
+			formData.append('tiempoVarArch',tiempoVarArch);
+			formData.append('acronimoEnte',acronimoEnte);
+			formData.append('valorVG',valorVG);
+			formData.append('idFichaVG', idFichaVG);
+			formData.append('idValorHistoricoVG', idValorHistoricoVG);
+			formData.append('comentarioVG',comentarioVG);
+			formData.append('idEnte',idEnte);	
+			$.ajax({
+			       url: url,
+			       data:formData,
+			       cache: false,
+		           contentType: false,
+		           processData: false,
+			       type: 'POST',
+			      success: function(result){
+			      	if(result == '-1')
+			      	{
+			      		alerta('149', 'alert-error');
+			      	}
+			      	else if(result == '-2')
+			      	{
+			      		alerta('148', 'alert-error');
+			      	}
+			      	else{
+						alerta('147', 'alert-success');
+			      		cargarContenido(base+'index.php/variableGenerica/capturaValoresVariableGenerica_c/capturaValoresVG/'+idFichaVG+'/'+idEnte);	      		
+			      	}
+			        },
+			       error: function(e){
+			         // Programar y lanzar una excepcion e
+			       }
+			   });
+		}
+		else
+		{
+			switch(banderaValidacion) 
+			{
+			    case -1:
+					alerta('151','alert-error');
+			        break;
+			    case -2:
+					alerta('152','alert-error');
+			        break;
+			    case -3:
+					alerta('155','alert-error');
+			        break;
+			    case -4:
+					alerta('154','alert-error');
+			        break;
+			    case -5:
+					alerta('153','alert-error');
+			        break;
+			    default:
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function validarValorVG(idFichaVG,valorVG)
+{
+	if(valorVG == "")
+	{
+		return -1;//Valor invalido, campo requerido
+	}
+	else
+	{
+		var url=base+'index.php/variableGenerica/capturaValoresVariableGenerica_c/obtenerRestriccionesVG/'+idFichaVG;
+		var restriccionesResultado=$.ajax({
+		url:url,
+		type:'POST',
+		async:false
+		});
+
+	   	datos  = restriccionesResultado.responseText;
+
+	   	var restricciones=$.parseJSON(datos);
+	    var es_real =restricciones.es_real;
+	    var carga = restricciones.carga; 
+	    var numero_decimales = restricciones.numero_decimales;
+		var limite_sup = restricciones.limite_sup;
+		var limite_inf = restricciones.limite_inf;
+		
+	   	if(validarLimiteSupVG(valorVG,limite_sup)== 1 || validarLimiteInfVG(valorVG,limite_inf) == 1)
+		{
+			return -2;
+		}else if(validarRealEnteroVG(valorVG,es_real) == 3)
+				{
+					return -3;
+				}
+				else if(validarCargaVG(valorVG,carga) == 2 || validarCargaVG(valorVG,carga) == 3)
+				{
+					return -4;
+				}
+				else if(validarDecimalesVG(valorVG,numero_decimales)==0)
+				{
+					return -5;
+				}
+				else
+					return 1;
+	}
+}
+
+function validarLimiteSupVG(valorVariable, limiteSuperior)
+{	
+	if(parseFloat(valorVariable) > parseFloat(limiteSuperior))
+		return 1;
+	else
+		return 0;
+}
+
+function validarLimiteInfVG(valorVariable, limiteInf)
+{
+	if(parseFloat(valorVariable) < parseFloat(limiteInf))
+		return 1;
+	else
+		return 0;
+}
+
+function validarRealEnteroVG(valorVariable, esReal)
+{
+	bandera = 0;
+	switch (esReal)
+	{
+		case '3'://entero
+			if(!esEntero(valorVariable))
+				bandera = 3;
+			break;
+		default:
+			break;
+	}
+	return bandera;
+}
+
+function validarCargaVG(valorVariable, carga)
+{
+	bandera = 0;
+	switch (carga)
+	{
+		case '2'://positivos
+			if(valorVariable < 0)
+				bandera = 2;
+			break;
+		case '3'://negativos
+			if(valorVariable >= 0)
+				bandera = 3;
+			break;
+		default:
+			break;
+	}
+	
+	return bandera;
+	
+}
+
+
+function validarDecimalesVG(variable, numeroDecimales)
+{	
+	if(numeroDecimales == "")
+	{
+		numeroDecimales =0;
+	}
+	numDec = parseInt(numeroDecimales);
+	superior = variable.split(".");
+	
+	puntoSuperior = superior.length;
+
+	if( puntoSuperior > 1)
+	{
+		decSuperior = superior[1].length;    
+	}
+	else
+	{
+		decSuperior = 0;    
+	}
+
+	if(decSuperior > numDec)
+	{
+		return 0;		
+	}
+	else
+		return 1;
+}
+
+function configurarConsultaVG()
+{
+	var checkboxValues = new Array();
+	var checkboxValuesH = new Array();
+	var delPeriodo = 1;
+	var AlPeriodo = 2;
+	var delAlPeriodo = $('#delAlPeriodo').val();
+	//recorremos todos los checkbox seleccionados con .each
+	$('input[name="agregarAConsulta[]"]:checked').each(function() {
+		checkboxValues.push($(this).val());
+	});
+	$('input[name="agregarAConsultaH[]"]:checked').each(function() {
+		checkboxValues.push($(this).val());
+	});
+	
+	if(delAlPeriodo == 1)//Revisamos que exista al menos un checkbox seleccionado
+	{
+		var url=base+'index.php/variableGenerica/configurarConsultaVG_c/cargarTablaGraficaVG/1/';
+		
+		var periodicidad = $('#parametroListPeriodicidad').val();//Periodo enero-febrero
+		var anioPeriodicidad= $('#parametroAnioPeriodicidad').val();
+		var descPeriodicidad= $('#selectPeriodicidad option:selected').text();
+		var idPeriodicidad =$('#selectPeriodicidad').val();
+		var conjuntoVariables = JSON.stringify(arrayIdsVariablesMarcadas);
+		
+		if($("#promedio").is(':checked'))
+			var promedio= $('#promedio').val();
+		if($("#sumatoria").is(':checked'))
+			var sumatoria= $('#sumatoria').val();
+		if($("#producto").is(':checked'))
+			var producto= $('#producto').val();
+		if($("#desviacion_estandar").is(':checked'))
+			var desviacion_estandar= $('#desviacion_estandar').val();
+
+		$.ajax({
+	        url: url,
+	        data: { 
+	        		conjuntoVariables:conjuntoVariables,
+	        		delAlPeriodo:delAlPeriodo,
+	        		descPeriodicidad:descPeriodicidad,
+	        		periodicidad:periodicidad,
+	        		anioPeriodicidad:anioPeriodicidad,
+	        		idPeriodicidad:idPeriodicidad,
+	        		promedio: promedio,
+	        		sumatoria: sumatoria,
+	        		producto: producto,
+	        		desviacionEstandar:desviacion_estandar
+	        		},
+	        type: 'POST',
+	        async:true,           
+	        success: function(data){
+		        if(data != 0)
+		        {
+		        	$('#body_principal').html(data);	
+		        }
+				else
+				{
+					alerta('La consulta no arrojo resultados', 'alert-info');
+					//cargarContenido(base+'index.php/index.php/abcIndicadores/consultaIndicador_c/mostrarIndicadores');
+				}
+	        },
+	        error: function(){
+	           alert("no se pudo");
+	           alert(url);
+	        }
+	    });
+		
+	}//En caso de que no existan check box seleccionados puede que estemos en la vista del Modal del Historico
+	else
+	{
+		
+		//Si existen elementos en la consulta de indicadores por Historico
+			var conjuntoVariables = JSON.stringify(arrayIdsVariablesMarcadas);
+			var url=base+'index.php/variableGenerica/configurarConsultaVG_c/cargarTablaGraficaVG/2/';
+
+			var anioPeriodicidad= $('#parametroAnioPeriodicidad2').val();
+			var descPeriodicidad= $('#selectPeriodicidad option:selected').text();
+			var mesPeriodicidad = $('#parametroListPeriodicidad2').val();
+			var anioPeriodicidadFin= $('#parametroAnioPeriodicidadFin').val();
+			var descPeriodicidadFin= $('#selectPeriodicidad option:selected').text();
+			var mesPeriodicidadFin = $('#parametroListPeriodicidadFin').val();
+			var periodicidad = $('#selectPeriodicidad').val();
+			var idPeriodicidad =$('#selectPeriodicidad').val();
+			
+			if($("#promedioH").is(':checked'))
+				var promedio= $('#promedioH').val();
+			if($("#sumatoriaH").is(':checked'))
+				var sumatoria= $('#sumatoriaH').val();
+			if($("#productoH").is(':checked'))
+				var producto= $('#productoH').val();
+			if($("#desviacion_estandarH").is(':checked'))
+				var desviacion_estandar= $('#desviacion_estandarH').val();
+			$.ajax({
+		        url: url,
+		        data: { 
+		        		conjuntoVariables:conjuntoVariables,
+		        		descPeriodicidad:descPeriodicidad,
+		        		anioPeriodicidad:anioPeriodicidad,
+		        		descPeriodicidadFin:descPeriodicidadFin,
+		        		anioPeriodicidadFin:anioPeriodicidadFin,
+		        		mesPeriodicidad:mesPeriodicidad,
+		        		mesPeriodicidadFin:mesPeriodicidadFin,
+		        		periodicidad:periodicidad,
+		        		idPeriodicidad:idPeriodicidad,
+		        		promedio: promedio,
+	        			sumatoria: sumatoria,
+	        			producto: producto,
+	        			desviacionEstandar:desviacion_estandar
+		        		},
+		        type: 'POST',
+		        async:true,           
+		        success: function(data){
+			        if(data != 0 && data != 1)
+			        {
+			        	$('#body_principal').html(data);	
+			        }
+					else
+					{
+						if(data == 1)
+						{
+							alerta('La fecha de inicio debe ser menor a la fecha final, maximo 12 periodos', 'alert-info');
+						}
+						else
+						{
+							alerta('La consulta no arrojo resultados', 'alert-info');	
+						}
+					}
+		        },
+		        error: function(){
+		           alert("no se pudo");
+		           alert(url);
+		        }
+		    });
+	}
+}
+
+function desactivarVG(idFichaVG,accion,estatus){
+		if(accion==0){
+			if(estatus==2){
+				if(confirm('Esta acción ocultará la variable de gestión a las dependencias que lo tienen asociado y no podrán capturar los valores en los periodos posteriores. ¿Desea continuar?')){
+					cargarContenido(base+'index.php/variableGenerica/consultaVariablesGenericas_c/desactivarVG/'+idFichaVG+'/'+accion);
+				}				
+			}else{
+				if(confirm('Esta acción ocultará la variable de gestión a las dependencias que lo tienen asociado y no podrán capturar los valores en los periodos posteriores. ¿Desea continuar?')){
+					cargarContenido(base+'index.php/variableGenerica/consultaVariablesGenericas_c/desactivarVG/'+idFichaVG+'/'+accion);
+				}								
+			}
+		}else{
+			if(confirm('Esta acción activará la variable de gestión y el usuario podrá verla en su bandeja. ¿Desea continuar?')){
+				cargarContenido(base+'index.php/variableGenerica/consultaVariablesGenericas_c/desactivarVG/'+idFichaVG+'/'+accion);
+			}
+		}
+}

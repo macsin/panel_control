@@ -1,0 +1,241 @@
+<?php
+class Periodos{
+
+ 	function etiquetasPeriodos(){
+ 		$periodos[2]=array(
+			'Enero'	=>array(
+					'inicio_p'=>'01-01',
+					'fin_p'=>'01-31',
+					'inicio_c'=>'02-01',
+					'abrev'=>'Ene'
+				),
+			'Febrero'=>array(
+					'inicio_p'=>'02-01',
+					'fin_p'=>'02-28',
+					'inicio_c'=>'03-01',
+					'abrev'=>'Feb'
+				),			
+			'Marzo'=>array(
+					'inicio_p'=>'03-01',
+					'fin_p'=>'03-31',
+					'inicio_c'=>'04-01',					
+					'abrev'=>'Mar'
+				),	
+			'Abril'=>array(
+					'inicio_p'=>'04-01',
+					'fin_p'=>'04-30',
+					'inicio_c'=>'05-01',					
+					'abrev'=>'Abr'
+				),
+			'Mayo'=>array(
+					'inicio_p'=>'05-01',
+					'fin_p'=>'05-31',
+					'inicio_c'=>'06-01',					
+					'abrev'=>'May'
+				),
+			'Junio'=>array(
+					'inicio_p'=>'06-01',
+					'fin_p'=>'06-30',
+					'inicio_c'=>'07-01',					
+					'abrev'=>'Jun'
+				),
+			'Julio'=>array(
+					'inicio_p'=>'07-01',
+					'fin_p'=>'07-31',
+					'inicio_c'=>'08-01',					
+					'abrev'=>'Jul'
+				),
+			'Agosto'=>array(
+					'inicio_p'=>'08-01',
+					'fin_p'=>'08-31',
+					'inicio_c'=>'09-01',					
+					'abrev'=>'Ago'
+				),
+			'Septiembre'=>array(
+					'inicio_p'=>'09-01',
+					'fin_p'=>'09-30',
+					'inicio_c'=>'10-01',					
+					'abrev'=>'Sep'
+				),
+			'Octubre'=>array(
+					'inicio_p'=>'10-01',
+					'fin_p'=>'10-31',
+					'inicio_c'=>'11-01',					
+					'abrev'=>'Oct'
+				),
+			'Noviembre'=>array(
+					'inicio_p'=>'11-01',
+					'fin_p'=>'11-30',
+					'inicio_c'=>'12-01',					
+					'abrev'=>'Nov'
+				),
+			'Diciembre'=>array(
+					'inicio_p'=>'12-01',
+					'fin_p'=>'12-31',
+					'inicio_c'=>'01-01',					
+					'abrev'=>'Dic'
+				)			
+		);	
+		
+		$periodos[3]=array(
+			'Enero-Febrero'	=>array(
+					'inicio_p'=>'01-01',
+					'fin_p'=>'02-28',
+					'inicio_c'=>'03-01',					
+					'abrev'=>'Ene-Feb'
+				),
+			'Marzo-Abril'=>array(
+					'inicio_p'=>'03-01',
+					'fin_p'=>'04-30',
+					'inicio_c'=>'05-01',					
+					'abrev'=>'Mar-Abr'
+				),
+			'Mayo-Junio'=>array(
+					'inicio_p'=>'05-01',
+					'fin_p'=>'06-30',
+					'inicio_c'=>'07-01',					
+					'abrev'=>'May-Jun'
+				),
+			'Julio-Agosto'=>array(
+					'inicio_p'=>'07-01',
+					'fin_p'=>'08-31',
+					'inicio_c'=>'09-01',					
+					'abrev'=>'Jul-Ago'
+				),
+			'Septiembre-Octubre'=>array(
+					'inicio_p'=>'09-01',
+					'fin_p'=>'10-31',
+					'inicio_c'=>'11-01',					
+					'abrev'=>'Sep-Oct'
+				),
+			'Noviembre-Diciembre'=>array(
+					'inicio_p'=>'11-01',
+					'fin_p'=>'12-31',
+					'inicio_c'=>'01-01',					
+					'abrev'=>'Nov-Dic'
+				)
+		);	
+		$periodos[4]=array(
+				'Enero-Marzo'	=>array(
+						'inicio_p'=>'01-01',
+						'fin_p'=>'03-31',
+						'inicio_c'=>'04-01',					
+						'abrev'=>'Ene-Mar'
+					),
+				'Abril-Junio'	=>array(
+						'inicio_p'=>'04-01',
+						'fin_p'=>'06-30',
+						'inicio_c'=>'07-01',					
+						'abrev'=>'Abr-Jun'
+					),
+				'Julio-Septiembre'	=>array(
+						'inicio_p'=>'07-01',
+						'fin_p'=>'09-30',
+						'inicio_c'=>'10-01',					
+						'abrev'=>'Jul-Sep'
+					),
+				'Octubre-Diciembre'	=>array(
+						'inicio_p'=>'10-01',
+						'fin_p'=>'12-31',
+						'inicio_c'=>'01-01',					
+						'abrev'=>'Oct-Dic'
+					)
+			);
+		$periodos[5]=array(
+				'Enero-Junio'	=>array(
+						'inicio_p'=>'01-01',
+						'fin_p'=>'06-30',
+						'inicio_c'=>'07-01',					
+						'abrev'=>'Ene-Jun'
+					),
+				'Julio-Diciembre'	=>array(
+						'inicio_p'=>'07-01',
+						'fin_p'=>'12-31',
+						'inicio_c'=>'01-01',					
+						'abrev'=>'Jul-Dic'
+					)
+		);
+		
+		$periodos[6]=array(
+				'Enero-Diciembre'	=>array(
+						'inicio_p'=>'01-01',
+						'fin_p'=>'12-31',
+						'inicio_c'=>'01-01',					
+						'abrev'=>'Ene-Dic'
+					)
+				);
+				
+		return $periodos;
+ 	}
+
+	function etiquetasPeriodosNombre(){
+ 		$periodos[2]=array(
+			'Enero'=>'Enero'	,
+			'Febrero'=>'Febrero',			
+			'Marzo'=>'Marzo',	
+			'Abril'=>'Abril',
+			'Mayo'=>'Mayo',
+			'Junio'=>'Junio',
+			'Julio'=>'Julio',
+			'Agosto'=>'Agosto',
+			'Septiembre'=>'Septiembre',
+			'Octubre'=>'Octubre',
+			'Noviembre'=>'Noviembre',
+			'Diciembre'=>'Diciembre'			
+		);	
+		$periodos[3]=array(
+			'Enero-Febrero'=>'Enero-Febrero',
+			'Marzo-Abril'=>'Marzo-Abril',
+			'Mayo-Junio'=>'Mayo-Junio',
+			'Julio-Agosto'=>'Julio-Agosto',
+			'Septiembre-Octubre'=>'Septiembre-Octubre',
+			'Noviembre-Diciembre'=>'Noviembre-Diciembre'
+		);	
+		$periodos[4]=array(
+				'Enero-Marzo'=>'Enero-Marzo',
+				'Abril-Junio'=>'Abril-Junio',
+				'Julio-Septiembre'=>'Julio-Septiembre',
+				'Octubre-Diciembre'=>'Octubre-Diciembre'
+		);
+		$periodos[5]=array(
+				'Enero-Junio'=>'Enero-Junio',
+				'Julio-Diciembre'=>'Julio-Diciembre'
+		);
+		
+		$periodos[6]=array(
+				'Enero-Diciembre'=>'Enero-Diciembre'
+		);
+		//para concatenar en fechas el valor numerico		
+		$periodos[7]=array(
+			'01'=>'Enero',
+			'02'=>'Febrero',			
+			'03'=>'Marzo',	
+			'04'=>'Abril',
+			'05'=>'Mayo',
+			'06'=>'Junio',
+			'07'=>'Julio',
+			'08'=>'Agosto',
+			'09'=>'Septiembre',
+			'10'=>'Octubre',
+			'11'=>'Noviembre',
+			'12'=>'Diciembre'			
+		);	
+		
+		$periodos[8]=array(
+			'Enero-Abril'=>'Enero-Abril',
+			'Mayo-Agosto'=>'Mayo-Agosto',
+			'Septiembre-Diciembre'=>'Septiembre-Diciembre'			
+		);	
+		
+		$periodos[9]=array(
+			'2013-2014'=>'2013-2014',
+			'2014-2015'=>'2014-2015',
+			'2015-2016'=>'2015-2016',
+			'2016-2017'=>'2016-2017',
+			'2016-2017'=>'2016-2017',
+			'2017-2018'=>'2017-2018'
+			);	
+		return $periodos;
+ 	}
+
+}?>

@@ -1,0 +1,598 @@
+function configurarConsulta()
+{
+	var checkboxValues = new Array();
+	var delPeriodo = 1;
+	var AlPeriodo = 2;
+	
+	//recorremos todos los checkbox seleccionados con .each
+	$('input[name="agregarAConsulta[]"]:checked').each(function() {
+		checkboxValues.push($(this).val());
+	});
+	
+	if(checkboxValues != '')//Revisamos que exista al menos un checkbox seleccionado
+	{
+		var url=base+'index.php/abcIndicadores/configurarConsulta_c/cargarTablaGrafica/1/';
+		var delAlPeriodo = $('#delAlPeriodo').val();
+		var periodicidad = $('#parametroListPeriodicidad').val();//Periodo enero-febrero
+		var anioPeriodicidad= $('#parametroAnioPeriodicidad').val();
+		var descPeriodicidad= $('#selectPeriodicidad option:selected').text();
+		var idPeriodicidad =$('#selectPeriodicidad').val();
+		var conjuntoIndicadores = JSON.stringify(arrayIdsMarcados);
+		
+		if($("#avance_real").is(':checked'))
+			var avanceReal= $('#avance_real').val();
+		if($("#metaConfig").is(':checked'))
+			var meta1= $('#metaConfig').val();
+		if($("#variacion").is(':checked'))
+			var variacion= $('#variacion').val();
+		if($("#grado_de_cumplimiento").is(':checked'))
+			var gradoCumplimiento= $('#grado_de_cumplimiento').val();
+		if($("#avance_promedio").is(':checked'))
+			var avancePromedio= $('#avance_promedio').val();
+		if($("#promedio").is(':checked'))
+			var promedio= $('#promedio').val();
+		if($("#maximo").is(':checked'))
+			var maximo= $('#maximo').val();			
+		if($("#minimo").is(':checked'))
+			var minimo= $('#minimo').val();					
+		
+		$.ajax({
+	        url: url,
+	        data: { 
+	        		conjuntoIndicadores:conjuntoIndicadores,
+	        		delAlPeriodo:delAlPeriodo,
+	        		descPeriodicidad:descPeriodicidad,
+	        		periodicidad:periodicidad,
+	        		anioPeriodicidad:anioPeriodicidad,
+	        		avance_real:avanceReal,
+	        		meta:meta1,
+	        		variacion:variacion,
+	        		grado_de_cumplimiento:gradoCumplimiento, 
+	        		avance_promedio:avancePromedio,
+	        		promedio:promedio,
+	        		maximo:maximo,
+	        		minimo:minimo,
+	        		idPeriodicidad:idPeriodicidad
+	        		},
+	        type: 'POST',
+	        async:true,           
+	        success: function(data){
+		        if(data != 0)
+		        {
+		        	$('#body_principal').html(data);	
+		        }
+				else
+				{
+					alerta('La consulta no arrojo resultados', 'alert-info');
+					//cargarContenido(base+'index.php/index.php/abcIndicadores/consultaIndicador_c/mostrarIndicadores');
+				}
+	        },
+	        error: function(){
+	           alert("no se pudo");
+	           alert(url);
+	        }
+	    });
+		
+	}//En caso de que no existan check box seleccionados puede que estemos en la vista del Modal del Historico
+	else
+	{
+		if(!$("input[name='radio_agregarAConsulta']:checked").val())
+			alerta('Debe seleccionar al menos un parametro para la consulta', 'alert-info');//Si tampoco hay nada seleccionado en la vista de historico mandamos mensaje de error.
+		else
+		{//Si existen elementos en la consulta de indicadores por Historico
+			var conjuntoIndicadores = JSON.stringify(arrayIdsMarcados);
+			var url=base+'index.php/abcIndicadores/configurarConsulta_c/cargarTablaGrafica/2/';
+			if($("#promedio2").is(':checked'))
+				var promedio= $('#promedio2').val();
+			var parametro=$("input[name='radio_agregarAConsulta']:checked").val();
+			var periodos= $('#numeroPeriodosMostrar option:selected').val();
+			var anioPeriodicidad= $('#parametroAnioPeriodicidad2').val();
+			var descPeriodicidad= $('#selectPeriodicidad option:selected').text();
+			var mesPeriodicidad = $('#parametroListPeriodicidad2').val();
+			var anioPeriodicidadFin= $('#parametroAnioPeriodicidadFin').val();
+			var descPeriodicidadFin= $('#selectPeriodicidad option:selected').text();
+			var mesPeriodicidadFin = $('#parametroListPeriodicidadFin').val();
+			var periodicidad = $('#selectPeriodicidad').val();
+			var idPeriodicidad =$('#selectPeriodicidad').val();
+			
+			$.ajax({
+		        url: url,
+		        data: { 
+		        		conjuntoIndicadores:conjuntoIndicadores,
+		        		parametroConsulta:parametro,
+		        		promedio:promedio,
+		        		numeroPeriodos:periodos,
+		        		descPeriodicidad:descPeriodicidad,
+		        		anioPeriodicidad:anioPeriodicidad,
+		        		descPeriodicidadFin:descPeriodicidadFin,
+		        		anioPeriodicidadFin:anioPeriodicidadFin,
+		        		mesPeriodicidad:mesPeriodicidad,
+		        		mesPeriodicidadFin:mesPeriodicidadFin,
+		        		periodicidad:periodicidad,
+		        		idPeriodicidad:idPeriodicidad
+		        		},
+		        type: 'POST',
+		        async:true,           
+		        success: function(data){
+			        if(data != 0 && data != 1)
+			        {
+			        	$('#body_principal').html(data);	
+			        }
+					else
+					{
+						if(data == 1)
+						{
+							alerta('La fecha de inicio debe ser menor a la fecha final, maximo 12 periodos', 'alert-info');
+						}
+						else
+						{
+							alerta('La consulta no arrojo resultados', 'alert-info');	
+						}
+					}
+		        },
+		        error: function(){
+		           alert("no se pudo");
+		           alert(url);
+		        }
+		    });
+				
+		}
+	}
+}
+
+//Actualizamos la Periodicidad en el modal donde banderaTablaGrafica es igual a 0 si viene de la pantalla principal de
+//los filtros. 
+//En caso que sea diferente es una reeconfiguracion y trae el ID de la periodicidad (Mensual, Bimestral, etc)
+function actualizaPeriodicidadModal()
+{
+	var valorSelectPeriodicidad = $('#selectPeriodicidad').val();
+	$("#parametroListPeriodicidad").empty();	
+	$("#parametroAnioPeriodicidad").empty();
+	if(valorSelectPeriodicidad != "8")
+	{
+		$('#ocultarBianualInicio1').removeClass('ocultar');
+		$('#ocultarBianualInicio2').removeClass('ocultar');
+		$('#ocultarBianualFin2').removeClass('ocultar');
+		
+		$('#ocultarBianualInicio1').addClass('mostrar');
+		$('#ocultarBianualInicio2').addClass('mostrar');
+		$('#ocultarBianualFin2').addClass('mostrar');
+		
+		var url=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodosAnio/'+valorSelectPeriodicidad;
+		var data = '';
+		$.ajax({
+			url:url,
+			data: data,
+			type:'POST',
+			success: function(data){
+					jsonR=$.parseJSON(data);
+					$.each(jsonR,function(){
+						$('#parametroAnioPeriodicidad').append("<option value='"+this.anio+"'>"+this.anio+"</option>");
+					});
+		        },        
+	        	error: function(){
+		           alert("No se pudo");
+	    	       alert(url);
+		        }
+		});
+	}
+	else
+	{
+		$('#ocultarBianualInicio1').removeClass("mostrar");
+		$('#ocultarBianualInicio2').removeClass("mostrar");
+		$('#ocultarBianualFin2').removeClass("mostrar");
+		
+		$('#ocultarBianualInicio1').addClass("ocultar");
+		$('#ocultarBianualInicio2').addClass("ocultar");
+		$('#ocultarBianualFin2').addClass("ocultar");
+	}
+	var url2=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodos/'+valorSelectPeriodicidad;
+	var data2 = '';
+	$.ajax({
+		url:url2,
+		data: data2,
+		type:'POST',
+		success: function(data2){
+				jsonR2=$.parseJSON(data2);
+				$.each(jsonR2,function(){
+					$('#parametroListPeriodicidad').append("<option value='"+this.valor+"'>"+this.valor+"</option>");
+				});
+	        },        
+	        error: function(){
+	           alert("No se pudo");
+	           alert(url);
+	        }
+		});
+}
+
+function actualizaPeriodicidadModal2()
+{
+	var valorSelectPeriodicidad = $('#selectPeriodicidad').val();
+	
+	$("#parametroListPeriodicidad2").empty();	
+	$("#parametroAnioPeriodicidad2").empty();
+	$("#parametroListPeriodicidadFin").empty();	
+	$("#parametroAnioPeriodicidadFin").empty();
+	
+	if(valorSelectPeriodicidad != "8")
+	{
+		$('#ocultarBianualInicio1').removeClass('ocultar');
+		$('#ocultarBianualInicio2').removeClass('ocultar');
+		$('#ocultarBianualFin2').removeClass('ocultar');
+		
+		$('#ocultarBianualInicio1').addClass('mostrar');
+		$('#ocultarBianualInicio2').addClass('mostrar');
+		$('#ocultarBianualFin2').addClass('mostrar');
+		
+		var url=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodosAnio/'+valorSelectPeriodicidad;
+		var data = '';
+		$.ajax({
+			url:url,
+			data: data,
+			type:'POST',
+			success: function(data){
+					jsonR=$.parseJSON(data);
+					$.each(jsonR,function(){
+						$('#parametroAnioPeriodicidad2').append("<option value='"+this.anio+"'>"+this.anio+"</option>");
+						$('#parametroAnioPeriodicidadFin').append("<option value='"+this.anio+"'>"+this.anio+"</option>");
+					});
+		        },        
+		        error: function(){
+		           alert("No se pudo");
+		           alert(url);
+		        }
+			});
+	}
+	else
+	{
+		$('#ocultarBianualInicio1').removeClass("mostrar");
+		$('#ocultarBianualInicio2').removeClass("mostrar");
+		$('#ocultarBianualFin2').removeClass("mostrar");
+		
+		$('#ocultarBianualInicio1').addClass("ocultar");
+		$('#ocultarBianualInicio2').addClass("ocultar");
+		$('#ocultarBianualFin2').addClass("ocultar");
+	}
+	
+	var url2=base+'index.php/abcIndicadores/altaIndicador_c/traerPeriodos/'+valorSelectPeriodicidad;
+	var data2 = '';
+	$.ajax({
+		url:url2,
+		data: data2,
+		type:'POST',
+		success: function(data2){
+				jsonR2=$.parseJSON(data2);
+				$.each(jsonR2,function(){
+					$('#parametroListPeriodicidad2').append("<option value='"+this.valor+"'>"+this.valor+"</option>");
+					$('#parametroListPeriodicidadFin').append("<option value='"+this.valor+"'>"+this.valor+"</option>");
+				});
+	        },        
+	        error: function(){
+	           alert("No se pudo");
+	           alert(url);
+	        }
+		});
+}
+
+function actualizaVistaConfiguracion(elemento)
+{
+	//alert(elemento.id); 1-> DelPeriodo 2->Al Periodo 3->Historico
+	if(elemento.value == 3)//Historico
+	{
+		$("#parametrosConsulta2").addClass("mostrar");
+		$("#parametrosConsulta2").removeClass("ocultar");
+		$("#parametrosConsulta").addClass("ocultar");
+		$("#parametrosConsulta").removeClass("mostrar");
+		if(elemento.id == 'delAlPeriodo2')//Estabamos en el modal de Historico
+		{
+			$("#promedio2").attr("checked", false);
+			$("input[name='radio_agregarAConsulta']:checked").attr("checked", false);
+			$("#delAlPeriodo option[value="+ elemento.value +"]").attr("selected",true);
+			$("#avance_real").attr("checked", false);
+			$("#metaConfig").attr("checked", false);
+			$("#variacion").attr("checked", false);
+			$("#grado_de_cumplimiento").attr("checked", false);
+			$("#avance_promedio").attr("checked", false);
+			$("#promedio").attr("checked", false);	
+			$("#avance_real").removeAttr("disabled");
+			$("#metaConfig").removeAttr("disabled");
+			actualizaPeriodicidadModal();
+		}
+		else
+		{
+			$("#avance_real").attr("checked", false);
+			$("#metaConfig").attr("checked", false);
+			$("#avance_real").removeAttr("disabled");
+			$("#metaConfig").removeAttr("disabled");
+			$("#variacion").attr("checked", false);
+			$("#grado_de_cumplimiento").attr("checked", false);
+			$("#avance_promedio").attr("checked", false);
+			$("#promedio").attr("checked", false);	
+			$("#delAlPeriodo2 option[value="+ elemento.value +"]").attr("selected",true);
+			$("#promedio2").attr("checked", false);
+			$("input[name='radio_agregarAConsulta']:checked").attr("checked", false);
+			actualizaPeriodicidadModal2();
+		}
+	}
+	else
+	{
+		$("#parametrosConsulta").addClass("mostrar");
+		$("#parametrosConsulta").removeClass("ocultar");
+		$("#parametrosConsulta2").addClass("ocultar");
+		$("#parametrosConsulta2").removeClass("mostrar");
+		if(elemento.id == 'delAlPeriodo2')
+		{
+			$("#promedio2").attr("checked", false);
+			$("input[name='radio_agregarAConsulta']:checked").attr("checked", false);
+			$("#delAlPeriodo option[value="+ elemento.value +"]").attr("selected",true);
+			$("#avance_real").attr("checked", false);
+			$("#metaConfig").attr("checked", false);
+			$("#variacion").attr("checked", false);
+			$("#grado_de_cumplimiento").attr("checked", false);
+			$("#avance_promedio").attr("checked", false);
+			$("#promedio").attr("checked", false);
+			$("#avance_real").removeAttr("disabled");
+			$("#metaConfig").removeAttr("disabled");
+			actualizaPeriodicidadModal();
+		}
+		else
+		{
+			$("#avance_real").attr("checked", false);
+			$("#metaConfig").attr("checked", false);
+			$("#avance_real").removeAttr("disabled");
+			$("#metaConfig").removeAttr("disabled");
+			$("#variacion").attr("checked", false);
+			$("#grado_de_cumplimiento").attr("checked", false);
+			$("#avance_promedio").attr("checked", false);
+			$("#promedio").attr("checked", false);	
+			$("#delAlPeriodo2 option[value="+ elemento.value +"]").attr("selected",true);
+			$("#promedio2").attr("checked", false);
+			$("input[name='radio_agregarAConsulta']:checked").attr("checked", false);
+			actualizaPeriodicidadModal2();
+		}
+	}
+}
+
+
+function autoSeleccionar(elemento)
+{
+	if (elemento.checked)
+	{
+		$("#avance_real").prop("checked", true);
+		$("#avance_real").attr("disabled","disabled");
+		$("#metaConfig").prop("checked", true);
+		$("#metaConfig").attr("disabled","disabled");
+	}
+	else
+	{
+		$("#avance_real").removeAttr("disabled");
+		$("#metaConfig").removeAttr("disabled");
+	}
+}
+
+/*mimi*/
+function actualizaModalConfigurarConsultaPGD(filtro){
+	if(filtro==1){
+		
+	}else{
+		
+	}
+	var anio=[2013,2014,2015,2016,2017,2018]
+	var ente = $('#selectEnte').val();
+	var documento = document.getElementById('selectEnte');
+   	var descEnte=documento.options[documento.selectedIndex].text;
+    		
+	$("#periodicidadMensual").empty();	
+	$("#anioPeriodicidad").empty();
+	$("#enteConsulta").empty();
+	
+	var url=base+'index.php/abcIndicadores/consultaIndicador_c/traerPeriodos'
+	var data = '';
+	$.ajax({	
+		url:url,
+		data: data,
+		type:'POST',
+		success: function(data){
+				jsonR=$.parseJSON(data);
+				$.each(jsonR,function(){
+					$('#periodicidadMensual').append("<option value='"+this.id+"'>"+this.mes+"</option>");
+				});
+	        },        
+	        error: function(){
+	           alert("No se pudo");
+	           alert(url);
+	        }
+		});
+
+   		
+	data2='';
+	url2='';	
+	$.ajax({	
+		url:url2,
+		data: {ente: ente,descripcion: descEnte},
+		type:'POST',
+		success: function(data2){
+			if(ente=='' || ente==1)
+				$('#enteConsulta').append("<option value='0'>Todos los entes</option>");
+			else
+				$('#enteConsulta').append("<option value='0'>Todos los entes</option> <option value='"+ente+"'>"+descEnte+"</option>");
+	
+	        },        
+	        error: function(){
+	           alert("No se pudo");
+	           alert(url);
+	        }
+		});
+
+	data2='';
+	url2='';	
+	$.ajax({	
+		url:url2,
+		data: anio,
+		type:'POST',
+		success: function(data){
+			for (i=0;i<anio.length;i++){
+				$('#anioPeriodicidad').append("<option value='"+anio[i]+"'>"+anio[i]+"</option>");
+				}
+	        },        
+	        error: function(){
+	           alert("No se pudo");
+	           alert(url);
+	        }
+		});    					
+}
+
+function switchOnclick(id,valor){
+	
+	actualizaModalConfigurarConsultaPGD();
+	$("#"+id).attr('onclick','');
+	$("#"+id).attr('onclick',valor);
+}
+
+function generaConsultaTipoPrograma(){
+	var periodo=$("#periodicidadMensual").val();
+	var descPeriodicidad= $('#selectPeriodicidad option:selected').text();
+	var tipoPrograma=$("#selectTipoEvaluacion").val();
+	var descPeriodo=$("#periodicidadMensual").text();
+	var anio=$("#anioPeriodicidad").val();
+	var ente=$("#enteConsulta").val();
+	var avanceReal=$("#avanceReal:checked").val();
+	var gradoDeCumplimiento=$("#gradoDeCumplimiento:checked").val();
+	var avancePromedio=$("#avancePromedio:checked").val();
+	var promedioConsulta=$("#promedioConsulta:checked").val();
+	var maximoConsulta=$("#maximoConsulta:checked").val();
+	var minimoConsulta=$("#minimoConsulta:checked").val();
+	
+	if(avanceReal==undefined){
+		avanceReal=0;
+	}
+	if(promedioConsulta==undefined){
+		promedioConsulta=0;
+	}
+	if(maximoConsulta==undefined){
+		maximoConsulta=0;
+	}
+	if(minimoConsulta==undefined){
+		minimoConsulta=0;
+	}
+	if(gradoDeCumplimiento==undefined){
+		gradoDeCumplimiento=0;
+	}
+	if(avancePromedio==undefined){
+		avancePromedio=0;
+	}
+	if(promedioConsulta!=0 && minimoConsulta!=0 && maximoConsulta!=0 && avanceReal==0 && gradoDeCumplimiento==0 && avancePromedio==0){
+		window.open (base+'index.php/alerta_c/alert/125/alert-error',"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=250,left=500,top=200");
+	}else{
+		if(avanceReal!=0 || gradoDeCumplimiento!=0 || avancePromedio!=0){			
+		
+			var url=base+'index.php/abcIndicadores/consultaNiveles_c/crearTablaNiveles'
+			var data = 'periodo='+periodo+'&anio='+anio+'&ente='+ente+'&avanceReal='+avanceReal+'&promedio='+promedioConsulta+
+			'&minimo='+minimoConsulta+'&maximo='+maximoConsulta+
+			'&gradoCumplimiento='+gradoDeCumplimiento+'&avancePromedio='+avancePromedio+'&descPeriodicidad='+descPeriodicidad+
+			'&descPeriodo='+descPeriodo+'&tipoPrograma='+tipoPrograma;
+			$.ajax({	
+				url:url,
+				data: data,
+				type:'POST',
+				success: function(data){
+
+					if(data==0){
+						window.open (base+'index.php/alerta_c/alert/123/alert-error',"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=250,left=500,top=200");
+					}else{
+						$('#body_principal').html(data);	
+					}
+			    },        
+			    error: function(){
+			           alert("No se pudo");
+			           alert(url);
+			        }
+				});
+		}else{
+			window.open (base+'index.php/alerta_c/alert/124/alert-error',"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=250,left=500,top=200");
+		}
+	}
+}
+
+function generaConsultaPGD(){
+	var periodo=$("#periodicidadMensual").val();
+	var descPeriodo=$("#periodicidadMensual").text();
+	var anio=$("#anioPeriodicidad").val();
+	var ente=$("#enteConsulta").val();
+	var avanceReal=$("#avanceReal:checked").val();
+	var promedioConsulta=$("#promedioConsulta:checked").val();
+	var maximoConsulta=$("#maximoConsulta:checked").val();
+	var minimoConsulta=$("#minimoConsulta:checked").val();
+	var gradoDeCumplimiento=$("#gradoDeCumplimiento:checked").val();
+	var avancePromedio=$("#avancePromedio:checked").val();
+	var descPeriodicidad= $('#selectPeriodicidad option:selected').text();
+
+	if(avanceReal==undefined){
+		avanceReal=0;
+	}
+	if(promedioConsulta==undefined){
+		promedioConsulta=0;
+	}
+	if(maximoConsulta==undefined){
+		maximoConsulta=0;
+	}
+	if(minimoConsulta==undefined){
+		minimoConsulta=0;
+	}
+	if(gradoDeCumplimiento==undefined){
+		gradoDeCumplimiento=0;
+	}
+	if(avancePromedio==undefined){
+		avancePromedio=0;
+	}
+	
+	if(promedioConsulta!=0 && minimoConsulta!=0 && maximoConsulta!=0 && avanceReal==0 && gradoDeCumplimiento==0 && avancePromedio==0){
+		window.open (base+'index.php/alerta_c/alert/125/alert-error',"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=250,left=500,top=200");
+	}else{
+		if(avanceReal!=0 || gradoDeCumplimiento!=0 || avancePromedio!=0){
+			
+			switch(graficarNivel) {
+			    case 2:
+			       	var valorNivel=$("#idCatEje").val();
+			        break;
+			    case 3:
+			        var valorNivel=$("#areaOportunidad").val();
+			        break;
+			    case 4:
+			        var valorNivel=$("#objetivo").val();
+			        break;
+			    case 5:
+			        var valorNivel=$("#meta").val();
+			        break;
+			    case 6:
+			        var valorNivel=$("#metaSectorial").val();
+			        break;
+			    default:
+			       var valorNivel=1;
+			}
+			var url=base+'index.php/abcIndicadores/consultaNiveles_c/crearTablaNiveles'
+			var data = 'periodo='+periodo+'&anio='+anio+'&ente='+ente+'&avanceReal='+avanceReal+'&promedio='+promedioConsulta+
+			'&minimo='+minimoConsulta+'&maximo='+maximoConsulta+
+			'&gradoCumplimiento='+gradoDeCumplimiento+'&avancePromedio='+avancePromedio+'&descPeriodicidad='+descPeriodicidad+
+			'&nivel='+graficarNivel+'&valorNivel='+valorNivel+'&descPeriodo='+descPeriodo;
+			$.ajax({	
+				url:url,
+				data: data,
+				type:'POST',
+				success: function(data){
+					if(data==0){
+						window.open (base+'index.php/alerta_c/alert/123/alert-error',"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=250,left=500,top=200");
+					}else{
+						$('#body_principal').html(data);	
+					}
+			    },        
+			    error: function(){
+			           alert("No se pudo");
+			           alert(url);
+			        }
+				});
+		}else{
+			window.open (base+'index.php/alerta_c/alert/124/alert-error',"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=250,left=500,top=200");
+		}
+	}
+}

@@ -1,0 +1,27 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Welcome extends CI_Controller {
+	function __construct() {
+		parent::__construct();
+    }
+
+	/**
+	 * Index Controlador que se carga por default, el primero en toda la aplicacion web
+	 * segun la arquitectura de CodeIgniter. Se envian a la vista principal las etiquetas correspondientes,
+	 * la vista que primero se carga es para dar acceso al usuario con sus credenciales.
+	 * 
+	 * @see http://codeigniter.com/user_guide/general/urls.html
+	 */
+	public function index()	{
+		//Comentario de prueba borrar
+		$etiquetas = $this->etiquetas->camposLoggin();
+		$datos['etiquetas'] = $etiquetas;
+		$this->load->view('comun/cabecera');
+		$this->load->view('inicio/loggin_v',$datos);
+		// $this->load->view('pruebaEfrenLoggin_v',$datos);
+		// $this->load->view('comun/footer');
+	}
+}
+
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */

@@ -1,0 +1,940 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class PruebaEfren_c extends CI_Controller {
+	private $tipoUsuario = 0;
+	public function __construct() {
+		parent::__construct();
+		$this->load->model('pruebaEfren_m');
+		// $this->load->model('abcBitacora/queryBitacora');
+		// $this->load->library('bitacora');
+	}
+	public function index()	{
+		$this->load->view('PruebaEfren_v');
+	}
+
+
+	public function pngToJpeg() {
+		$datos = $this->input->post('param1');
+		list($tipo, $datos) = explode('[removed]', $datos);
+		$datos = base64_decode($datos);
+		file_put_contents('tmp\mi_grafica.png', $datos);
+
+		$imagen = imagecreatefrompng('tmp\mi_grafica.png');
+		imagejpeg($imagen, 'tmp\mi_grafica.jpg', 100);
+
+		// Filtros para dismuis calidad de la imagen
+		// imagefilter($image, IMG_FILTER_PIXELATE, 1, true);
+		// imagefilter($image, IMG_FILTER_MEAN_REMOVAL);
+
+		ob_start();
+		imagejpeg($imagen);
+		$contents = ob_get_contents();
+		ob_end_clean();
+
+		$datosUri = "data:image/jpeg;base64," . base64_encode($contents);
+		imagedestroy($imagen);
+		// unlink("tmp\mi_grafica''.png");
+		// unlink("tmp\mi_grafica''.jpg");
+
+		echo $datosUri;
+
+		
+	}
+
+	
+	public function pruebaPNG() {
+		$this->load->view('PruebaEfren_v');
+	}
+
+	public function pruebaBarChart() {
+		$this->load->view('PruebaEfren2_v');
+	}
+
+	public function pruebaColumnChart() {
+		$this->load->view('PruebaEfren3_v');
+	}
+
+	public function tablaDatos3() {
+		$datos = array(
+					'grafica_pastel' => 1,
+					'titulo' =>
+						array(
+							'tipo_de_informacion' => 'Del periodo',
+							'ente' => 'SEDUVI',
+							'periodo' => 'Enero',
+							'anio' => 2013, 
+						),
+					'encabezados' =>
+						array(
+							'id' => 'Id',
+							'objetivo' => 'Objetivo',
+							'variacion' => 'Variación',
+							'grado_de_cumplimiento' => 'Grado de cumplimiento',
+							'avance_promedio' => 'Avance promedio',
+						),
+					'tabla' => 
+						array(
+							'1' => 
+								array(									
+									'id' => '1.1.1.1 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 1',
+									'variacion' => 75,
+									'grado_de_cumplimiento' => 38,
+									'avance_promedio' => 56,
+								),
+							'2' => 
+								array(									
+									'id' => '1.1.1.2 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 2',
+									'variacion' => 74,
+									'grado_de_cumplimiento' => 37,
+									'avance_promedio' => 55,
+									
+								),
+							'3' => 
+								array(									
+									'id' => '1.1.1.3 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 3',
+									'variacion' => 70,
+									'grado_de_cumplimiento' => 30,
+									'avance_promedio' => 50,
+									
+								),
+							'4' => 
+								array(									
+									'id' => '1.1.1.4 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 4',
+									'variacion' => 85,
+									'grado_de_cumplimiento' => 48,
+									'avance_promedio' => 66,
+									
+								),
+							'5' => 
+								array(									
+									'id' => '1.1.1.5 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 5',
+									'variacion' => 79,
+									'grado_de_cumplimiento' => 39,
+									'avance_promedio' => 59,
+									
+								),
+							'6' => 
+								array(									
+									'id' => '1.1.1.5 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 6',
+									'variacion' => 111,
+									'grado_de_cumplimiento' => 102,
+									'avance_promedio' => 0,
+									
+								),
+							'7' => 
+								array(									
+									'id' => '1.1.1.7 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 7',
+									'variacion' => 9,
+									'grado_de_cumplimiento' => 4,
+									'avance_promedio' => 56,
+									
+								),
+							'8' => 
+								array(									
+									'id' => '1.1.1.8 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 8',
+									'variacion' => 2,
+									'grado_de_cumplimiento' => 2,
+									'avance_promedio' => 4,
+									
+								),
+							'9' => 
+								array(									
+									'id' => '1.1.1.9 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 9',
+									'variacion' => 9,
+									'grado_de_cumplimiento' => 9,
+									'avance_promedio' => 19,
+									
+								),
+							'10' => 
+								array(									
+									'id' => '1.1.1.10 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',									
+									'objetivo' => 'Objetivo 10',
+									'variacion' => 179,
+									'grado_de_cumplimiento' => 19,
+									'avance_promedio' => 99,
+									
+								),
+						),
+					'operaciones' =>
+						array(
+							'encabezados' =>
+								array(								
+									'operacion' => 'Operacion',
+									'variacion' => 'Variación',
+									'grado_de_cumplimiento' => 'Grado de cumplimiento',
+									'avance_promedio' => 'Avance promedio',
+								),
+							'tabla' =>
+								array(
+									'1' => 
+										array(
+											'operacion' => 'Promedio',
+											'variacion' => 44,
+											'grado_de_cumplimiento' => 8,
+											'avance_promedio' => 9,	 
+										),
+									'2' => 
+										array(
+											'operacion' => 'Varianza',
+											'variacion' => 4,
+											'grado_de_cumplimiento' => 8,
+											'avance_promedio' => 9,	 
+										),
+									'3' => 
+										array(
+											'operacion' => 'Desviacion estandar',
+											'variacion' => 4.4,
+											'grado_de_cumplimiento' => 8,
+											'avance_promedio' => 9,	 
+										),
+								),
+						),
+				);
+		// echo "<pre>";
+		// print_r($datos['operaciones']);
+		$this->load->view('abcIndicadores/graficas/consultaPorPGD_v', $datos);
+	}
+
+	public function tablaDatos2() {
+		$datos = array(
+					'titulo' =>
+						array(
+							'tipo_de_informacion' => 'Del periodo',
+							'numero_de_periodos' => 12,
+							'tipo_de_consulta' => 'Bla bla',
+							'periodicidad' => 'Mensual', 
+						),
+					'encabezados' =>
+						array(
+							'id' => 'Id',
+							'ente' => 'Ente',
+							'1' => 'Ene',
+							'2' => 'Feb',
+							'3' => 'Mar',
+							'4' => 'Abr',
+							'5' => 'May',
+							'6' => 'Jun',
+							'7' => 'Jul',
+							'8' => 'Ago',
+							'9' => 'Sep',
+							'10' => 'Oct',
+							'11' => 'Nov',
+							'12' => 'Dic',
+						),
+					'tabla' => 
+						array(
+							'1' => 
+								array(									
+									'id' => '1.1.1.1',									
+									'ente' => 'ACRONIMO',
+									'1' => 17,
+									'2' => 25,
+									'3' => 2, 
+									'4' => 8,
+									'5' => 9,
+									'6' => 17,
+									'7' => 25,
+									'8' => 2, 
+									'9' => 8,
+									'10' => 9,
+									'11' => FALSE,
+									'12' => FALSE,
+									
+								),
+							'2' => 
+								array(									
+									'id' => '1.1.1.2',									
+									'ente' => 'ACRONIMO',
+									'1' => 14,
+									'2' => 32,
+									'3' => -4, 
+									'4' => 8,
+									'5' => 9,
+									'6' => 17,
+									'7' => 25,
+									'8' => 2, 
+									'9' => 8,
+									'10' => 9,
+									'11' => FALSE,
+									'12' => FALSE,
+									
+								),
+							'3' => 
+								array(									
+									'id' => '1.1.1.3',									
+									'ente' => 'ACRONIMO',
+									'1' => 16,
+									'2' => 32,
+									'3' => 4, 
+									'4' => 8,
+									'5' => 9,
+									'6' => 17,
+									'7' => 25,
+									'8' => 2, 
+									'9' => 8,
+									'10' => 9,
+									'11' => FALSE,
+									'12' => FALSE,
+									
+								),
+							'4' => 
+								array(									
+									'id' => '1.1.1.4',									
+									'ente' => 'ACRONIMO',
+									'1' => 25,
+									'2' => 12,
+									'3' => -5, 
+									'4' => 8,
+									'5' => 9,
+									'6' => 17,
+									'7' => 25,
+									'8' => 2, 
+									'9' => 8,
+									'10' => 9,
+									'11' => FALSE,
+									'12' => FALSE,
+									
+								),
+							'5' => 
+								array(									
+									'id' => '1.1.1.5',									
+									'ente' => 'ACRONIMO',
+									'1' => 25,
+									'2' => 25,
+									'3' => 0, 
+									'4' => 8,
+									'5' => 9,
+									'6' => 17,
+									'7' => 25,
+									'8' => 2, 
+									'9' => 8,
+									'10' => 9,
+									'11' => FALSE,
+									'12' => FALSE,
+									
+								),
+						),
+					'idPeriodicidad' => 3,
+					'tooltip' => 
+						array(
+							'nombre_operacion' => 
+								array(
+									'nombre' => 'Nombre 1',
+									'desviacion_estandar' => 'Desviación estandar',
+									'promedio' => 'Promedio',
+									'coeficiente_de_variacion' => 'Coeficiente de variación',
+								),
+							'datos' =>
+								array(
+									'1' => 
+										array(
+											'nombre' => 'Nombre del indicador 1',
+											'desviacion_estandar' => 56,
+											'promedio' => 8,
+											'coeficiente_de_variacion' => 12,
+										),
+									'2' => array(
+											'nombre' => 'Nombre del indicador 2',
+											'desviacion_estandar' => 5,
+											'promedio' => 88,
+											'coeficiente_de_variacion' => 121,
+										),
+								),
+						),					
+				);
+		
+
+		// echo "<pre>";
+		// print_r($datos);
+		$this->load->view('abcIndicadores/graficas/consultaHistorico_v', $datos);
+	}
+
+	public function tablaDatos() {
+		$datos = array(
+					'titulo' =>
+						array(
+							'tipo_de_informacion' => 'Del periodo',
+							'periodo' => 'Enero',
+							'anio' => '2013',
+							'periodicidad' => 'Mensual', 
+						),
+					'encabezados' =>
+						array(
+							'id' => 'Id',
+							'indicador' => 'Indicador',
+							'ente' => 'Ente',
+							'avance_real' => 'Avance real',
+							'meta' => 'Meta',
+							'variacion' => 'Variación',
+							'grado_de_cumplimiento' => 'Grado de cumplimiento',
+							'avance_promedio' => 'Avance promedio',
+						),
+					'tabla' => 
+						array(
+							'1' => 
+								array(
+									'registro' => 1,
+									'id' => '1.1.1.1',
+									'indicador' => 'Nombre del ente Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+									'ente' => 'ACRONIMO',
+									'avance_real' => 17,
+									'meta' => 25,
+									'variacion' => 2, 
+									'grado_de_cumplimiento' => 8,
+									'avance_promedio' => 9,
+								),
+							'2' => 
+								array(
+									'registro' => 2,
+									'id' => '1.1.1.2',
+									'indicador' => 'Nombre del ente Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+									'ente' => 'ACRONIMO',
+									'avance_real' => 14,
+									'meta' => 32,
+									'variacion' => -4, 
+									'grado_de_cumplimiento' => 8,
+									'avance_promedio' => 9,
+								),
+							'3' => 
+								array(
+									'registro' => 3,
+									'id' => '1.1.1.3',
+									'indicador' => 'Nombre del ente Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+									'ente' => 'ACRONIMO',
+									'avance_real' => 16,
+									'meta' => 32,
+									'variacion' => 4, 
+									'grado_de_cumplimiento' => 8,
+									'avance_promedio' => 9,
+								),
+							'4' => 
+								array(
+									'registro' => 4,
+									'id' => '1.1.1.4',
+									'indicador' => 'Nombre del ente Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+									'ente' => 'ACRONIMO',
+									'avance_real' => 25,
+									'meta' => 12,
+									'variacion' => -5, 
+									'grado_de_cumplimiento' => 8,
+									'avance_promedio' => 9,
+								),
+							'5' => 
+								array(
+									'registro' => 5,
+									'id' => '1.1.1.5',
+									'indicador' => 'Nombre del ente Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+									'ente' => 'ACRONIMO',
+									'avance_real' => 25,
+									'meta' => 25,
+									'variacion' => 0, 
+									'grado_de_cumplimiento' => 8,
+									'avance_promedio' => 9,
+								),
+						),
+					'operaciones' =>
+						array(
+							'1' => 
+								array(
+									'nombre_operacion' => 'Promedio',
+									'datos' =>
+										array(
+											'avance_real' => 85,
+											'meta' => 36,
+											'variacion' => 44,
+											'grado_de_cumplimiento' => 8,
+											'avance_promedio' => 9,
+										), 
+								),
+							'2' => 
+								array(
+									'nombre_operacion' => 'Varianza',
+									'datos' =>
+										array(
+											'avance_real' => 5,
+											'meta' => 6,
+											'variacion' => 4,
+											'grado_de_cumplimiento' => 8,
+											'avance_promedio' => 9,
+										), 
+								),
+							'3' => 
+								array(
+									'nombre_operacion' => 'Desviación estandar',
+									'datos' =>
+										array(
+											'avance_real' => 185,
+											'meta' => 3.6,
+											'variacion' => 4.4,
+											'grado_de_cumplimiento' => 8,
+											'avance_promedio' => 9,
+										), 
+								),
+						),						
+				);
+		
+		// $datos = array(
+		// 			'titulo' =>
+		// 				array(
+		// 					'tipo_de_informacion' => 'Del periodo',
+		// 					'periodo' => 'Enero',
+		// 					'anio' => '2013',
+		// 					'periodicidad' => 'Mensual', 
+		// 				),
+		// 			'encabezados' =>
+		// 				array(
+		// 					'id' => 'Id',
+		// 					'indicador' => 'Indicador',
+		// 					'avance_real' => 'Avance real',
+		// 					'meta' => 'Meta',
+		// 					'variacion' => 'Variación'
+		// 				),
+		// 			'tabla' => 
+		// 				array(
+		// 					'1' => 
+		// 						array(
+		// 							'registro' => 1,
+		// 							'id' => '1.1.1.1',
+		// 							'indicador' => 'Indicador 1',
+		// 							'avance_real' => 17,
+		// 							'meta' => 25,
+		// 							'variacion' => 2, 
+		// 						),
+		// 					'2' => 
+		// 						array(
+		// 							'registro' => 2,
+		// 							'id' => '1.1.1.2',
+		// 							'indicador' => 'Indicador 2',
+		// 							'avance_real' => 14,
+		// 							'meta' => 32,
+		// 							'variacion' => -4, 
+		// 						),
+		// 					'3' => 
+		// 						array(
+		// 							'registro' => 3,
+		// 							'id' => '1.1.1.3',
+		// 							'indicador' => 'Indicador 3',
+		// 							'avance_real' => 16,
+		// 							'meta' => 32,
+		// 							'variacion' => 4, 
+		// 						),
+		// 					'4' => 
+		// 						array(
+		// 							'registro' => 4,
+		// 							'id' => '1.1.1.4',
+		// 							'indicador' => 'Indicador 4',
+		// 							'avance_real' => 25,
+		// 							'meta' => 12,
+		// 							'variacion' => -5, 
+		// 						),
+		// 					'5' => 
+		// 						array(
+		// 							'registro' => 5,
+		// 							'id' => '1.1.1.5',
+		// 							'indicador' => 'Indicador 5',
+		// 							'avance_real' => 25,
+		// 							'meta' => 25,
+		// 							'variacion' => 0, 
+		// 						),
+		// 				),
+		// 			'operaciones' => FALSE,						
+		// 		);
+
+
+		// echo "<pre>";
+		// print_r($datos);
+		// echo "</pre>";
+		
+
+		
+		$this->load->view('abcIndicadores/graficas/consultaPGD_v', $datos);
+	}
+
+	public function texto($datos) {
+		$resultado = base64_decode($datos);
+		$objJson = json_decode($resultado);
+		$arreglo = $this->objeto_a_arreglo($objJson);
+		echo "<pre>";
+		print_r($arreglo);
+
+		echo "</pre>";
+	}
+	public function objeto_a_arreglo($datos) {
+	    if (is_array($datos) || is_object($datos)) {
+	        $resultado = array();
+	        foreach ($datos as $key => $value) {
+	            $resultado[$key] = $this->objeto_a_arreglo($value);
+	        }
+	        return $resultado;
+	    }
+	    return $datos;
+	}
+
+	public function pruebaGoogleCharts() {
+		$ciudades = array(
+			'Cd de Mexico' => 700,
+			'Bogota' => 651,
+			'Lima' => 581,
+			'Caracas' => 552,
+			'Montevideo' => 357
+			 );
+		$datos['ciudades'] = $ciudades;
+		$this->load->view('PruebaEfren_v', $datos);
+	}
+
+	public function correohabilitarCaptura() {
+		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+		$mensaje='<html>
+                        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">
+                        <body>
+                            <div style="width:300px;">
+                                <img width="300" src="'.base_url().'statics/images/head-mail.png"/>
+                            </div>
+                            <div style="width:600px;">
+                                <div style="text-align:right;font-family: Arial Narrow;font-size: 12pt;">
+                                    Ciudad de M&eacute;xico, '.$fecha.'.
+                                </div>
+                                <div style="font-family:Arial Narrow;font-size: 12pt; width:300px;margin-top:50px;margin-bottom:30px;">
+                                    <b>Estimado usuario,</b>
+                                </div>
+                                <br>
+                                <div style="text-align:justify;font-family: Arial Narrow;font-size: 12pt;">
+                                    Se le informa que se le ha <b style="font-style:oblique;">habilitado</b> nuevamente la captura de indicadores en el Sistema de Monitoreo, a partir del d&iacute;a '.$fecha.' a las '.date('H:i').' hrs.
+                                    <br>                            
+                                	<br>
+                                	Le pedimos de favor no retrasarse en los periodos de captura para evitar un futuro cierre del sistema.                           
+                                    <br>
+                                </div>
+                                <div style="font-family: Arial Narrow;font-size: 12pt;">
+                                    <br><br>
+                                    <b>
+                                        Att. Direcci&oacute;n de Evaluaci&oacute;n y Uso Estrat&eacute;gico de la Informaci&oacute;n. <br>Coordinaci&oacute;n General de Modernizaci&oacute;n Administrativa.
+                                    </b>
+                                    <br><br>
+                                    <div style="text-decoration: underline" >
+                                        Este mensaje es autom&aacute;tico, favor de no responder este correo. 
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </div>
+                            <div>
+                                <img width="600" height="70" src="'.base_url().'statics/images/logo_footer_doc.png"/>
+                            </div>
+                        </body>
+                </html>';
+        echo $mensaje;
+	}
+
+	public function correoDeshabilitarCaptura($morasTotales,$morasVigentes) {
+		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+		$mensaje='<html>
+                        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">
+                        <body>
+                            <div style="width:300px;">
+                                <img width="300" src="'.base_url().'statics/images/head-mail.png"/>
+                            </div>
+                            <div style="width:600px;">
+                                <div style="text-align:right;font-family: Arial Narrow;font-size: 12pt;">
+                                    Ciudad de M&eacute;xico, '.$fecha.'.
+                                </div>
+                                <div style="font-family:Arial Narrow;font-size: 12pt; width:300px;margin-top:50px;margin-bottom:30px;">
+                                    <b>Estimado usuario,</b>
+                                </div>
+                                <br>
+                                <div style="text-align:justify;font-family: Arial Narrow;font-size: 12pt;">
+                                    Se le informa que debido al n&uacute;mero de periodos con retrasos en la captura de sus indicadores, se le ha <b style="font-style:oblique;text-decoration: underline">cerrado</b> la opci&oacute;n de captura en el sistema.
+                                    <br>
+                                    <br>
+                                    <div style="font-style:oblique;">
+                                    	Resumen de retrasos:
+                                    </div>
+                                    <br>
+                                    
+                                	En total <b>'.$morasTotales.'</b> periodos con retrasos en la captura.
+                                	<br>';
+        if ($morasTotales != $morasVigentes) {
+        	$mensaje .= '<b>'.$morasVigentes.'</b> periodos desde la &uacute;ltima vez que se se le cerr&oacute; el sistema.
+                                    <br>';
+        }
+                                	
+        $mensaje .=                 '<br>
+                                    Usted puede solicitar la apertura a trav&eacute;s del sistema, al acceder a la bandeja de "Consulta de indicadores" y seleccionar la opci&oacute;n correspondiente.
+                                    <br>
+                                    Saludos.
+                                    <br>
+                                </div>
+                                <div style="font-family: Arial Narrow;font-size: 12pt;">
+                                    <br><br>
+                                    <b>
+                                        Att. Direcci&oacute;n de Evaluaci&oacute;n y Uso Estrat&eacute;gico de la Informaci&oacute;n. <br>Coordinaci&oacute;n General de Modernizaci&oacute;n Administrativa.
+                                    </b>
+                                    <br><br>
+                                    <div style="text-decoration: underline" >
+                                        Este mensaje es autom&aacute;tico, favor de no responder este correo. 
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </div>
+                            <div>
+                                <img width="600" height="70" src="'.base_url().'statics/images/logo_footer_doc.png"/>
+                            </div>
+                        </body>
+                </html>';
+        echo $mensaje;
+	}
+
+	public function mensaje($contrasenia) {
+		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+		$fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+
+
+		$mensaje='<html>
+						<meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">
+						<body>
+							<div style="width:300px;">
+								<img width="300" src="'.base_url().'statics/images/head-mail.png"/>
+							</div>
+							<div style="width:600px;">
+								<div style="text-align:right;font-family: Arial Narrow;font-size: 12pt;">
+									Ciudad de M&eacute;xico, '.$fecha.'.
+								</div>
+								<div style="font-family:Arial Narrow;font-size: 12pt; width:300px;margin-top:50px;margin-bottom:30px;">
+									<b>Estimado usuario,</b>
+								</div>
+								<br>
+								<div style="text-align:justify;font-family: Arial Narrow;font-size: 12pt;">
+									Por cuestiones de seguridad se ha cambiado la contrase&#241;a que ten&iacute;a anteriormente. Su nueva contrase&#241;a es: <br>
+									<br>
+									<div style="text-align:center;">
+										<b>'.$contrasenia.'</b>
+									</div>
+									<br>
+									<br>
+									Una vez iniciada su sesi&oacute;n,usted puede cambiarla en cualquier momento desde la opci&oacute;n &#34;Cambiar Contrase&#241;a&#34; que se despliega al hacer clic en el bot&oacute;n que tiene su nombre de usuario, en la parte superior derecha de la pantalla.
+								</div>
+								<div style="font-family: Arial Narrow;font-size: 12pt;">
+									<br><br>
+									<b>
+										Att. Direcci&oacute;n de Evaluaci&oacute;n y Uso Estrat&eacute;gico de la Informaci&oacute;n. <br>Coordinaci&oacute;n General de Modernizaci&oacute;n Administrativa.
+									</b>
+									<br><br>
+									<div style="text-decoration: underline" >
+										Este mensaje es autom&aacute;tico, favor de no responder este correo. 
+									</div>
+								</div>
+								<br>
+								<br>
+							</div>
+							<div>
+								<img width="600" height="70" src="'.base_url().'statics/images/logo_footer_doc.png"/>
+							</div>
+						</body>
+				</html>';
+		echo $mensaje;
+
+
+		
+	}
+
+	public function fecha() {
+		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+		echo $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+	}
+
+	public function correoHTML() {
+		$contrasenia = "PASSWORD";
+		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+		$fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+
+
+		$mensaje='<html>
+						<meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">
+						<body>
+							<div style="width:300px;">
+								<img width="300" src="'.base_url().'statics/images/head-mail.png"/>
+							</div>
+							<div style="width:600px;">
+								<div style="text-align:right;font-family: Arial Narrow;font-size: 12pt;">
+									Ciudad de M&eacute;xico, '.$fecha.'.
+								</div>
+								<div style="font-family:Arial Narrow;font-size: 12pt; width:300px;margin-top:50px;margin-bottom:30px;">
+									<b>Estimado usuario,</b>
+								</div>
+								<br>
+								<div style="text-align:justify;font-family: Arial Narrow;font-size: 12pt;">
+									Por cuestiones de seguridad se ha cambiado la contrase&#241;a que ten&iacute;a anteriormente. Su nueva contrase&#241;a es: <br>
+									<br>
+									<div style="text-align:center;">
+										<b>'.$contrasenia.'</b>
+									</div>
+									<br>
+									<br>
+									Una vez iniciada su sesi&oacute;n,usted puede cambiarla en cualquier momento desde la opci&oacute;n &#34;Cambiar Contrase&#241;a&#34; que se despliega al hacer clic en el bot&oacute;n que tiene su nombre de usuario, en la parte superior derecha de la pantalla.
+								</div>
+								<div style="font-family: Arial Narrow;font-size: 12pt;">
+									<br><br>
+									<b>
+										Att. Direcci&oacute;n de Evaluaci&oacute;n y Uso Estrat&eacute;gico de la Informaci&oacute;n. <br>Coordinaci&oacute;n General de Modernizaci&oacute;n Administrativa.
+									</b>
+									<br><br>
+									<div style="text-decoration: underline" >
+										Este mensaje es autom&aacute;tico, favor de no responder este correo. 
+									</div>
+								</div>
+								<br>
+								<br>
+							</div>
+							<div>
+								<img width="600" height="70" src="'.base_url().'statics/images/logo_footer_doc.png"/>
+							</div>
+						</body>
+				</html>';
+
+		echo $mensaje;
+	}
+
+	public function variable() {
+		$datos = array(
+			'ecuacion' => '(A/B)*100',
+			'linea_base' => 5,
+			'meta' => 85,
+			'meta_periodo' => 25,
+			'variables' => array(
+					'A' => 5,
+					'B' => 60,					
+				),
+			'periodoAnterior' => array(
+					'avance_real_periodo' => 21,
+					'variacion_periodo' => -4,
+					'cumplimiento_periodo' => 83,
+					'avance_acumulado' => 21,
+					'meta_acumulada' => 25,
+					'variacion_acumulada' => -4,
+					'cumplimiento_acumulado' => 83.33,
+					'avance_promedio' => 21,
+				),
+			'numeroPeriodos' => 4,
+			'periodoActual' => 2,
+			);
+		$this->load->library('parser/ecuaciones');
+		echo "<pre>";
+		print_r($this->ecuaciones->calcularVariable($datos));
+		echo "</pre>";
+	}
+
+	public function pruebaCorreo() {
+        $this->load->library('email');
+        $this->email->from('your@example.com', 'Your Name');
+        $this->email->to('jezrel_mx@hotmail.com'); 
+        $this->email->cc('jezrelmx1304@gmail.com'); 
+
+        $this->email->subject('Email Test');
+        $this->email->message('Testing the email class.');  
+
+        $this->email->send();
+
+        echo $this->email->print_debugger();
+    }
+
+	public function generarPsw() {
+		$str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#_-.";
+		$cad = "";
+		for($i=0;$i<3;$i++) {
+			$cad .= substr($str,rand(0,66),1);
+		}
+		// print $cad;
+		$psswd = substr(md5(microtime()), 1, 3);
+		echo $psswd.$cad;
+	}
+
+	public function cifrar() {
+		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+		$iv = mcrypt_create_iv($iv_size, MCRYPT_DEV_URANDOM);
+		$key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
+		# show key size use either 16, 24 or 32 byte keys for AES-128, 192
+		# and 256 respectively
+		$key_size =  strlen($key);
+		echo "Key size: " . $key_size . "\n";
+		$text = "Meet me at 11 o'clock behind the monument.";
+		echo strlen($text) . "\n";
+
+		$crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv);
+		echo strlen($crypttext) . "\n";
+	}
+
+	public function compresion() {
+		$input = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumlaborumlaborumlaborumlaborumlaborumlaborumlaborumllllllll.';
+		var_dump($input);
+		$out = urlencode(base64_encode(gzcompress($input)));
+		var_dump($out);
+		$regreso = gzuncompress(base64_decode(urldecode($out)));
+		var_dump($regreso);
+	}
+	public function pruebaBitacora() {
+		// echo "controlador pruebaBitacora";
+		$this->pruebaEfren_m->bitacora();
+		
+	}
+
+	public function darAcceso() {
+		$this->pruebaEfren_m->bitacora();
+		$datosSesion = $this->session->all_userdata();
+		echo "<pre> Tipo de usuario";
+		print_r($datosSesion);
+		echo "</pre>";
+		
+		
+		// if ($this->tipoUsuario == 1) {
+		// 	$this->accederMetodoPrivado();
+		// } else {
+		// 	echo "No tienes acceso al sistema";
+		// 	$this->accederMetodoPublico();
+		// }
+		
+		// echo "Este es el modulo 1 y eres un usuario CGMA o un super usuario";
+	}
+
+	public function accederMetodoPublico() {
+		echo "Metodo publico";
+		$data['botones'][1]['btnNombre1'] = "boton publico 1";
+		$data['botones'][1]['controlador1'] = "index.php/prubeaEfren_c/control1";
+		$data['botones'][2]['btnNombre2'] = "boton publico 1";
+		$data['botones'][2]['controlador2'] = "index.php/prubeaEfren_c/control2";
+		// $this->load->view('PruebaEfren_v', $data);
+
+	}
+
+	private function accederMetodoPrivado() {
+		echo "Metodo privado";
+		$data['botones'][1]['btnNombre1'] = "boton privado 1";
+		$data['botones'][1]['controlador1'] = "index.php/prubeaEfren_c/control3";
+		$data['botones'][2]['btnNombre2'] = "boton privado 1";
+		$data['botones'][2]['controlador2'] = "index.php/prubeaEfren_c/control4";
+		// $this->load->view('PruebaEfren_v', $data);
+	}
+
+
+
+
+
+}
+
+/* End of file prubeaEfren_c.php */
+/* Location: ./application/controllers/prubeaEfren_c.php */

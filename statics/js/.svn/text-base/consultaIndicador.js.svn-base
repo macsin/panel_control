@@ -1,0 +1,371 @@
+/**
+ *En este archivo se guardan funciones llamadas desde las vistas consultaIndicadores_v y filtrarIndicadores_v 
+ */
+
+	/**
+	 * traerEvaluacion actualiza options del elemento #selectNomEvaluacion
+	 * @param  entero recupera de la vista el valor del elemento "#selectTipoEvaluacion" y lo pasa al controlador como condicion de la busqueda en DB
+	 * @return select-options del elemento #selectNomEvaluacion.
+	 * @author  Nohemi
+	 */
+	
+function traerEvaluacion(){
+		var id_tipoEvaluacion=$('#selectTipoEvaluacion').val();
+		
+		
+		if(id_tipoEvaluacion!=0){
+			$("#Ntooltip5").attr('href','#modalConsultaPGD');
+			$("#Ntooltip5").removeClass('deshabilitado');
+			$("#Ntooltip5").addClass('resaltarbtn');
+		}else{
+			$("#Ntooltip5").attr('href','#');
+			$("#Ntooltip5").addClass('deshabilitado');
+			$("#Ntooltip5").removeClass('resaltarbtn');
+		}
+		
+		
+		var url=base+'index.php/abcIndicadores/consultaIndicador_c/traerEvaluacion/'+id_tipoEvaluacion;
+		var evaluacion=$.ajax({
+				url:url,
+				type:'POST',
+				data:{
+					id_tipoEvaluacion:id_tipoEvaluacion,
+				},
+				success: function (data){
+					obtenerRango();
+				},
+				async:false
+			}).responseText;
+				$('#selectNomEvaluacion').empty();
+				jsonR=$.parseJSON(evaluacion);	
+				$.each(jsonR,function(){
+						$('#selectNomEvaluacion').append("<option value='"+this.id+"'>"+this.texto+"</option>");	
+			
+			});
+	}
+	
+
+	 var varsFiltroIndicador=null;
+	/**
+	 * filtrarIndicadores actualiza la vista consultaIndicadores_v en la clase .consultaIndicador.
+	 * @param  entero recupera de la vista los valores: id_cat_ente= del elemento #selectEnte, id_periodicidad= del elemento #selectPeriodicidad,
+	 * id_cat_tipo_evaluacion= del elemento #selectTipoEvaluacion, id_estatus= del elemento #selectEstatus, id_cat_evaluacion= del elemento #selectNomEvaluacion
+	 * @return id_ente, id_tipoEvaluacion, id_nomEvaluacion, id_periodicidad, id_estatus (datos tipo entero)
+	 * @author  Nohemi
+	 */
+function filtrarIndicadores(){
+	var id_ente=$('#selectEnte').val();
+	var id_periodicidad=$('#selectPeriodicidad').val();
+	var id_tipoEvaluacion=$('#selectTipoEvaluacion').val();
+	var id_estatus=$('#selectEstatus').val();
+	var id_nomEvaluacion=$('#selectNomEvaluacion').val();
+	var rango=$('#rango').val();
+
+	if(id_nomEvaluacion==null || (id_nomEvaluacion=='') || (id_nomEvaluacion==' ')){
+		id_nomEvaluacion=0;
+		}
+		
+	varsFiltroIndicador=null;
+	varsFiltroIndicador=base+"index.php/abcIndicadores/consultaIndicador_c/mostrarIndicadores/"+id_ente+"/"+id_tipoEvaluacion+"/"+id_nomEvaluacion+"/"+id_periodicidad+"/"+id_estatus+"/0";
+			
+		var url = base+'index.php/abcIndicadores/consultaIndicador_c/mostrarIndicadores/'+id_ente+'/'+id_tipoEvaluacion+'/'+id_nomEvaluacion+'/'+id_periodicidad+'/'+id_estatus+'/1';
+		var data = 'rango='+rango;
+		$.ajax({
+			async: false,			
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+	        	$('#consultaIndicador').empty();
+				$('#consultaIndicador').html(data);
+				obtenerRango(0);
+	        },        
+	        error: function(){
+	           alert("no se pudo");
+	           alert(url);
+	        }
+	    });
+	//resetear filtros PGD
+	document.getElementById("idCatEje").selectedIndex = '0';
+	document.getElementById("areaOportunidad").selectedIndex = '0';
+	$('#descripcionAreaOportunidad').val("");
+	document.getElementById("objetivo").selectedIndex = '0';
+	$('#descripcionObjetivo').val("");
+	document.getElementById("meta").selectedIndex = '0';
+	$('#descripcionMeta').val("");
+	document.getElementById("metaSectorial").selectedIndex = '0';
+	$('#descripcionMetaSectorial').val("");		
+	//llamar funciones para habilitar y marcar checkboxes	
+	habilitarCheckBox();
+	marcarCheckBox();	    
+	    	
+}
+
+
+	/**
+	 * filtrarIndicadoresPGD actualiza la vista consultaIndicadores_v en la clase .consultaIndicador.
+	 * @param  
+	 * @return 
+	 * @author  Nohemi
+	 */
+function filtrarIndicadoresPGD(){
+	var rango=$('#rangoPGD').val();
+	var id_ente=$('#selectEnte').val();
+	var id_periodicidad=$('#selectPeriodicidad').val();	
+	var id_eje=$('#idCatEje').val();
+	var id_areaOportunidad=$('#areaOportunidad').val();
+	var id_objetivo=$('#objetivo').val();
+	var id_meta=$('#meta').val();
+	var id_metaSectorial=$('#metaSectorial').val();
+	var id_metaInstitucional=$('#metaInstitucional').val();
+	//alert(id_ente+"/"+id_eje+"/"+id_areaOportunidad+"/"+id_objetivo+"/"+id_meta);
+	if(rango=='' || rango==null) rango=0
+	if(id_eje=='' || id_eje==null) id_eje=0
+	if(id_periodicidad=='' || id_periodicidad==null) id_periodicidad=0	
+	if(id_areaOportunidad=='' || id_areaOportunidad==null) id_areaOportunidad=0
+	if(id_objetivo=='' || id_objetivo==null) id_objetivo=0
+	if(id_meta=='' || id_meta==null) id_meta=0
+	if(id_metaSectorial=='' || id_metaSectorial==null) id_metaSectorial=0
+	if(id_metaInstitucional=='' || id_metaInstitucional==null) id_metaInstitucional=0	
+	//alert(id_ente+"/"+id_eje+"/"+id_areaOportunidad+"/"+id_objetivo+"/"+id_meta+'/'+id_metaSectorial);
+//	filtro.length=0;
+	//filtro=["filtroPGDIndicadores",id_ente,id_periodicidad,id_eje,id_areaOportunidad,id_objetivo,id_meta,id_metaSectorial];
+	varsFiltroIndicador=null;
+	varsFiltroIndicador=base+"index.php/abcIndicadores/consultaIndicador_c/filtroPGDIndicadores/"+id_ente+"/"+id_periodicidad+"/"+id_eje+"/"+id_areaOportunidad+"/"+id_objetivo+"/"+id_meta+"/"+id_metaSectorial+"/"+id_metaInstitucional+"/0";
+	
+			
+	var url = base+'index.php/abcIndicadores/consultaIndicador_c/filtroPGDIndicadores/'+id_ente+'/'+id_periodicidad+'/'+id_eje
+	+'/'+id_areaOportunidad+'/'+id_objetivo+'/'+id_meta+'/'+id_metaSectorial+'/'+id_metaInstitucional+'/1';
+	var data = '';
+		$.ajax({
+			async: false,			
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+	        	$('#consultaIndicador').empty();
+				$('#consultaIndicador').html(data);
+				//obtenerRango(0);
+	        },        
+	        error: function(){
+	           alert("no se pudo");
+	           alert(url);
+	        }
+	    });
+	//resetear filtros General
+	document.getElementById("selectTipoEvaluacion").selectedIndex = '0';
+	document.getElementById("selectNomEvaluacion").selectedIndex = '0';
+	document.getElementById("selectEstatus").selectedIndex = '0';
+	document.getElementById("rango").selectedIndex = '0';		    
+	//llamar funciones para habilitar y marcar checkboxes
+	habilitarCheckBox();
+	marcarCheckBox();	
+}
+
+function desactivarIndicador(idIndicador,accion,estatus){
+		if(accion==0){
+			if(estatus==2){
+				if(confirm('Esta acción ocultará el indicador a las dependencias que lo tienen asociado y no podrán capturar los valores de las variables en los periodos posteriores. ¿Desea continuar?')){
+					cargarContenido(base+'index.php/abcIndicadores/consultaIndicador_c/desactivarIndicador/'+idIndicador+'/'+accion);
+				}				
+			}else{
+				if(confirm('Esta acción desactivará el indicador y no podrá ser publicado mientras permanezca en este estado. ¿Desea continuar?')){
+					cargarContenido(base+'index.php/abcIndicadores/consultaIndicador_c/desactivarIndicador/'+idIndicador+'/'+accion);
+				}								
+			}
+		}else{
+			if(confirm('Esta acción activará el indicador y el usuario podrá verlo en su bandeja. ¿Desea continuar?')){
+				cargarContenido(base+'index.php/abcIndicadores/consultaIndicador_c/desactivarIndicador/'+idIndicador+'/'+accion);
+			}
+		}
+}
+
+
+	/**
+	 * consultarDatosIndicadorEnte actualiza tabla de reporte con valores capturados en cada periodo
+	 * @param  
+	 * @return 
+	 * @author  Nohemi
+	 */
+function consultarDatosIndicadorEnte(idIndicador){
+	var id_indicador=idIndicador;
+	var id_ente=$('#selectEnte').val();
+	var url = base+'index.php/abcIndicadores/reporteIndicador_c/consultaDatosIndicador/'+id_indicador+'/'+id_ente;
+	var data = '';
+		$.ajax({
+	        url: url,
+	        data: data,
+	        type: 'POST',               
+	        success: function(data){
+				$('body').html(data);
+	        },        
+	        error: function(){
+	           alert("no se pudo");
+	           alert(url);
+	        }
+	    });	
+}
+
+
+	/**
+	 * solicitarAperturaCaptura envio de correo al administrador de sistema para solicitar que se habilite la captura de indicadores
+	 * @param  
+	 * @return 
+	 * @author  Nohemi
+	 */
+	function solicitarAperturaCaptura(idUsuario){
+		alert('Esta acción enviará un correo al administrador del sistema para solicitar que la captura de indicadores se habilite a este usuario.');
+		id_usuario=idUsuario;
+		//alert(id_usuario);
+		var url= base + 'index.php/abcIndicadores/habilitarCaptura_c/enviaCorreo/'+id_usuario;
+		var data = '';		
+		//alert(url);
+		$.ajax({	    
+				url: url,	    
+				data: data,	      
+				type: 'POST',	                
+				success: function(data){
+				//alert(data)
+			  	switch(data) {
+				    case "1":	alerta('121','alert-info');
+				    			document.getElementById('btnHabilitarCaptura').disabled = true;
+				    			var span='<span>El correo ya ha sido enviado. La respuesta puede tardar algunas horas. En caso de dudas contacte con el administrador del sistema </span>';
+				    			$('#btnHabilitarCaptura').append(span); 
+				    			//alert('La petición ha sido enviada al administrador de la CGMA y se ha informado al titular de la dependencia.');
+				        break;
+				    case "0":	alerta('120','alert-error');
+				    			//alert('Error al enviar correo');
+			  			break;
+				    /*default:
+				    	document.getElementById('btnHabilitarCaptura').disabled = true; 
+				    			var span='<span>El correo ya ha sido enviado. La respuesta puede tardar algunas horas. En caso de dudas contacte con el administrador del sistema </span>';
+				    			$('#btnHabilitarCaptura').append(span); 				    	
+				    	window.open (base+"index.php/abcIndicadores/habilitarCaptura_c/mensaje2/"+id_usuario,"mywindow","resizable=0,location=1,status=1,scrollbars=1,  width=650,height=650,left=200,top=50");*//*quitar*/
+					}			
+				 },	        
+					        error: function(){
+								alert(url);
+					           	alert("no se pudo");
+					        }	    
+				    });				
+	}
+
+	// variables globales,  arrayIdsMarcados; guarda los ids seleccionados para graficar, btnGraficarNivel; guarda el id del nivel que se va a graficar
+	 arrayIdsMarcados=[];
+	 graficarNivel=null;
+
+	/**
+	 * habilitarCheckBox se habilitan checkbox para graficar indicadores
+	 * @param  
+	 * @return 
+	 * @author  Nohemi
+	 */	
+	function habilitarCheckBox(){//cuando se cambia de periodo se inicializa el array arrayIdsMarcados
+		elementos=false;
+		var tamArray = arrayIdsMarcados.length
+		if(tamArray>0)//habilito el boton configurar cuando se ha seleccionado por lo menos un elemento
+			document.getElementById('btnConfigurarGrafica').disabled = false;
+		else
+			document.getElementById('btnConfigurarGrafica').disabled = true;				
+		var periodo=$('#selectPeriodicidad').val(); //habilito los checkbox de los indicadores que correspondan al periodo seleccionado		
+		if(periodo>1){//cuando se selecciona un periodo
+			$("input:checkbox").each(function(){
+			var array = $(this).val().split("-");		
+			if(array[2]!=undefined && array[2]==periodo) {
+				elementos=true;
+				document.getElementById(array[1]).style.display = 'block';
+				document.getElementById(array[1]).disabled = false;//si el periodo seleccionado corresponde al periodo del indicador se habilita el checkbox del indicador y el checkbox "seleccionar todos"
+			}else if(array[2]!=undefined && array[2]!=periodo){
+					document.getElementById("checkSeleccionarTodosLabel").style.display = 'none';				
+					document.getElementById("checkSeleccionarTodos").style.display = 'none';
+					document.getElementById("checkSeleccionarTodos").disabled = true; 
+					document.getElementById(array[1]).style.display = 'none';
+					document.getElementById(array[1]).disabled = true;//si no corresponde se inhabilita y se deja desmarcado
+					document.getElementById(array[1]).checked=0;}
+			});
+			if(elementos==true){
+				document.getElementById("checkSeleccionarTodosLabel").style.display = 'block';
+				document.getElementById("checkSeleccionarTodos").style.display = 'block';				
+				document.getElementById("checkSeleccionarTodos").disabled = false;//si el periodo seleccionado corresponde al periodo del indicador se habilita el checkbox
+				document.getElementById("checkSeleccionarTodos").checked=0;
+			}					
+		}else { //se deshabilitan los checkbox cuando no hay periodo valido y se desmarcan
+				document.getElementById("checkSeleccionarTodosLabel").style.display = 'none';			
+				document.getElementById("checkSeleccionarTodos").style.display = 'none';
+				document.getElementById("checkSeleccionarTodos").disabled = true;
+				$("input:checkbox").each(function(){
+					var array = $(this).val().split("-");
+					if(array[2]!=undefined){ document.getElementById(array[1]).style.display = 'none';
+						document.getElementById(array[1]).disabled = true;
+					document.getElementById(array[1]).checked=0;}
+					});
+			}
+	}
+	
+
+	/**
+	 * agregarValor agregar valores (ids de ibdicadores) para graficar
+	 * @param  
+	 * @return 
+	 * @author  Nohemi
+	 */	
+	function agregarValor(idMarcado){
+		var periodo=$('#selectPeriodicidad').val(); //habilito los checkbox de los indicadores que correspondan al periodo seleccionado		
+		if(idMarcado==0){//cuando se lesecciona marcar todos
+			if(document.getElementById("checkSeleccionarTodos").checked) {//valida si se marco seleccionar todos, marco todos los ids y los agrego al arreglo
+				arrayIdsMarcados.length=0;
+				$("input:checkbox").each(function(){
+					var array = $(this).val().split("-");
+					if(array[2]!=undefined && array[2]==periodo){
+						document.getElementById(array[1]).checked=1;
+						arrayIdsMarcados[arrayIdsMarcados.length] = array[1]; 						
+						}
+					});				
+				}else {//cuando seleccionar todos, se desmarca, recorre los checks y los saca del arreglo
+						$("input:checkbox").each(function(){
+						var array = $(this).val().split("-");
+						if(array[2]!=undefined && array[2]==periodo){
+							document.getElementById(array[1]).checked=0;
+							var posicion = arrayIdsMarcados.indexOf(idMarcado);
+							arrayIdsMarcados.splice( posicion, 1 ); 						
+							}
+						});		 
+				}			
+		}else{//cuando se selecciona uno por uno	
+			var array = idMarcado.split("-");//posicion 1 del array es el id del indicador y tambien el id del checkbox	
+			if(document.getElementById(array[1]).checked) {//valida si el id se marco
+				arrayIdsMarcados[arrayIdsMarcados.length] = array[1]; 
+				}else {//cuando el id se desmarca, busca la posición del elemento para sacarlo
+				var posicion = arrayIdsMarcados.indexOf(array[1]);
+				arrayIdsMarcados.splice( posicion, 1 ); 
+				}
+		}
+		var tamArray = arrayIdsMarcados.length
+		if(tamArray>0)//habilito el boton configurar cuando se ha seleccionado por lo menos un elemento
+			document.getElementById('btnConfigurarGrafica').disabled = false;
+		else
+			document.getElementById('btnConfigurarGrafica').disabled = true;		
+	}
+	
+	/**
+	 * marcarCheckBox marcar indicadores seleccionados antes de hacer un filtro
+	 * @param  
+	 * @return 
+	 * @author  Nohemi
+	 */		
+	function marcarCheckBox(){	//recorro los checkbox y busco en el array, si estan los habilito y los marco
+		$("input:checkbox").each(function(){
+			var array = $(this).val().split("-");
+			if(array[2]!=undefined){
+				for(i=0; i<arrayIdsMarcados.length; i++){//recorro el array
+					var indicador = arrayIdsMarcados[i];				
+					if(array[1]==indicador){
+						document.getElementById(array[1]).disabled = false;
+						document.getElementById(array[1]).checked=1;
+					}
+				}
+			}
+		});		
+	}
+	
+	

@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var propiedadCol = {type: 'string', role: 'annotation'};
+        var dataTable = google.visualization.arrayToDataTable([
+          ['Id - Objetivo', {'type': 'string', 'role': 'tooltip', 'p': {'html': true}}, 'Avance real', propiedadCol, 'Grado de cumplimiento', propiedadCol, 'Avance promedio', propiedadCol],
+          ['1.1.1.1' , contenidoHTML1(), 1000,           '',      400,         '',     250,   ''],
+          ['1.1.1.2' , contenidoHTML2(), 1170,           '',      460,         '',     120,   ''],
+          ['1.1.1.3' , contenidoHTML3(), 660,            '',     1120,         '',      21,   ''],
+          ['1.1.1.4' , contenidoHTML4(), 1030,           '',      540,         '',      11,   ''],
+          ['1.1.1.5' , contenidoHTML5(), 100,            '',     4100,         '',     564,   ''],
+          ['1.1.1.6' , contenidoHTML6(), 1179,           '',        5,         '',     254,   ''],
+          ['1.1.1.7' , contenidoHTML7(), 6604,           '',      120,         '',    4512,   ''],
+          ['1.1.1.8' , contenidoHTML8(), 1030,           '',      540,         '',      56,   ''],
+          ['1.1.1.9' , contenidoHTML9(), 660,            '',     1120,         '',      13,   ''],
+          ['1.1.1.10' , contenidoHTML10(), 1030,           '',      540,         '',       0,   ''],
+        ]);
+
+
+       
+        var options = {
+          title: 'Objetivos del PGD',
+          hAxis: {
+            title: 'Objetivos',
+            titleTextStyle: {
+              color: 'black',
+            },
+          },
+          vAxis: {
+            title: 'Porcentajes',
+            titleTextStyle: {
+              color: 'black',
+            },
+          },
+          // colors: ['#7F6FD2', '#94F29C', '#F8ECBC'],
+          // colors: ['#AF9965', '#DAC674', '#F3E79A'],
+          // colors: ['#EE7009', '#0A7AAC', '#504C4B'],
+          // colors: ['#0A19BB', '#02073A', '#4D5073'],
+          colors: ['#1D1E55', '#859DC4', '#6D165E'],
+          focusTarget: 'category',
+          selectionMode: 'multiple',
+          tooltip: {
+            isHtml: true,
+          },
+          
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(dataTable, options);
+        google.visualization.events.addListener(chart, 'select', miFuncion);
+        var columnas = new Array();
+
+        function miFuncion() {
+          var selection = chart.getSelection();
+          var message = '';
+          for (var i = 0; i < selection.length; i++) {
+            var item = selection[i];
+            if (item.row != null && item.column != null) {
+              var str = dataTable.getFormattedValue(item.row, item.column);
+              message += '{row:' + item.row + ',column:' + item.column + '} = ' + str + '\n';
+            } else if (item.row != null) {
+              var str = dataTable.getFormattedValue(item.row, 0);
+              message += '{row:' + item.row + ', column:none}; value (col 0) = ' + str + '\n';
+            } else if (item.column != null) {
+                var str = dataTable.getFormattedValue(0, item.column);
+                var indice = columnas.indexOf(item.column);
+                if (indice != -1) {
+                    columnas.splice(indice, 1);
+                    for (var j = 0; j < dataTable.getNumberOfRows(); j++) {
+                        dataTable.setValue(j, item.column + 1, '');
+                    };
+                } else{
+                    columnas.unshift(item.column);
+                    for (var j = 0; j < dataTable.getNumberOfRows(); j++) {
+                      dataTable.setValue(j, item.column + 1, (dataTable.getValue(j, item.column)).toString() + '%');
+                    };
+                };
+                console.log('columnas '+columnas);
+                message += '{row:none, column:' + item.column + '}; value (row 0) = ' + str + '\n';
+            }
+          }
+          if (message == '') {
+            message = 'nothing';
+          }
+          console.log('You selected ' + message);
+          chart.draw(dataTable, options);
+        }
+
+        function contenidoHTML1() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 1000%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 400%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 250%</div></div>';
+        }
+        function contenidoHTML2() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 1170%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 460%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 120%</div></div>';
+        }
+        function contenidoHTML3() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 660%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento: </b>1120%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 21%</div></div>';
+        }
+        function contenidoHTML4() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 1030%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 540%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 11%</div></div>';
+        }
+        function contenidoHTML5() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 100%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento: </b>4100%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 564%</div></div>';
+        }
+        function contenidoHTML6() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 1179%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 5%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 254%</div></div>';
+        }
+        function contenidoHTML7() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 6604%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 120%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 4512%</div></div>';
+        }
+        function contenidoHTML8() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 1030%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 540%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 56%</div></div>';
+        }
+        function contenidoHTML9() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 660%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento: </b>1120%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 13%</div></div>';
+        }
+        function contenidoHTML10() {
+          return '<div style="width:200px; text-align:justify; padding:5px 5px 5px 5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.<br><hr><div style="background-color:#1D1E55; padding-left:5px; color:#FFFFFF;"><b>Avance real:</b> 1030%</div><div style="background-color:#859DC4; padding-left:5px; color:#FFFFFF;"><b>Grado de cumplimiento:</b> 540%</div><div style="background-color:#6D165E; padding-left:5px; color:#FFFFFF;"><b>Avance promedio:</b> 0%</div></div>';
+        }
+
+        
+      }
+    </script>
+  </head>
+  <body>
+
+    <div id="chart_div" style="width: 1200px; height: 600px;"></div>
+  </body>
+</html>

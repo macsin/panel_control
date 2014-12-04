@@ -1,0 +1,26 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+// class AdminSubModulos_c extends CI_Controller {
+// 	public function __construct() {
+// 		parent::__construct();
+// 		$this->load->model('adminSubModulos_m');
+// 	}
+
+	// public function cargarSubModulosAdminVariables() {
+		// $etiquetas = $this->etiquetas->tablas();
+		// $subModulos = $this->adminSubModulos_m->cargarSubModulos ('Variables',$etiquetas);
+		// if ($subModulos) {
+		// 	$datos['subModulos'] = $subModulos;
+		// 	$datos['etiquetas'] = $this->etiquetas->camposAdminSubModulos();
+		// 	$this->load->view('comun/cabecera');
+		// 	$this->load->view('abcCatalogos/adminSubModulos_v',$datos);
+		// } else {
+		// 	echo "<script type='text/javascript'>alert('No hay submodulos asociados.');history.go(-1);</script>";                                                
+		// }
+		
+	// }
+
+// }
+
+/* End of file adminSubModulos.php */
+/* Location: ./application/controllers/adminSubModulos_c.php */

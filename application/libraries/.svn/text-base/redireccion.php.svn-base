@@ -1,0 +1,79 @@
+<?php 
+
+class Redireccion {
+ 	protected $ci;
+	function __construct(){
+	    
+	}
+    public static function headRedireccion($url,$parametros)
+    {
+    	$ci =& get_instance();
+        $ci ->load->model(array('inicio/loggin_m','abcIndicadores/altaIndicador_m'));
+		$ci ->load->library(array('session','etiquetas'));
+		
+		$constantes = $ci ->etiquetas->constantes();	
+		$datos['constantes']=$constantes;
+		$_SESSION=$ci ->session->all_userdata();
+		$correo = $_SESSION['usr'];
+	    $contrasenia1 = $_SESSION['pass'];
+		$etiquetas = $ci ->etiquetas->tablas();
+	    $contrasenia = do_hash($contrasenia1, 'md5');
+		$datosUsuario = $ci ->loggin_m->obtenerUsuario($correo,$contrasenia,$etiquetas);
+		
+		if ($datosUsuario) {
+			
+				if (isset($datosUsuario[0]['logueado']) && $datosUsuario[0]['estatus']==1) {
+					
+						$idModulos = $ci->loggin_m->cargarModulos($datosUsuario[0]['id_cat_tipo_usuario'],$etiquetas);
+	                        if ($idModulos) {
+	                        	
+	                            unset($datosUsuario[0]['contrasenia']);
+	                            foreach ($idModulos as $key) {
+	                                $auxModulo = $ci->loggin_m->cargarModuloPorId($key['id_cat_modulo'],$etiquetas);                                
+	                                if ($auxModulo) {
+	                                    $modulos[$key['id_cat_modulo']] = $auxModulo;                                        
+	                                }
+	                            }
+	                            foreach ($modulos as $key) {
+	                                $subModulos = $ci->loggin_m->cargarSubModulos($key['id_cat_modulo'],$datosUsuario[0]['id_cat_tipo_usuario'],$etiquetas);
+	                                if ($subModulos) {
+	                                    $modulos[$key['id_cat_modulo']]['sub_modulos'] = $subModulos;
+	                                }                                
+	                            }
+								$datos['etiquetas'] = $ci->etiquetas->cabecera();
+	                            $datos['modulos'] = $modulos;
+	                            $datos['datosUsuario'] = $datosUsuario[0];
+								$tipoUsuario = $ci->loggin_m->obtenerTipoDeUsuario($datos['datosUsuario']['id_cat_tipo_usuario'],$etiquetas);
+	                            $datos['datosUsuario']['tipo_captura'] = $tipoUsuario['tipo_captura'];
+								
+								$datos['catUsuarios']=$ci->loggin_m->traerPerfilUsuario();
+	                     }
+				}
+			}
+
+			$datos['entes']=$ci->altaIndicador_m->getCatEnte();
+			
+			if(strcmp($url, 0)>0){				
+				if($parametros==0){
+					$datos['url']=$url;
+				}else{
+					$cadenaParametros='';
+					foreach ($parametros as $key => $value) {
+						$cadenaParametros.='/'.$value;
+					}
+					$datos['url']=$url.$cadenaParametros;
+				}
+				
+		       	$ci->load->view('comun/cabecera');				
+		     	$ci->load->view('principal/principal_v',$datos);                                
+		        $ci->load->view('comun/footer');
+			}else{
+				return $datos;
+			}
+			
+    }
+
+
+}
+
+?>

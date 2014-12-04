@@ -1,0 +1,448 @@
+
+function agregarEntes(entes, idEntes){
+	numEntesInd++;
+	var catPeriodo=new Array;
+	var catIdPeriodo=new Array;
+	var catPeriodoInicio = new Array;
+	var catAnioInicio = new Array;
+	//alert("Agregar: "+numEntesInd);
+	if(numEntesInd > 1) //Si el numero de entes es mayor a uno, deshabilitamos boton enviar a revision y habilitamos boton publicar. 
+	{
+		$("#ficha_indicador-publicar").removeClass("ocultar");
+		$("#ficha_indicador-revision").addClass("ocultar");
+		
+		//$("#ficha_indicador-publicar").removeAttr("disabled");
+		//$("#ficha_indicador-revision").attr("disabled", true)
+		
+	}
+	else
+	{
+		$("#ficha_indicador-publicar").addClass("ocultar");
+		$("#ficha_indicador-revision").removeClass("ocultar");
+		//$("#ficha_indicador-publicar").attr("disabled", true);
+		//$("#ficha_indicador-revision").removeAttr("disabled");
+	}	
+	
+	var i=1;
+	$("#metas_periodoInicio1 option").each(function()
+	{			
+		catPeriodoInicio[i]=$(this).text();
+		i++;
+	});
+	
+	i=1;
+	$("#metas_anioInicio1 option").each(function()
+	{			
+		catAnioInicio[i]=$(this).text();
+		i++;
+	});
+
+	numEntes++;	
+	var ente='';
+	
+	ente='<div id="boxEnteMetas'+numEntes+'"><div id="ente'+numEntes+'" class="contenedorEnteLineaBase">';
+	ente+='<table width="900">';
+	ente+='<tr><td class="label-form">Ente:</td><td>';
+	ente+='<select  id="listaEntes'+numEntes+'" name="metas_listaEntes'+numEntes+'" class="input-xxlarge tipoSelectStyle tipoSelect" onchange="verificarEnte(this.id)">';												
+	for(var i=0;i<entes.length;i++){ 
+		ente += '<option value="'+idEntes[i]+'">'+entes[i]+'</option>';
+	}				
+						
+	ente+='</select><a class="btn-icono" onclick="eliminarElemento('+"'"+"boxEnteMetas"+numEntes+"'"+',0,0,0)" title="eliminar ente y metas"> <img width="30" class="inactivo subir-img" src="'+base+'/statics/images/minus.png"/></a>';
+	ente+='</tr></table></div>';
+	
+	ente+='<div id = "metas'+numEntes+'" class = "metasDinamicas"><div class = "valoresEnteMeta">';
+	ente+='<table  width="900">';
+	ente+='<tr>';
+	ente+='<td colspan="2" style="text-align: center"><b>Total</b> </td>';
+	ente+='<td colspan="2" style="text-align: center" class="tdborde"><b>Línea Base</b> </td>'; 
+	ente+='<td colspan="2" style="text-align: center" class="tdborde"><b>Meta</b><br></td>';
+	ente+='<td colspan="2" style="text-align: center" class="tdborde"><b></b><br></td>';
+	ente+='</tr>';
+	ente+='<tr>';
+	ente+='<td colspan="2" class="label-form ">Valor Total: <input type="number" step="any"  onblur="validarMeta(\'metas_realTotal\', '+numEntes+')" name="metas_realTotal'+numEntes+'" id="metas_realTotal'+numEntes+'" class ="noObliga input-small" placeholder="Real"></td>';
+	ente+='<td colspan="2" class="label-form tdborde">Valor real: <input type="number" step="any" onblur="validarMeta(\'metas_realLinea\', '+numEntes+')" name="metas_realLinea'+numEntes+'" id="metas_realLinea'+numEntes+'" class ="noObliga input-small" placeholder="Real"></td>';
+	ente+='<td colspan="2" class="label-form tdborde" >Valor real: <input type="number" step="any" onblur="validarMeta(\'metas_realMeta\', '+numEntes+')" name="metas_realMeta'+numEntes+'" id="metas_realMeta'+numEntes+'" class ="noObliga input-small" placeholder="Real"></td>';
+	ente+='<td colspan="2" rowspan="2" class="label-form tdborde" colspan="2"  style="text-align: center; vertical-align: middle;"> <input type="button" class = "btn" value="Calcular Porcentaje" onclick="calculoValorPorcentual('+numEntes+');" /> </td>';
+	ente+='</tr>';
+	ente+='<tr>';
+	ente+='<td colspan="2" class="label-form bordebottom"> Porcentaje: <input type="number" step="any" name="metas_porcentualTotal'+numEntes+'" id="metas_porcentualTotal'+numEntes+'" class ="noObliga input-small" readonly value="100">%</td>';
+	ente+='<td colspan="2" class="label-form tdborde bordebottom"> Valor porcentual: <input type="number" step="any" onblur="validarMeta(\'metas_porcentualLinea\', '+numEntes+')" name="metas_porcentualLinea'+numEntes+'" id="metas_porcentualLinea'+numEntes+'" class ="variables input-mini" placeholder="Porcentual">%</td>';
+	ente+='<td colspan="2" class="label-form tdborde bordebottom"> Valor porcentual: <input type="number" step="any" onblur="validarMeta(\'metas_porcentualMeta\', '+numEntes+'); obtenerFecha('+numEntes+')" name="metas_porcentualMeta'+numEntes+'" id="metas_porcentualMeta'+numEntes+'" class ="variables input-mini" placeholder="Porcentual">%</td>';
+	ente+='</tr>';
+	ente+='<tr><td colspan="2" class="label-form bordebottom">Unidad de medida:</td>';
+	ente+='<td colspan="6" class="bordebottom"><input type="text" name="metas_unidad'+numEntes+'" id="metas_unidad'+numEntes+'" class ="variables input-xxlarge" placeholder="Unidad en que se medirá la meta"></td>';
+	
+	
+	
+	
+	ente+='</tr><tr><td colspan="8" style="text-align: center"><b>Periodo que comprende la meta</b><br></td></tr>';
+
+/* */
+
+	ente+='<tr style="text-align: left;">';
+	ente+='<td class=" bordebottom" colspan="2">';
+	ente+='Periodo Inicio:	<select style="width: 150px" name="metas_periodoInicio'+numEntes+'" id="metas_periodoInicio'+numEntes+'" class ="variables" onchange="obtenerFecha('+numEntes+',this.id); cambiarFinalBianual('+numEntes+');">';
+
+	for(var i=1;i<catPeriodoInicio.length;i++){ 
+		if(catPeriodoInicio[i]=='Seleccionar' || catPeriodoInicio[i]=='Seleccione periodo'){
+			ente+='<option value="">Seleccionar</option>';
+		}else{
+			ente += '<option value="'+catPeriodoInicio[i]+'">'+catPeriodoInicio[i]+'</option>';
+		}
+		
+	}
+	ente+='</select>';
+	ente+='</td>';
+	ente+='<td class="bordebottom" colspan="2">';
+	if($("#fichaIndicador_idCatPeriodicidad").val() == '8')
+		ente+='<div id="ocultarBianualInicio'+numEntes+'" class = "ocultar">';
+	else
+		ente+='<div id="ocultarBianualInicio'+numEntes+'" class = "mostrar">';
+	ente+='Año:<select style="width: 100px" name="metas_anioInicio'+numEntes+'" id="metas_anioInicio'+numEntes+'" class ="variables" onchange="obtenerFecha('+numEntes+')">';
+
+	for(var i=1;i<catAnioInicio.length;i++){ 
+		if(catAnioInicio[i]=='Seleccionar' || catAnioInicio[i]=='Seleccione periodo'){
+			ente+='<option value="">Seleccionar</option>';
+		}else{
+			ente += '<option value="'+catAnioInicio[i]+'">'+catAnioInicio[i]+'</option>';
+		}
+	}
+	ente+='</select>';
+	ente+='</div>';
+	ente+='</td>';
+	ente+='<td colspan="2" class="bordebottom">';
+	ente+='Periodo Fin:<select style="width: 150px" name="metas_periodoFin'+numEntes+'" id="metas_periodoFin'+numEntes+'" class ="variables" onchange="obtenerFecha('+numEntes+')">';
+
+	for(var i=1;i<catPeriodoInicio.length;i++){ 
+		if(catPeriodoInicio[i]=='Seleccionar' || catPeriodoInicio[i]=='Seleccione periodo'){
+			ente+='<option value="">Seleccionar</option>';
+		}else{
+			ente += '<option value="'+catPeriodoInicio[i]+'">'+catPeriodoInicio[i]+'</option>';
+		}
+	}
+	ente+='</select>';
+	ente+='</td>';
+	ente+='<td colspan="2" class="bordebottom">';
+	if($("#fichaIndicador_idCatPeriodicidad").val() == '8')
+		ente+='<div id="ocultarBianualFin'+numEntes+'" class = "ocultar">';
+	else
+		ente+='<div id="ocultarBianualFin'+numEntes+'" class = "mostrar">';
+	ente+='Año:<select style="width: 100px" name="metas_anioFin'+numEntes+'" id="metas_anioFin'+numEntes+'" class ="variables" onchange="obtenerFecha('+numEntes+')">';
+
+	for(var i=1;i<catAnioInicio.length;i++){ 
+		if(catAnioInicio[i]=='Seleccionar' || catAnioInicio[i]=='Seleccione periodo'){
+			ente+='<option value="">Seleccionar</option>';
+		}else{
+			ente += '<option value="'+catAnioInicio[i]+'">'+catAnioInicio[i]+'</option>';
+		}
+	}
+	ente+='</select>';
+	ente+='</div>';
+	ente+='</td>';
+	ente+='</tr>';
+  
+/* */	
+	/*
+	ente+='<tr><td class="label-form bordebottom" colspan="2">Inicio:</td>';
+	ente+='<td colspan="2" class="bordebottom"><select name="metas_periodoInicio'+numEntes+'" id="metas_periodoInicio'+numEntes+'" class ="variables"  onchange="obtenerFecha('+numEntes+')">';
+	
+	for(var i=1;i<catPeriodo.length;i++){ 
+		ente += '<option value="'+catIdPeriodo[i]+'">'+catPeriodo[i]+'</option>';
+	}
+	ente+='</select></td>';
+	ente+='<td colspan="2" class="label-form bordebottom">Fin:</td>';
+	ente+='<td colspan="2" class="bordebottom"><select name="metas_periodoFin'+numEntes+'" id="metas_periodoFin'+numEntes+'" class ="variables" onchange="obtenerFecha('+numEntes+')">';
+	
+	for(var i=1;i<catPeriodo.length;i++){ 
+		ente += '<option value="'+catIdPeriodo[i]+'">'+catPeriodo[i]+'</option>';
+	}	
+	ente+='</select></td></tr>'; */
+	
+	ente+='<tr><td colspan="2">Periodos comprendidos:</td>';
+	ente+='<td colspan="2"><input type="text" id="pComprendidos'+numEntes+'" name="metas_pComprendidos'+numEntes+'" class="input-mini" readonly="readonly"/></td>';
+	ente+='<td colspan="2">Avance planeado por periodo:</td>';
+	ente+='<td colspan="2"><input type="text" id="aPlaneado'+numEntes+'" name="metas_aPlaneado'+numEntes+'" class="input-mini" readonly="readonly"/>%</td></tr>';
+	
+	ente+='</table></div></div>	<div class="barra"></div>';
+	
+	ente+='</div>';
+	
+	$("#entes").append(ente);		
+}
+	
+
+/*function agregarMeta(ente){
+	
+	var meta='';
+	numMetas[ente]++;
+	meta+='<div class = "valoresEnteMeta" id="divEnte'+ente+'Meta'+numMetas[ente]+'">';
+	meta+='<table  width="823"><tr><td class="label-form">Valor:</td>';
+	meta+='<td><input type="number" step="any" id ="valorEnte'+ente+'Meta'+numMetas[ente]+'" name="metas_valorEnte'+ente+'Meta'+numMetas[ente]+'" class="input-medium" onblur="verificarMetas('+ente+','+numMetas[ente]+')"/></td>';
+	meta+='<td class="label-form">A la Fecha: </td><td>';
+	meta+='<div id="pickerEnte'+ente+'Meta'+numMetas[ente]+'" class="input-append">';
+	meta+='<input data-format="dd-MM-yyyy" placeholder="dd-mm-aaaa" type="text" maxlength="10" id="fechaEnte'+ente+'Meta'+numMetas[ente]+'" name="metas_fechaEnte'+ente+'Meta'+numMetas[ente]+'" onblur="verificarMetas('+ente+','+numMetas[ente]+')"></input>';
+	meta+='<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>';
+	meta+='<a class="btn-icono" onclick="eliminarElemento('+"'"+"divEnte"+ente+'Meta'+numMetas[ente]+"'"+',0,0,0)" title="eliminar meta"> <img width="30" class="inactivo subir-img" src="'+base+'/statics/images/minus.png"/></a></td><td width="100"></td></tr></table></div></div>';
+	
+	$('#metas'+ente).append(meta);
+	
+	var date = new Date();
+	date.setDate(date.getDate());
+	$('#pickerEnte'+ente+'Meta'+numMetas[ente]).datetimepicker({startDate:date});
+	
+}*/
+
+
+function eliminarElemento(idElemento,div,idBD,valor){
+	numEntesInd--;
+	if(numEntesInd > 1) //Si el numero de entes es mayor a uno, deshabilitamos boton enviar a revision y habilitamos boton publicar. 
+	{
+		$("#ficha_indicador-publicar").removeClass("ocultar");
+		$("#ficha_indicador-revision").addClass("ocultar");
+
+		//$("#ficha_indicador-publicar").removeAttr("disabled");
+		//$("#ficha_indicador-revision").attr("disabled", true)
+
+	}else{
+		$("#ficha_indicador-publicar").addClass("ocultar");
+		$("#ficha_indicador-revision").removeClass("ocultar");
+		//$("#ficha_indicador-publicar").attr("disabled", true);
+		//$("#ficha_indicador-revision").removeAttr("disabled");
+	}
+
+	$("#" + idElemento).remove();
+	if (div != 0) {
+		$("#" + div).append('<input type="hidden" name="' + idBD + '" value="' + valor + '"/>');
+	}
+}
+
+function verificarEnte(idEnteSelect) {
+	valorActual = $('#' + idEnteSelect).val();
+	for ( i = 1; i <= numEntes; i++) {
+		idListaEntesAct = 'listaEntes' + i;
+		//alert('Select='+idEnteSelect+' Actual='+idListaEntesAct);
+		if (idEnteSelect != idListaEntesAct) {
+			aux = $('#' + idListaEntesAct).val();
+			//alert('AUX= '+aux+' Actual= '+idListaEntesAct)
+			if (aux == valorActual) {
+				alerta('70', 'alert-error');
+				$('#' + idEnteSelect).val('1');
+				break;
+			}
+		}
+	}
+}
+
+/*function verificarMetas(numEnte, numMeta)
+{
+	idValorEnteMeta = 'valorEnte'+numEnte+'Meta'+numMeta;
+	idFechaEnteMeta = 'fechaEnte'+numEnte+'Meta'+numMeta;
+	valorActual = $('#'+idValorEnteMeta).val();
+	fechaActual = $('#'+idFechaEnteMeta).val();
+	if(valorActual != '' && fechaActual!='')
+	{
+		//alert('Valor '+valorActual+'  Fecha: '+fechaActual);
+		//alert(numMetas[numEnte]);
+		for(i=1; i<=numEntes; i++)
+		{
+			if(i== numEnte)
+			{
+				for(j=1; j<= numMetas[numEnte]; j++)
+				{
+					if(j!= numMeta)
+					{
+						idValorAux = 'valorEnte'+i+'Meta'+j;
+						idFechaAux = 'fechaEnte'+i+'Meta'+j;
+						valorAuxiliar = $('#'+idValorAux).val();
+						fechaAuxiliar = $('#'+idFechaAux).val();
+						if((valorAuxiliar == valorActual) || (fechaAuxiliar == fechaActual))
+						{							
+							$('#'+idValorEnteMeta).val('');
+							$('#'+idFechaEnteMeta).val('');
+							alerta('71','alert-error');
+						}
+					}					
+				}				
+			}
+			
+		}	
+	}
+	
+	
+	
+}
+*/
+ 
+
+function cancelar(formulario){
+	 $("#Formulario").reset();
+}
+
+
+function obtenerFecha(id, nombreID){
+
+	var anioPeriodoBianual = new Array();
+	//Arreglo que nos sirve para cambiar de forma dinamica la selección de los periodos y años
+	anioPeriodoBianual['2013-2014'] = 2014;
+	anioPeriodoBianual['2014-2015'] = 2015;
+	anioPeriodoBianual['2015-2016'] = 2016;
+	anioPeriodoBianual['2016-2017'] = 2017;
+	anioPeriodoBianual['2017-2018'] = 2018;
+	/*anioPeriodoBianual['2018-2019'] = 2019;
+	anioPeriodoBianual['2019-2020'] = 2020;
+	anioPeriodoBianual['2020-2021'] = 2021;
+	anioPeriodoBianual['2021-2022'] = 2022;
+	anioPeriodoBianual['2022-2023'] = 2023;
+	anioPeriodoBianual['2023-2024'] = 2024;
+	anioPeriodoBianual['2024-2025'] = 2025;*/
+	
+	if ($('#fichaIndicador_idCatPeriodicidad').val() == 8 && nombreID != undefined ) {
+		
+		var periodoInicio=$("#metas_periodoInicio"+id).val();
+		var periodosPares=new Array();
+		var periodosImpares=new Array();
+
+		periodosPares[0] = "2013-2014";
+		periodosPares[1] = "2015-2016";
+		periodosPares[2] = "2017-2018";
+		/*periodosPares[3] = "2019-2020";
+		periodosPares[4] = "2021-2022";
+		periodosPares[5] = "2023-2024";*/
+
+		periodosImpares[0] = "2014-2015";
+		periodosImpares[1] = "2016-2017";
+		/*periodosImpares[2] = "2018-2019";
+		periodosImpares[3] = "2020-2021";
+		periodosImpares[4] = "2022-2023";
+		periodosImpares[5] = "2024-2025";*/
+
+		$('#metas_periodoFin' + id).html('');
+		$('#metas_periodoFin' + id).append('<option value = "" selected>Seleccionar</option>');
+		if (periodoInicio == "2013-2014" || periodoInicio == "2015-2016" || periodoInicio == "2017-2018" || periodoInicio == "2019-2020" || periodoInicio == "2021-2022" || periodoInicio == "2023-2024") {
+			for (var i = 0; i < periodosPares.length; i++) {
+				$('#metas_periodoFin' + id).append('<option value="'+periodosPares[i]+'">'+periodosPares[i]+'</option>');
+			}
+			$('#pComprendidos' + id).val('');
+			$('#aPlaneado' + id).val('');
+		} else {
+			for (var i = 0; i < periodosImpares.length; i++) {
+				$('#metas_periodoFin' + id).append('<option value="'+periodosImpares[i]+'">'+periodosImpares[i]+'</option>');
+			}
+			$('#pComprendidos' + id).val('');
+			$('#aPlaneado' + id).val('');
+		}
+	}
+
+	var periodoInicio = $("#metas_periodoInicio" + id).val();
+	var periodoFin = $("#metas_periodoFin" + id).val();
+	
+	if ($("#fichaIndicador_idCatPeriodicidad").val() == '8' && periodoFin != "")//esta seleccionada Bianual
+	{
+		var anioInicio = anioPeriodoBianual[periodoInicio];
+		var anioFin = anioPeriodoBianual[periodoFin];
+	} else {
+		var anioInicio = $("#metas_anioInicio" + id).val();
+		var anioFin = $("#metas_anioFin" + id).val();
+	}	
+	if(periodoInicio != '' && anioInicio != '' && periodoFin != '' && anioFin != '') {
+		var urlCalculaIdInicio = base + 'index.php/abcIndicadores/altaIndicador_c/traerIdPeridoJS/' + periodoInicio + '/' + anioInicio;
+		var urlCalculaIdFin = base + 'index.php/abcIndicadores/altaIndicador_c/traerIdPeridoJS/' + periodoFin + '/' + anioFin;
+		
+				
+		var respIdInicio=$.ajax({
+					url:urlCalculaIdInicio,
+					type:'POST',
+					async:false,
+				});
+		jsonIdInicio = respIdInicio.responseText;
+		jsonRInicio = $.parseJSON(jsonIdInicio);
+		$.each(jsonRInicio, function() {
+			idPeriodoInicio = this.idPeriodo;
+		});
+
+		var respIdFin = $.ajax({
+			url : urlCalculaIdFin,
+			type : 'POST',
+			async : false,
+		});
+		jsonIdFin = respIdFin.responseText;
+
+		jsonRFin = $.parseJSON(jsonIdFin);
+		$.each(jsonRFin, function() {
+			idPeriodoFin = this.idPeriodo;
+		});
+
+		meta =0;
+
+		if(idPeriodoFin!=-1 && idPeriodoInicio != -1 && idPeriodoFin >= idPeriodoInicio)
+		{
+			var url = base+'index.php/abcIndicadores/altaIndicador_c/traerPlaneacion/' + idPeriodoInicio + '/' + idPeriodoFin + '/' + meta;
+			var data = '';
+			$.ajax({
+				url : url,
+				data : data,
+				type : 'POST',
+				async : false,
+				success : function(data) {
+					jsonR = $.parseJSON(data);
+					$.each(jsonR, function() {
+						$('#pComprendidos' + id).val(this.periodos);
+						$('#aPlaneado' + id).val(this.avance);
+					});
+				},
+				error: function(){
+					alert("no se pudo");
+					alert(url);
+				}
+			});
+		}
+		if (idPeriodoFin < idPeriodoInicio) {
+			alerta('El periodo inicio debe ser mayor o igual que el periodo final', 'alert-error');
+			$('#pComprendidos' + id).val('');
+			$('#aPlaneado' + id).val('');
+
+		}
+
+	}
+}
+
+function cambiarFinalBianual(id) {
+	
+//	if ($('#fichaIndicador_idCatPeriodicidad').val() == 8) {
+		
+//		var periodoInicio = $("#metas_periodoInicio" + id).val();
+//		var periodosPares = new Array();
+//		var periodosImpares = new Array();
+
+//		periodosPares[0] = "2013-2014";
+//		periodosPares[1] = "2015-2016";
+//		periodosPares[2] = "2017-2018";
+		/*periodosPares[3] = "2019-2020";
+		periodosPares[4] = "2021-2022";
+		periodosPares[5] = "2023-2024";*/
+
+//		periodosImpares[0] = "2014-2015";
+//		periodosImpares[1] = "2016-2017";
+		/*periodosImpares[2] = "2018-2019";
+		periodosImpares[3] = "2020-2021";
+		periodosImpares[4] = "2022-2023";
+		periodosImpares[5] = "2024-2025";*/
+
+/*		$('#metas_periodoFin' + id).html('');
+		$('#metas_periodoFin' + id).append('<option value = "">Seleccionar</option>');
+		if (periodoInicio == "2013-2014" || periodoInicio == "2015-2016" || periodoInicio == "2017-2018" || periodoInicio == "2019-2020" || periodoInicio == "2021-2022" || periodoInicio == "2023-2024") {
+			for (var i = 0; i < periodosPares.length; i++) {
+				$('#metas_periodoFin' + id).append('<option value="'+periodosPares[i]+'">'+periodosPares[i]+'</option>');
+			}
+			$('#pComprendidos' + id).val('');
+			$('#aPlaneado' + id).val('');
+		} else {
+			for (var i = 0; i < periodosImpares.length; i++) {
+				$('#metas_periodoFin' + id).append('<option value="'+periodosImpares[i]+'">'+periodosImpares[i]+'</option>');
+			}
+			$('#pComprendidos' + id).val('');
+			$('#aPlaneado' + id).val('');
+		}
+	}*/
+}

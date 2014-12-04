@@ -1,0 +1,42 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/*
+ * Controlador que se encarga de realizar las llamadas al Modelo de Actualizacion de Datos 
+ */
+
+class Alerta_c extends CI_Controller {
+	public function __construct() {
+		parent::__construct();
+		if (!($this->session->userdata('usr') && $this->session->userdata('nombre'))) {
+			$etiquetas = $this->etiquetas->urlRedireccionar();
+			exit($etiquetas['mensaje']." <a href='".base_url()."'>".$etiquetas['liga']."</a>");
+		} else {
+			/**
+			 * Escribir aqui lo que necesiten cargar en el constructor
+			 */
+			$this->load->library(array('session','etiquetas'));
+		}
+	}
+	
+	function alert($idMensaje,$tipo){
+		$mensajes=$this->etiquetas->mensajes();
+		$datos['tipo']=$tipo;
+		if(isset($mensajes[$idMensaje])){
+			$datos['mensaje']=$mensajes[$idMensaje];
+		}else{
+			$mensaje=str_replace('%20', ' ', $idMensaje);
+			$mensaje=str_replace('%20%', ' ', $mensaje);
+			
+			$mensaje=str_replace('_', ',', $mensaje);
+			$mensaje=str_replace('%C3%B3', 'ó', $mensaje);
+			$mensaje=str_replace('%C3%A1', 'á', $mensaje);
+			$mensaje=str_replace('%C3%A9', 'é', $mensaje);
+			$mensaje=str_replace('%C3%AD', 'í', $mensaje);
+			$mensaje=str_replace('%C3%BA', 'ú', $mensaje);
+			
+			$datos['mensaje']=$mensaje;
+		}
+		
+		$this->load->view('comun/cabecera','');
+		$this->load->view('comun/alerta_v',$datos);
+	}
+}?>

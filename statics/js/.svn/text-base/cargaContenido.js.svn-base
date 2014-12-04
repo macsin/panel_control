@@ -1,0 +1,929 @@
+function cargarContenido(ruta) {
+	var url = ruta;
+	var data = '';
+	$.ajax({
+		url : url,
+		data : data,
+		type : 'POST',
+		success : function(data) {
+			$('#body_principal').html(data);
+		},
+		error : function() {
+			alert("Error al cargar el contenido Url: "+url);
+			//alert(url);
+		}
+	});
+
+}
+
+/* Función que se encarga de actualizar el nuevo contenido de los "Selects" con los datos obtenidos mediante AJAX para una carga
+ *en cascada.
+ */
+
+function actualizar(datos, idCambioValor) {
+	switch (idCambioValor) {
+		case 'idCatTipoEvaluacion':
+			$('#catEvaluacion_idCatEvaluacion').empty();
+			$('#catEvaluacion_idCatEvaluacion').append("<option value=''>Seleccione nombre del programa</option>");
+			jsonR = $.parseJSON(datos);
+			$.each(jsonR, function() {
+				$('#catEvaluacion_idCatEvaluacion').append("<option value='" + this.id + "'>" + this.texto + "</option>");
+			});
+			//Actualiza el valor del select
+			break;
+
+		case 'idCatEje':
+			$('#areaOportunidad').empty();
+			$('#objetivo').empty();
+			$('#objetivo').append("<option value=''>Seleccione un Objetivo</option>");
+			$('#meta').empty();
+			$('#meta').append("<option value=''>Seleccione una Meta</option>");
+			$('#metaSectorial').empty();
+			$('#metaSectorial').append("<option value=''>Seleccione una meta sectorial</option>");
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+			$('#metaInstitucional').empty();
+			$('#metaInstitucional').append("<option value=''>Seleccione una meta institucional</option>");	
+			}
+		
+			if ( document.getElementById("numeroMeta")) {//para alta-edicion de metas sectoriales
+				     document.formularioMetaSectorial.indiceMetaSectorial.value = "";//borrar indice sectorial para que se ingrese nuevamente
+				     $('#indiceSectorialExistente').empty();   
+				}
+			var i = 0;
+			jsonR = $.parseJSON(datos);
+			$.each(jsonR, function() {
+				//$('#areaOportunidad').append("<option value='"+this.id+"'>"+this.texto+"</option>");}); //Actualiza el valor del select
+				if (this.id == '')
+					$('#areaOportunidad').append("<option value='" + this.id + "'>Seleccione un Área de Oportunidad</option>");
+				else
+					$('#areaOportunidad').append("<option value='" + this.id + "'>Área de Oportunidad " + this.texto + "</option>");
+			});
+			break;
+
+		case 'areaOportunidad':
+			$('#objetivo').empty();
+			$('#meta').empty();
+			$('#metaSectorial').empty();
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();	
+			}
+			if ( document.getElementById("numeroMeta")) {//para alta-edicion de metas sectoriales
+				     document.formularioMetaSectorial.indiceMetaSectorial.value = "";//borrar indice sectorial para que se ingrese nuevamente
+				     $('#indiceSectorialExistente').empty();   
+				}			
+			jsonR = $.parseJSON(datos);
+			$.each(jsonR, function() {
+				//$('#objetivo').append("<option value='"+this.id+"'>"+this.texto+"</option>");	}); //Actualiza el valor del select
+				if (this.id == '' || this.id == '')
+					$('#objetivo').append("<option value='" + this.id + "'>Seleccione un Objetivo</option>");
+				else
+					$('#objetivo').append("<option value='" + this.id + "'>Objetivo " + this.texto + "</option>");
+			});
+
+			$('#meta').empty();
+			$('#meta').append("<option value=''>Seleccione una meta</option>");
+			$('#metaSectorial').empty();
+			$('#metaSectorial').append("<option value=''>Seleccione una meta sectorial</option>");
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();
+				$('#metaInstitucional').append("<option value=''>Seleccione una meta institucional</option>");	
+			}			
+			break;
+
+		case 'objetivo':
+			$('#meta').empty();
+			$('#metaSectorial').empty();
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();
+			}	
+			if ( document.getElementById("numeroMeta")) {//para alta-edicion de metas sectoriales
+				     document.formularioMetaSectorial.indiceMetaSectorial.value = "";//borrar indice sectorial para que se ingrese nuevamente
+				     $('#indiceSectorialExistente').empty();   
+				}			
+			jsonR = $.parseJSON(datos);
+			$.each(jsonR, function() {
+				//$('#meta').append("<option value='"+this.id+"'>"+this.texto+"</option>");	}); //Actualiza el valor del select
+				if (this.id == 0 || this.id == '')
+					$('#meta').append("<option value='" + this.id + "'>Seleccione una meta</option>");
+				else
+					$('#meta').append("<option value='" + this.id + "'>Meta " + this.texto + "</option>");
+			});
+			//Actualiza el valor del select
+			$('#metaSectorial').empty();
+			$('#metaSectorial').append("<option value=''>Seleccione una meta sectorial</option>");
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();
+				$('#metaInstitucional').append("<option value=''>Seleccione una meta institucional</option>");	
+			}			
+			break;
+
+		case 'meta':
+			$('#metaSectorial').empty();
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();
+			}			
+			jsonR = $.parseJSON(datos);
+			$.each(jsonR, function() {
+				if (this.id == 0 || this.id == 1 || this.id == '')
+					$('#metaSectorial').append("<option value='" + this.id + "'>Seleccione una meta sectorial</option>");
+				else
+					$('#metaSectorial').append("<option value='" + this.id + "'>Meta sectorial " + this.texto + "</option>");
+			});
+			//Actualiza el valor del select
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();
+				$('#metaInstitucional').append("<option value=''>Seleccione una meta institucional</option>");	
+			}				
+			break;
+
+		case 'metaSectorial':
+			if ( document.getElementById( "metaInstitucional" )) {//validar si se encuentra el elemento ya que para alta de sectoriales este campo no existe
+				$('#metaInstitucional').empty();
+			}			
+			jsonR = $.parseJSON(datos);
+			$.each(jsonR, function() {
+				if (this.id == 0 || this.id == 1 || this.id == '')
+					$('#metaInstitucional').append("<option value='" + this.id + "'>Seleccione una meta institucional</option>");
+				else
+					$('#metaInstitucional').append("<option value='" + this.id + "'>Meta institucional " + this.texto + "</option>");
+			});
+			//Actualiza el valor del select				
+			break;
+			
+		default:
+			break;
+	}
+}
+
+function insertarDescripcionAO(datos) {
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		$('#descripcionAreaOportunidad').val(this.texto);
+	});
+}
+
+function insertarDescripcionObjetivo(datos) {
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		$('#descripcionObjetivo').val(this.texto);
+	});
+}
+
+function insertarDescripcionMeta(datos) {
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		$('#descripcionMeta').val(this.texto);
+	});
+}
+
+function insertarDescripcionMetSectorial(datos) {
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		var dato= this.texto.replace(/&quot;/g,'"').replace(/&#039;/g,"'");
+		$('#descripcionMetaSectorial').val(dato);
+	});
+}
+
+
+function insertarDescripcionMetInstitucional(datos) {
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		var dato= this.texto.replace(/&quot;/g,'"').replace(/&#039;/g,"'");
+		$('#descripcionMetaInstitucional').val(dato);
+	});
+}
+
+
+function actualizarNombreEvaluacion(idCambioValor) {
+	var idCatTipoAgrupacion = $('#idCatTipoEvaluacion').val();
+	if (idCatTipoAgrupacion == '')
+		idCatTipoAgrupacion = 0;
+	var tipoEvaluacion = $('#idCatTipoEvaluacion').find(":selected").text();
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarNombreEvaluacion/' + idCatTipoAgrupacion;
+	if (tipoEvaluacion == 'Programa Especial') {
+		actualizarAlineacionEspecial();
+	} else 
+		if ((tipoEvaluacion != 'Programa Sectorial') && (tipoEvaluacion != 'Programa Institucional') && (tipoEvaluacion != 'Seleccione tipo de programa')) 
+		{
+			actualizarAlineacionOtro();
+		} else 
+			if((tipoEvaluacion != 'Programa Institucional') && (tipoEvaluacion != 'Seleccione tipo de programa'))
+			{
+				actualizarAlineacionSectorialInstitucional();
+			}
+			else
+				if((tipoEvaluacion != 'Seleccione tipo de programa'))
+				{
+					actualizarAlineacionInstitucional();
+				}
+				else
+				{
+					actualizarSeleccioneTipoPrograma();
+				}
+	var evaluaciones = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = evaluaciones.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	evaluaciones.onreadystatechange = actualizar(datos, idCambioValor);
+}
+
+//Actualizamos el Select de Area de Oportunidad dependiendo del Eje seleccionado
+function actualizarAreaOportunidad(idCambioValor) {
+	var idCatEje = $('#idCatEje').val();
+	//Obtenemos el eje seleccionado
+	if (idCatEje == '')
+		idCatEje = 1;
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarAreaOportunidad/' + idCatEje;
+	$('#descripcionAreaOportunidad').val("");
+	$('#descripcionObjetivo').val("");
+	$('#descripcionMeta').val("");
+	$('#descripcionMetaSectorial').val("");
+	var areasOportunidad = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = areasOportunidad.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	areasOportunidad.onreadystatechange = actualizar(datos, idCambioValor);
+
+	var rango = $("#rangoPGD").val();
+
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+
+	if(idCatEje!=1){
+		$("#Ntooltip1").attr('href','#modalConsultaPGD');
+		$("#Ntooltip1").removeClass('deshabilitado');
+		$("#Ntooltip1").addClass('resaltarbtn');
+	}else{
+		//deshabilitar nivel area eje
+		$("#Ntooltip1").attr('href','#');
+		$("#Ntooltip1").addClass('deshabilitado');
+		$("#Ntooltip1").removeClass('resaltarbtn');
+		//deshabilitar nivel area de oportunidad
+		$("#Ntooltip2").attr('href','#');
+		$("#Ntooltip2").addClass('deshabilitado');
+		$("#Ntooltip2").removeClass('resaltarbtn');
+		//deshabilitar nivel objetivo
+		$("#Ntooltip3").attr('href','#');
+		$("#Ntooltip3").addClass('deshabilitado');
+		$("#Ntooltip3").removeClass('resaltarbtn');
+		//deshabilitar nivel meta 
+		$("#Ntooltip4").attr('href','#');
+		$("#Ntooltip4").addClass('deshabilitado');
+		$("#Ntooltip4").removeClass('resaltarbtn');
+		//deshabilitar nivel meta sectorial
+		$("#Ntooltip6").attr('href','#');
+		$("#Ntooltip6").addClass('deshabilitado');
+		$("#Ntooltip6").removeClass('resaltarbtn');			
+	}
+}
+
+function actualizarObjetivo(idCambioValor) {
+	var idCatAreaOportunidad = $('#areaOportunidad').val();
+	if (idCatAreaOportunidad == '')
+		idCatAreaOportunidad = 1;
+	$('#descripcionObjetivo').val("");
+	$('#descripcionMeta').val("");
+	$('#descripcionMetaSectorial').val("");
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarObjetivo/' + idCatAreaOportunidad;
+	//Realiza peticion al servidor
+	var objetivos = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = objetivos.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	objetivos.onreadystatechange = actualizar(datos, idCambioValor);
+	var rango = $("#rangoPGD").val();
+
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+	
+	if(idCatAreaOportunidad!=1){
+		$("#Ntooltip2").attr('href','#modalConsultaPGD');
+		$("#Ntooltip2").removeClass('deshabilitado');
+		$("#Ntooltip2").addClass('resaltarbtn');
+	}else{
+		//deshabilitar nivel area de oportunidad
+		$("#Ntooltip2").attr('href','#');
+		$("#Ntooltip2").addClass('deshabilitado');
+		$("#Ntooltip2").removeClass('resaltarbtn');
+		//deshabilitar nivel objetivo
+		$("#Ntooltip3").attr('href','#');
+		$("#Ntooltip3").addClass('deshabilitado');
+		$("#Ntooltip3").removeClass('resaltarbtn');
+		//deshabilitar nivel meta 
+		$("#Ntooltip4").attr('href','#');
+		$("#Ntooltip4").addClass('deshabilitado');
+		$("#Ntooltip4").removeClass('resaltarbtn');
+		//deshabilitar nivel meta sectorial
+		$("#Ntooltip6").attr('href','#');
+		$("#Ntooltip6").addClass('deshabilitado');
+		$("#Ntooltip6").removeClass('resaltarbtn');		
+	}
+}
+
+function actualizarMeta(idCambioValor) {
+	var idCatObjetivo = $('#objetivo').val();
+	if (idCatObjetivo == '')
+		idCatObjetivo = 1;
+	$('#descripcionMeta').val("");
+	$('#descripcionMetaSectorial').val("");
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarMeta/' + idCatObjetivo;
+	//Realiza peticion al servidor
+	var metas = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = metas.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	metas.onreadystatechange = actualizar(datos, idCambioValor);
+
+	var rango = $("#rangoPGD").val();
+
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+	if(idCatObjetivo!=1){
+		$("#Ntooltip3").attr('href','#modalConsultaPGD');
+		$("#Ntooltip3").removeClass('deshabilitado');
+		$("#Ntooltip3").addClass('resaltarbtn');
+	}else{
+		//deshabilitar nivel objetivo
+		$("#Ntooltip3").attr('href','#');
+		$("#Ntooltip3").addClass('deshabilitado');
+		$("#Ntooltip3").removeClass('resaltarbtn');
+		//deshabilitar nivel meta 
+		$("#Ntooltip4").attr('href','#');
+		$("#Ntooltip4").addClass('deshabilitado');
+		$("#Ntooltip4").removeClass('resaltarbtn');
+		//deshabilitar nivel meta sectorial
+		$("#Ntooltip6").attr('href','#');
+		$("#Ntooltip6").addClass('deshabilitado');
+		$("#Ntooltip6").removeClass('resaltarbtn');
+	}
+}
+
+function actualizarMetSectorial(idCambioValor) {
+	var idCatMeta = $('#meta').val();
+	$('#descripcionMetaSectorial').val("");
+	if (idCatMeta == '')
+		idCatMeta = 1;
+	var url = base + 'index.php/abcIndicadores/consultaIndicador_c/actualizarMetaSectorial/' + idCatMeta;
+	//Realiza peticion al servidor
+	var metasSectoriales = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = metasSectoriales.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	metasSectoriales.onreadystatechange = actualizar(datos, idCambioValor);
+	var rango = $("#rangoPGD").val();
+
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+	if(idCatMeta!=1){
+		$("#Ntooltip4").attr('href','#modalConsultaPGD');
+		$("#Ntooltip4").removeClass('deshabilitado');
+		$("#Ntooltip4").addClass('resaltarbtn');
+	}else{
+		//deshabilitar nivel meta 
+		$("#Ntooltip4").attr('href','#');
+		$("#Ntooltip4").addClass('deshabilitado');
+		$("#Ntooltip4").removeClass('resaltarbtn');
+		//deshabilitar nivel meta sectorial
+		$("#Ntooltip6").attr('href','#');
+		$("#Ntooltip6").addClass('deshabilitado');
+		$("#Ntooltip6").removeClass('resaltarbtn');
+	}
+}
+
+function actualizarMetInstitucional(idCambioValor) {
+	var idCatMetaSectorial = $('#metaSectorial').val();
+	$('#descripcionMetaInstitucional').val("");
+	if (idCatMetaSectorial == '')
+		idCatMetaSectorial = 1;
+	var url = base + 'index.php/abcIndicadores/consultaIndicador_c/actualizarMetaInstitucional/' + idCatMetaSectorial;
+	//Realiza peticion al servidor
+	var metasInstitucionales = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = metasInstitucionales.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+
+	metasInstitucionales.onreadystatechange = actualizar(datos, idCambioValor);
+	var rango = $("#rangoPGD").val();
+
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+	
+	if(idCatMetaSectorial!=1){
+		$("#Ntooltip6").attr('href','#modalConsultaPGD');
+		$("#Ntooltip6").removeClass('deshabilitado');
+		$("#Ntooltip6").addClass('resaltarbtn');
+	}else{
+		//deshabilitar nivel meta sectorial
+		$("#Ntooltip6").attr('href','#');
+		$("#Ntooltip6").addClass('deshabilitado');
+		$("#Ntooltip6").removeClass('resaltarbtn');
+	}	
+
+}
+
+
+function actualizarDescripcionAO() {
+	var idCatAreaOportunidad = $('#areaOportunidad').val();
+	if (idCatAreaOportunidad == '')
+		idCatAreaOportunidad = 1;
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarDescripcionAO/' + idCatAreaOportunidad;
+	var descripcionAO = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+
+	datos = descripcionAO.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	descripcionAO.onreadystatechange = insertarDescripcionAO(datos);
+}
+
+function actualizarDescripcionObjetivo() {
+	var idCatObjetivo = $('#objetivo').val();
+	if (idCatObjetivo == '')
+		idCatObjetivo = 1;
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarDescripcionObjetivo/' + idCatObjetivo;
+	var descripcionObjetivo = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+
+	datos = descripcionObjetivo.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	descripcionObjetivo.onreadystatechange = insertarDescripcionObjetivo(datos);
+}
+
+function actualizarDescripcionMeta() {
+	var idCatMeta = $('#meta').val();
+	if (idCatMeta == '')
+		idCatMeta = 1;
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarDescripcionMeta/' + idCatMeta;
+	var descripcionMeta = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+
+	datos = descripcionMeta.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	descripcionMeta.onreadystatechange = insertarDescripcionMeta(datos);
+}
+
+function actualizarDescripcionMetSectorial() {
+	var idCatMetaSectorial = $('#metaSectorial').val();
+	if (idCatMetaSectorial == '')
+		idCatMetaSectorial = 1;
+	var url = base + 'index.php/abcIndicadores/consultaIndicador_c/actualizarDescripcionMetaSectorial/' + idCatMetaSectorial;
+	var descripcionMetaSectorial = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+
+	datos = descripcionMetaSectorial.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	descripcionMetaSectorial.onreadystatechange = insertarDescripcionMetSectorial(datos);
+	var rango = $("#rangoPGD").val();
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+}
+
+
+function actualizarDescripcionMetInstitucional() {
+	var idCatMetaInstitucional = $('#metaInstitucional').val();
+	if (idCatMetaInstitucional == '')
+		idCatMetaInstitucional = 1;
+	var url = base + 'index.php/abcIndicadores/consultaIndicador_c/actualizarDescripcionMetaInstitucional/' + idCatMetaInstitucional;
+	var descripcionMetaInstitucional = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+
+	datos = descripcionMetaInstitucional.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	descripcionMetaInstitucional.onreadystatechange = insertarDescripcionMetInstitucional(datos);
+	var rango = $("#rangoPGD").val();
+	if (rango != 'undefined') {
+		obtenerRangoPGD();
+	}
+}
+
+function actualizarAlineacionEspecial() {
+	/*No fue programa Sectorial ni Institucional entonces se oculta la parte de Alineacion con Programa Sectorial e Institucional*/
+	$('#metaSectorial').empty();
+	$('#metaSectorial').append("<option value='1'>Seleccione una meta sectorial</option>");
+	$('#metaSectorial').attr("name","ficha_indicador-id_meta_sectorial");
+	$('#descripcionMetaSectorial').val('');
+	$('#metaInstitucional').empty();
+	$('#metaInstitucional').append("<option value='1'>Seleccione una meta institucional</option>");
+	$('#metaInstitucional').attr("name","fichais_indicador-id_meta_sectorial");
+	$('#descripcionMetaInstitucional').val('');
+	$('#alineacionOtro').val('');
+	$('#contenedorAlineacionOtro').removeClass('mostrar');
+	$('#contenedorAlineacionOtro').addClass('ocultar');
+	$('#contenedorAlineacionSectorialInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionSectorialInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionEspecial').removeClass('ocultar');
+	$('#contenedorAlineacionEspecial').addClass('mostrar');
+}
+
+function actualizarAlineacionSectorialInstitucional() {
+	$('#alineacionOtro').val('');
+	$('#metaSectorial').empty();
+	$('#metaSectorial').append("<option value='1'>Seleccione una meta sectorial</option>");
+	$('#metaSectorial').attr("name","ficha_indicador-id_meta_sectorial");
+	$('#descripcionMetaSectorial').val('');
+	$('#metaInstitucional').empty();
+	$('#metaInstitucional').append("<option value='1'>Seleccione una meta institucional</option>");
+	$('#metaInstitucional').attr("name","fichais_indicador-id_meta_sectorial");
+	$('#descripcionMetaInstitucional').val('');
+	$('#idCatEnfoque> option[value="1"]').attr('selected', 'selected');
+	$('#contenedorAlineacionOtro').removeClass('mostrar');
+	$('#contenedorAlineacionOtro').addClass('ocultar');
+	$('#contenedorAlineacionEspecial').removeClass('mostrar');
+	$('#contenedorAlineacionEspecial').addClass('ocultar');
+	$('#contenedorAlineacionSectorialInstitucional').removeClass('ocultar');
+	$('#contenedorAlineacionSectorialInstitucional').addClass('mostrar');
+	$('#contenedorAlineacionInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionInstitucional').addClass('ocultar');
+}
+
+function actualizarAlineacionInstitucional() {
+	$('#alineacionOtro').val('');
+	$('#metaSectorial').empty();
+	$('#metaSectorial').append("<option value='1'>Seleccione una meta sectorial</option>");
+	$('#metaSectorial').attr("name","fichais_indicador-id_meta_sectorial");
+	$('#descripcionMetaSectorial').val('');
+	$('#metaInstitucional').empty();
+	$('#metaInstitucional').append("<option value='1'>Seleccione una meta institucional</option>");
+	$('#metaInstitucional').attr("name","ficha_indicador-id_meta_sectorial");
+	$('#descripcionMetaInstitucional').val('');
+	$('#idCatEnfoque> option[value="1"]').attr('selected', 'selected');
+	$('#contenedorAlineacionOtro').removeClass('mostrar');
+	$('#contenedorAlineacionOtro').addClass('ocultar');
+	$('#contenedorAlineacionEspecial').removeClass('mostrar');
+	$('#contenedorAlineacionEspecial').addClass('ocultar');
+	$('#contenedorAlineacionSectorialInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionSectorialInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionInstitucional').removeClass('ocultar');
+	$('#contenedorAlineacionInstitucional').addClass('mostrar');
+}
+
+function actualizarAlineacionOtro() {
+	$('#idCatEnfoque> option[value="1"]').attr('selected', 'selected');
+	$('#idCatEje> option[value="1"]').attr('selected', 'selected');
+	$('#metaSectorial').empty();
+	$('#metaSectorial').append("<option value='1'>Seleccione una meta sectorial</option>");
+	$('#metaSectorial').attr("name","ficha_indicador-id_meta_sectorial");
+	$('#descripcionMetaSectorial').val('');
+	$('#metaInstitucional').empty();
+	$('#metaInstitucional').append("<option value='1'>Seleccione una meta institucional</option>");
+	$('#metaInstitucional').attr("name","fichais_indicador-id_meta_sectorial");
+	$('#descripcionMetaInstitucional').val('');
+	$('#contenedorAlineacionEspecial').removeClass('mostrar');
+	$('#contenedorAlineacionEspecial').addClass('ocultar');
+	$('#contenedorAlineacionSectorialInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionSectorialInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionOtro').removeClass('ocultar');
+	$('#contenedorAlineacionOtro').addClass('mostrar');
+}
+
+function actualizarSeleccioneTipoPrograma()
+{
+	$('#idCatEnfoque> option[value="1"]').attr('selected', 'selected');
+	$('#idCatEje> option[value="1"]').attr('selected', 'selected');
+	$('#metaSectorial').empty();
+	$('#metaSectorial').append("<option value='1'>Seleccione una meta sectorial</option>");
+	$('#metaSectorial').attr("name","ficha_indicador-id_meta_sectorial");
+	$('#descripcionMetaSectorial').val('');
+	$('#metaInstitucional').empty();
+	$('#metaInstitucional').append("<option value='1'>Seleccione una meta institucional</option>");
+	$('#metaSectorial').attr("name","fichais_indicador-id_meta_sectorial");
+	$('#descripcionMetaInstitucional').val('');
+	$('#contenedorAlineacionEspecial').removeClass('mostrar');
+	$('#contenedorAlineacionEspecial').addClass('ocultar');
+	$('#contenedorAlineacionSectorialInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionSectorialInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionInstitucional').removeClass('mostrar');
+	$('#contenedorAlineacionInstitucional').addClass('ocultar');
+	$('#contenedorAlineacionOtro').removeClass('mostrar');
+	$('#contenedorAlineacionOtro').addClass('ocultar');
+}
+//Funcion que se encarga de habilitar y desabilitar los limites de las variables
+function activarLimites(contador) {
+	if ($('#rango' + contador).attr('checked')) {
+		$('#limiteSuperior' + contador).removeAttr('disabled');
+		$('#limiteInferior' + contador).removeAttr('disabled');
+	} else {
+		$('#limiteSuperior' + contador).attr('disabled', 'disabled');
+		$('#limiteInferior' + contador).attr('disabled', 'disabled');
+		$('#limiteSuperior' + contador).attr('value', '');
+		$('#limiteInferior' + contador).attr('value', '');
+	}
+}
+
+function activarConstante(idCheck, contador) {
+	if ($('#' + idCheck).attr('checked')) {
+		$('#selectValorNumerico' + contador).val($('#selectValorNumerico' + contador + ' > option:first').val());
+		$('#selectValorNumerico' + contador).attr('disabled', 'disabled');
+		$('#selectCarga' + contador).val($('#selectCarga' + contador + ' > option:first').val());
+		$('#selectCarga' + contador).attr('disabled', 'disabled');
+		$('#varConstanteOn' + contador).removeClass('mostrar');
+		$('#varConstanteOn' + contador).addClass('ocultar');
+		$('#boxNumeroDecimales' + contador).removeClass('mostrar');
+		$('#boxNumeroDecimales' + contador).addClass('ocultar');
+		$('#numeroDecimales' + contador).val('');
+		$('#numeroDecimales' + contador).removeClass('required');
+		$('#valorConstante' + contador).removeAttr('disabled');
+		if ($('#rango' + contador).attr('checked')) {
+			$('#rango' + contador).attr('checked', false);
+			$('#rango' + contador).attr('disabled', 'disabled');
+			$('#limiteSuperior' + contador).attr('value', '');
+			$('#limiteInferior' + contador).attr('value', '');
+			$('#limiteSuperior' + contador).attr('disabled', 'disabled');
+			$('#limiteInferior' + contador).attr('disabled', 'disabled');
+		} else {
+			$('#rango' + contador).attr('disabled', 'disabled');
+		}
+	} else {
+		$('#varConstanteOn' + contador).removeClass('ocultar');
+		$('#varConstanteOn' + contador).addClass('mostrar');
+		$('#selectValorNumerico' + contador).removeAttr('disabled', 'disabled');
+		$('#selectCarga' + contador).removeAttr('disabled', 'disabled');
+		$('#rango' + contador).removeAttr('disabled', 'disabled');
+		$('#valorConstante' + contador).attr('disabled', 'disabled');
+		$('#valorConstante' + contador).attr('value', '');
+	}
+}
+
+function actualizarEcuacion() {
+	var idCatEcuacion = $('#ecuacion').val();
+	if ($('#ecuacion').val() == '')
+		idCatEcuacion = 1;
+	//alert(idCatEcuacion);
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarEcuacion/' + idCatEcuacion;
+	var ecuacion = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+
+	datos = ecuacion.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	ecuacion.onreadystatechange = insertarEcuacion(datos);
+}
+
+function insertarEcuacion(datos) {
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		$('#formula').val(this.texto);
+	});
+}
+
+function insertarVariablesBox(datos, idEntes, nombreEntes, idEtiquetas, carga, idCarga, tipoNumero, idTipoNumero) {
+	var numeroVariables;
+	var contador = 1;
+	var datosVar = new String();
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		numeroVariables = this.texto;
+		variables = this.formula;
+	});
+	$('#numeroDeVariables').val(numeroVariables);
+	datosVar += '<div class = "barra"></div>';
+	for ( contador = 1; contador <= numeroVariables; contador++) {
+		datosVar += '<div id ="definicionVariables' + contador + '" class = "definicionVariables">';
+		datosVar += '<div><b>Variable ' + variables[contador - 1] + '</b><input type="hidden" id="variable' + contador + '" value ="' + variables[contador - 1] + '"></div>';
+		datosVar += '<table width="600px" style="margin-top: 10px;" >';
+		datosVar += '<tr>';
+		datosVar += '<td class="label-form">';
+		datosVar += '<label>' + idEtiquetas['ente'] + '</label>';
+		datosVar += '</td>';
+		datosVar += '<td>';
+		datosVar += '<select  id="listaVariablesEnte' + contador + '" class = "input-xxlarge tipoSelect variables" name="listaVariablesEnte[' + variables[contador - 1] + ']" onchange="actualizarVariablesEnte(this.id,' + contador + ');">';
+		for (var i = 0; i < idEntes.length; i++) {
+			datosVar += '<option value="' + idEntes[i] + '">' + nombreEntes[i] + '</option>';
+		}
+		datosVar += '</select>';
+		datosVar += '</td>';
+		datosVar += '</tr>';
+		datosVar += '<tr>';
+		datosVar += '<td  class="label-form"><label>' + idEtiquetas['variable'] + '</label></td>';
+		datosVar += '<td><select id = "variablesEnte' + contador + '" name = "variablesEnte[' + variables[contador - 1] + ']" class ="input-xxlarge tipoSelect variables"><option value ="1">Seleccione una Variable</option></select></td>';
+		datosVar += '</tr>';
+		datosVar += '</table>';
+		datosVar += '<div id="contenedorConstante" class ="contenedorConstante">';
+		datosVar += '<table width="600px" style=" margin-top: 10px;">';
+		datosVar += '<tr>';
+		datosVar += '<td colspan="2">';
+		datosVar += '<input type="checkbox" id="checkConstante' + contador + '" name= "checkConstante[' + variables[contador - 1] + ']" onclick="activarConstante(this.id,' + contador + ')"><label>' + idEtiquetas['constante'] + '</label>';
+		datosVar += '</td>';
+		datosVar += '</tr>';
+		datosVar += '<tr>';
+		datosVar += '<td class ="label-form">';
+		datosVar += '<label>' + idEtiquetas['valor'] + '</label>';
+		datosVar += '</td>';
+		datosVar += '<td><input type="number" step="any" id="valorConstante' + contador + '" name="valorConstante[' + variables[contador - 1] + ']"  class = "variables" min="-9999999999999" max="9999999999999" disabled="disabled">';
+		datosVar += '</td>';
+		datosVar += '</tr>';
+		datosVar += '</table>';
+		datosVar += '</div>';
+		datosVar += '<div id="varConstanteOn' + contador + '"  class = "mostrar">';
+		datosVar += '<div class="panelIzquierdo">';
+		datosVar += '<table style=" margin-top: 10px;">';
+		datosVar += '<tr>';
+		datosVar += '<td class="label-form"><label>' + idEtiquetas['valorNumerico'] + '</label></td>';
+		datosVar += '<td><select  id ="selectValorNumerico' + contador + '" name = "selectValorNumerico[' + variables[contador - 1] + ']" class ="tipoSelect variables" onclick="activarNumeroDecimales(this.id,' + contador + ')">';
+		for (var i = 0; i < idTipoNumero.length; i++) {
+			datosVar += '<option value="' + idTipoNumero[i] + '">' + tipoNumero[i] + '</option>';
+		}
+		datosVar += '</select>';
+		datosVar += '</td>';
+		datosVar += '</tr>';
+		datosVar += '<tr>';
+		datosVar += '<td colspan = "2"><div id="boxNumeroDecimales' + contador + '" class = "ocultar" >Número de Decimales(1-10): <input type= "number" min ="1" max = "10" style="width: 50px;" class ="decimal variables" value = "2" id ="numeroDecimales' + contador + '" name = "numeroDecimales[' + variables[contador - 1] + ']" ></div>';
+		datosVar += '</td>';
+		datosVar += '</tr>';
+		datosVar += '<tr>';
+		datosVar += '<td  class="label-form"><label>' + idEtiquetas['carga'] + '</label></td>';
+		datosVar += '<td><select id ="selectCarga' + contador + '" name ="selectCarga[' + variables[contador - 1] + ']" class ="tipoSelect variables">';
+		for (var i = 0; i < idCarga.length; i++) {
+			datosVar += '<option value="' + idCarga[i] + '">' + carga[i] + '</option>';
+		}
+		datosVar += '</select></td>';
+		datosVar += '</tr>';
+		datosVar += '</table>';
+		datosVar += '</div>';
+		datosVar += '<div class="panelDerecho">';
+		datosVar += '<table style="margin-top: 10px; width: 100%">';
+		datosVar += '<tr>';
+		datosVar += '<td colspan="2"><input type="checkbox" id="rango' + contador + '" name="rango[' + variables[contador - 1] + ']" style="display: inline;" onclick="activarLimites(' + contador + ')">';
+		datosVar += '&nbsp;&nbsp;&nbsp;<label style="display: inline;">' + idEtiquetas['definirLimites'] + '</label>';
+		datosVar += '</td>';
+		datosVar += '</tr>';
+		datosVar += '<tr>';
+		datosVar += '<td class="label-form"><label>' + idEtiquetas['limiteInf'] + '</label></td>';
+		datosVar += '<td><input  type="number" step="any" id="limiteInferior' + contador + '" name="limiteInferior[' + variables[contador - 1] + ']" class = "variables" disabled="disabled"></td>';
+		datosVar += '</tr>';
+		datosVar += '<tr>';
+		datosVar += '<td class="label-form"><label>' + idEtiquetas['limiteSup'] + '</label></td>';
+		datosVar += '<td><input type="number" step="any" id="limiteSuperior' + contador + '" name="limiteSuperior[' + variables[contador - 1] + ']" class = "variables" disabled="disabled"></td>';
+		datosVar += '</tr>';
+		datosVar += '</table>';
+		datosVar += '</div>';
+		datosVar += '</div>';
+		datosVar += '<div class = "barra"></div>';
+	}
+	$("#definicionVariablesBox").empty();
+	$("#definicionVariablesBox").append(datosVar);
+}
+
+function agregarVariablesBox(idEntes, nombreEntes, idEtiquetas, carga, idCarga, tipoNumero, idTipoNumero) {
+	var idCatEcuacion = $('#ecuacion').val();
+	if (idCatEcuacion == '')
+		idCatEcuacion = 1;
+	var variablesEcuacion = $('#ecuacion').find(":selected").text();
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/numVariablesEcuacion/' + idCatEcuacion;
+	var numVariablesEcuacion = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = numVariablesEcuacion.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	numVariablesEcuacion.onreadystatechange = insertarVariablesBox(datos, idEntes, nombreEntes, idEtiquetas, carga, idCarga, tipoNumero, idTipoNumero);
+
+}
+
+/*
+ Funciones utlizadas en el modulo de Variables para la actualizacion dinamica
+ *
+ * */
+
+function agregarVariablesEnte(datos, contador) {
+	var numVarEcuacion = $('#numeroDeVariables').val();
+		
+	$('#variablesEnte' + contador).empty();
+	$('#variablesEnte' + contador).append("<option value='1'>Seleccione una Variable</option>");
+	jsonR = $.parseJSON(datos);
+	$.each(jsonR, function() {
+		$('#variablesEnte' + contador).append("<option title = '"+this.texto+"' value='" + this.id + "'>" + this.texto + "</option>");
+	});
+	
+	for(var i =contador; i<numVarEcuacion; i++)
+	{
+		var enteIndice = i+1;
+		$('#variablesEnte' + enteIndice).empty();
+		$('#variablesEnte' + enteIndice).append("<option value='1'>Seleccione una Variable</option>");
+		jsonR = $.parseJSON(datos);
+		$.each(jsonR, function() {
+			$('#variablesEnte' + enteIndice).append("<option title = '"+this.texto+"' value='" + this.id + "'>" + this.texto + "</option>");
+		});
+	}
+	
+	//Actualiza el valor del select
+}
+
+function actualizarVariablesEnte(idCambioValor, contador) {
+	var numVarEcuacion = $('#numeroDeVariables').val();
+	var idCatEnte = $('#' + idCambioValor).val();
+	//Obtenemos el id del ente seleccionado
+	if (idCatEnte == '')
+		idCatEnte = 1;
+		
+	for(var i =contador; i<numVarEcuacion; i++)
+	{
+		var enteIndice = i+1;
+		$("#listaVariablesEnte"+enteIndice+" option[value="+ idCatEnte +"]").attr("selected",true);
+	}
+	
+	//alert(idCatEnte);
+	var url = base + 'index.php/abcIndicadores/altaIndicador_c/actualizarVariablesEnte/' + idCatEnte;
+	var variablesEnte = $.ajax({
+		url : url,
+		type : 'POST',
+		async : false
+	});
+	datos = variablesEnte.responseText;
+	// guarda los datos en la varibale "datos" que recibe del servidor
+	variablesEnte.onreadystatechange = agregarVariablesEnte(datos, contador);
+}
+
+function activarNumeroDecimales(id, contador) {
+	if ($('#' + id).val() == 2) {
+		$('#boxNumeroDecimales' + contador).removeClass('ocultar');
+		$('#boxNumeroDecimales' + contador).addClass('mostrar');
+		$('#numeroDecimales' + contador).addClass('required');
+		$('#numeroDecimales' + contador).val('2');
+	} else {
+		$('#boxNumeroDecimales' + contador).removeClass('mostrar');
+		$('#numeroDecimales' + contador).removeClass('required');
+		$('#boxNumeroDecimales' + contador).addClass('ocultar');
+		$('#numeroDecimales' + contador).val('');
+	}
+}
+
+/**
+ *Ale: Contador de caracteres
+ **/
+
+(function($) {
+	$.fn.extend({
+		limiter : function(limit, elem) {
+			$(this).on("keyup focus", function() {
+				setCount(this, elem);
+			});
+			function setCount(src, elem) {
+				if ( typeof (src) != "undefined" && src !== null) {
+					var chars = src.value.length;
+					if (chars > limit) {
+						src.value = src.value.substr(0, limit);
+						chars = limit;
+					}
+					elem.html(limit - chars);
+				}
+
+			}
+
+			setCount($(this)[0], elem);
+		}
+	});
+})(jQuery);
+
+/**
+ *Fin Contador de caracteres
+ **/
+
+function graf() {
+	cargarContenido(base + 'index.php/reportes/graficas_c/gTipoPrograma/1');
+}

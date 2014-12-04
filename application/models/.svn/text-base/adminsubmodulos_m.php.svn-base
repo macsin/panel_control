@@ -1,0 +1,24 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class AdminSubModulos_m extends CI_Model {
+	public function __construct() {
+		parent::__construct();
+	}
+
+	public function cargarSubModulos($nombreSubModulo,$etiquetas) {
+		$customQuery = "SELECT * FROM ".$etiquetas['tb_cat_modulo']." WHERE padre = (SELECT id_cat_modulo FROM ".$etiquetas['tb_cat_modulo']." WHERE nombre = '".$nombreSubModulo."');";
+		$query = $this->db->query($customQuery);
+        if ($query->num_rows()!=0) {
+            foreach ($query->result_array() as $value) {
+                $subModulos[$value['id_cat_modulo']] = $value;
+            }
+        } else {
+            $subModulos = FALSE;
+        }
+        return $subModulos;
+	}
+
+}
+
+/* End of file adminSubModulos_m.php */
+/* Location: ./application/models/adminSubModulos_m.php */

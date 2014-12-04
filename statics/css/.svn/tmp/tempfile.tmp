@@ -1,0 +1,528 @@
+body {
+	margin: 0 auto;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #787878;
+	
+}
+textarea { 
+    resize: none; 
+}
+.login{
+	background:rgb(248, 247, 247);
+	width: 521px;
+	/*height:210px;*/
+	margin: 0 auto;
+	padding: 15px;
+	margin-top:10%;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 5px 0px 0px;
+	-webkit-box-shadow: 2px 2px 2px 2px #B3B3B3;
+	box-shadow: 2px 2px 2px 2px #B3B3B3;
+
+}
+.boton-der{
+	float:right;
+}
+
+.header,.footer{
+	/*background:#B3B3B3 !important;*/
+}
+.wrapper,.header,.footer{
+	margin: 0 auto;
+	width:1100px;
+	-webkit-box-shadow: 2px 2px 2px 2px #B3B3B3;
+	box-shadow: 2px 2px 2px 2px #B3B3B3;
+
+}
+.header{
+	margin-top:30px;
+}
+.wrapper{
+	margin: 0 auto;
+	border: 1px solid #ccc;
+	padding:15px;
+	width:1068px;
+}
+.menu-left{
+	width:200px;
+	float:left;
+	font-size: 17px !important;
+}
+
+.contenido{
+	width: 1005px;
+	padding:30px;
+	float:right;	
+	border:1px solid #ccc;
+	-webkit-box-shadow: 1px 1px 1px 1px #B3B3B3;
+	box-shadow: 1px 1px 1px 1px #B3B3B3;
+}
+
+.clear{
+	clear: both
+}
+.en-construccion{
+	text-align:center;
+	color:rgb(81, 95, 255);
+}
+
+.footer-log{
+	margin: 0 auto;
+	width:553px;
+}
+.footer-log img{
+	width:554px;
+	-webkit-box-shadow: 2px 2px 2px 2px #B3B3B3;
+	box-shadow: 2px 2px 2px 2px #B3B3B3;
+}
+
+.dataTables_length,.dataTables_info{
+	width: 717px;
+	float: left;
+}
+
+/* CSS Modulo de Registro de Fichas*/
+.ocultar {
+	display: none;	
+	visibility:hidden;
+}
+
+.mostrar{
+	display: block;
+	visibility:visible;
+}
+
+.panelIzquierdo{
+	float:left;
+	width:410px;
+	
+	}
+
+.panelDerecho{
+	float:right;
+	width:410px;
+	
+	}
+	
+#contenedorRegistroFichas{
+	margin: 0 auto;
+	}
+
+.contenedorDatosGenerales{
+	margin: 0 auto;
+	width:845px;	
+}
+
+#contenedorAlineacionSectorialInstitucional{
+	margin: 0 auto;
+	width:845px;
+}
+
+.definicionVariables{
+	margin: 0 auto;
+	width:845px;
+}
+#contenedorAlineacionEspecial{
+	margin: 0 auto;
+	width:845px;
+	}
+	
+#contenedorVariables{
+	margin: 0 auto;
+	width:845px;
+	}
+	
+.contenedorMetasGeneral{
+	
+}
+
+#ecuReferencia{
+	alignment-baseline:central;
+	text-align: center; 
+	width: 845px;
+	background:#CCCCCC;
+	color:#002166;
+	padding: 0px 0px 10px 0px;
+}
+
+.entesDinamicos{
+	float: left;
+	padding: 30px 27px;
+	margin-bottom: 10px;
+	width: 943px;	
+}
+
+.contenedorEnteLineaBase{
+	float:left;
+	padding-top:20px;
+	padding-left:20px
+}
+
+#botonMasEntes{
+	float:right;
+}
+
+.valoresEnteMeta{
+
+	display:block;
+	margin: 0 auto;
+	float:left;
+}
+
+.metasDinamicas{
+	float:left;
+	padding-left:20px
+}
+
+#botonMasMetas{
+
+	display:block;
+	margin: 0 auto;
+	width:90px;
+	float:right;
+}
+
+.labelChar{
+	margin-right: 5px;
+	width: 33px;
+	float:left;
+	
+}
+
+.leyendaCampo{
+margin-left: 36px;
+}
+
+.panel-info {
+	border-color: #FFCC49;
+}
+
+.panel-info-head{
+	background: #FDEFA5;
+	font-weight: bold;
+	font-size: 15px;
+}
+.panel-info-head a{
+	color:#D17C01; 
+}
+.flotar-der{
+	float:right;
+}
+
+.label-form{
+	text-align:right;
+	padding-right:7px;
+}
+
+.barra{
+	border-bottom: 4px solid #ccc;
+	clear: both;
+	padding: 10px;
+	margin-bottom:15px;
+}
+
+
+.inactivo{
+	opacity:0.8;
+}
+
+.inactivo:hover{
+	opacity:1;
+	cursor:hand !important;
+}
+
+a.btn-icono{
+	text-decoration:none;
+}
+
+.consultaIndicador{
+	width:1000;
+}
+a:hover{
+	cursor:hand !important;
+}
+
+.subir-img{
+	margin-top:-10px;
+}
+
+.btn:hover{
+	opacity:0.8px;
+	cursor:hand
+}
+
+#indicadores_next{
+	padding-left: 30px;
+}
+
+.mensajeForm{
+	font-size:13px;
+	float:right;
+	font-style: italic;
+
+}
+
+.resaltarLabel{
+	font-size:21px;
+	font-weight:bold;
+	color:red;
+}
+.containerPlazos{
+		width: 450px;
+		padding-top: 25px;
+	}
+	.plazoCaptura,.plazoReporte{
+		width:392px;
+	}
+	.plazoCaptura{
+		float:left;
+	}
+	.plazoReporte{
+		float:right;
+	}
+	.containCaptura,.containReporte{
+		border:1px solid #ccc;
+		-webkit-border-radius: 5px 5px 5px 5px;
+		border-radius: 5px 5px 5px 5px;
+		-webkit-box-shadow: 0 2px 2px 2px #ADADAD;
+		box-shadow: 0 2px 2px 2px #ADADAD;
+		padding: 17px;
+	}
+	.containCaptura{
+		height:260px;
+	}
+	.containReporte{
+		padding:60px;
+		border:1px solid #ccc;
+	}
+.bordeRojo
+{
+	border: solid 1px red !important;
+}
+
+.tablePerPasados{
+	width: 536px;
+	float: right;
+}
+
+
+.labelPeriodo{
+	margin-bottom: 33px;
+	border-bottom: 1px solid #ccc;
+	width: 535px;
+}
+
+#tablePeriodos_wrapper{
+	width: 536px;
+}
+
+.dropdown-menu{
+	text-align:left !important;
+}
+
+.alert{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.mensaje{
+	padding:15px;
+	margin-top: 20px;
+}
+.border-alert-info{
+	border-top:1px solid #3a87ad;
+	border-bottom:1px solid #3a87ad;
+}
+.border-alert-success{
+	border-top:1px solid #468847;
+	border-bottom:1px solid #468847;
+}
+.border-alert-error{
+	border-top:1px solid #b94a48;
+	border-bottom:1px solid #b94a48;
+}
+.imgOrder{
+	width: 10px; margin: 3px;
+}
+
+.paginate_enabled_next,.paginate_disabled_next{
+	padding-left:15px;
+}
+
+.formAltaPrograma{
+	width: 500px;
+	margin-left: 240px;
+}
+
+.bienvenido{
+	background: #686868;
+	color: white;
+	padding: 5px 20px;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.comentarCampoBox{
+	margin-top:20px;
+	margin-bottom:20px;
+	margin-left:30px;
+	width: 870px;
+}
+
+#forMensaje{
+	float: left;
+	margin-left:20px;
+}
+
+.campoComentario{
+	text-align:center;
+}
+
+.btn-gris{
+	background:#E0E0E0;
+	border:1px solid #B1B1B1;
+}
+
+.btn-gris:hover{
+	background:#CCCCCC;
+}
+
+/* leyenda en boton accion para usuario dependencia */
+a#Ntooltip {
+position: relative; 
+text-decoration: none !important; 
+}
+
+a#Ntooltip:hover {
+z-index:999;
+}
+
+a#Ntooltip span.accion {
+display: none;
+}
+
+a#Ntooltip:hover span.accion {
+display: block;
+position: absolute; 
+top:2em; left:2em; 
+width:150px; 
+padding:1px; 
+background-color: #CCCCCC; 
+color: #000000;
+}
+/* encabezados bandeja de fichas*/
+.headTable{
+	font-size: 14px;
+	color:#787878;
+}
+
+
+.obligatorio{
+	color: red;
+}
+
+.titleAdmin{
+	font-size:19px;
+	font-weight: bold;
+}
+
+.labelWelcome{
+	width:760px;
+	float:left;
+}
+
+.closeSession{
+	width: 300px;
+	text-align:right;
+	float:right;
+}
+
+#mensajeValidacion{
+	width: 300px;
+}
+
+td,th{
+	padding:5px 10px !important;
+}
+
+th{
+	text-align:center;
+}
+
+.tableMSectorial{
+	text-align: right;
+	width: 952px;
+}
+.tdborde{
+	border-left: 1px solid #ccc;
+}
+.bordebottom{
+	border-bottom: 1px solid #ccc;
+	padding: 25px 5px !important;
+}
+
+.tipoSelectStyle{
+	width:735px;
+}
+
+.contenedorCapturaVariables{
+	margin: 0 auto;
+	width:845px;
+}
+.rutaNavegacion{
+	
+}
+.detallePeriodos{
+	margin: 0px auto;
+	width:840px;
+	
+}
+.descripcionIndicador{
+	margin: 5px auto;
+	width:840px;
+
+}
+.contenedorVariablesComentario{
+	margin: 5px auto;
+	width:800px;
+}
+
+.divVariables
+{
+	margin: 10px 0px 0px 0px;
+	float:left;
+	width:350px;
+	/*border:solid 1px;*/
+}
+
+.contenedorPeriodos
+{
+	margin:0px auto;
+	width:800px;
+	
+}
+
+.divComentarios
+{
+	margin: 10px 0px 0px 0px;
+	float:right;
+	width:450px;
+	/*border:solid 1px;*/
+}
+
+.divBotones
+{
+	text-align: center;
+	margin: 10px auto;
+	width:800px;
+}
+
+.descripcionVariables
+{
+	margin: 5px auto;
+	width:800px;
+}

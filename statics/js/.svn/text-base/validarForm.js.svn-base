@@ -1,0 +1,670 @@
+function validarPublicacion(idBoton)
+{
+	var elementosFaltantes = new String();
+	elementosFaltantes = 0;
+	banderaSeccionError = '3';	
+	
+		
+	if (idBoton == 2 || idBoton == 4) // (Publicar Indicador -- Enviar a Revision)
+	{
+	$("#formFicha").find(':input').each(function() {
+		var elemento=this;
+		switch(elemento.id)
+		{
+			case 'ficha_indicador-borrador':
+				break;
+			case 'ficha_indicador-publicar':
+				break;
+			case 'ficha_indicador-revision':
+				break;
+			case 'verComentario':
+				break;
+			case 'ficha_indicador-validar':
+				break;
+			case 'catTipoIndicador_idCatTipoIndicador':
+				if(elemento.value == 1 || elemento.value == '')
+				{
+					$('#'+elemento.id+' option:selected').val('');
+					$('#'+elemento.id).addClass('required');
+					$('#'+elemento.id).addClass('bordeRojo');
+				}else
+				{
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}
+						
+				break;
+			case 'fichaIndicador_idCatPeriodicidad':
+				if(elemento.value == 1 || elemento.value == '')
+				{
+					$('#'+elemento.id+' option:selected').val('');
+					$('#'+elemento.id).addClass('required');
+					$('#'+elemento.id).addClass('bordeRojo');			
+				}else
+				{
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}				
+				break;
+			case 'meta':
+				if($('#idCatTipoEvaluacion').val() == 1 || $('#idCatTipoEvaluacion').val() == 3) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}
+					else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}
+			break;
+			case 'metaSectorial':
+				if($('#idCatTipoEvaluacion').val() == ctePrograma['Sectorial']) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}
+					else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}
+			break;
+			case 'metaInstitucional':
+				if($('#idCatTipoEvaluacion').val() == ctePrograma['Institucional']) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}
+					else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}
+			break;
+			case 'idCatEje':
+				if($('#idCatTipoEvaluacion').val() == 1 || $('#idCatTipoEvaluacion').val() == 3) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}
+					else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}					
+			break;
+			case 'areaOportunidad':
+				if($('#idCatTipoEvaluacion').val() == 1 || $('#idCatTipoEvaluacion').val() == 3) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}
+					else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}					
+			break;
+			case 'objetivo':
+				if($('#idCatTipoEvaluacion').val() == 1 || $('#idCatTipoEvaluacion').val() == 3) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}
+					else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}					
+			break;
+			case 'idCatEnfoque':
+				if($('#idCatTipoEvaluacion').val() == 2) 
+				{
+					if(elemento.value == 1 || elemento.value == '')
+					{	
+						$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');
+					}else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}
+					
+			break;
+			case 'alineacionOtro':
+				if($('#idCatTipoEvaluacion').val() != '' && $('#idCatTipoEvaluacion').val() != 1 && $('#idCatTipoEvaluacion').val() != 2 && $('#idCatTipoEvaluacion').val() != 3) 
+				{
+					
+					if(elemento.value == '')
+					{	
+						if(!$('#'+elemento.id).hasClass('required'))
+						{
+							
+							$('#'+elemento.id).addClass('required');
+							$('#'+elemento.id).addClass('bordeRojo');	
+						}
+					}else
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}
+				else
+				{
+					$('#'+elemento.id).removeClass('required');
+					$('#'+elemento.id).removeClass('bordeRojo');
+				}				
+			break;
+			case 'ecuacion':
+				if(elemento.value == 1 || elemento.value == '')
+					{
+						
+						$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');			
+					}
+					else			
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}			
+						
+			break;
+			case 'formula':					
+			break;
+			case 'numeroDeVariables':					
+			break;
+			case 'idCatTipoEvaluacion':
+				if (elemento.value == '')
+					$('#'+elemento.id).addClass('bordeRojo');
+				else
+					$('#'+elemento.id).removeClass('bordeRojo');
+			break;
+			case 'catEvaluacion_idCatEvaluacion':
+				if (elemento.value == '')
+					$('#'+elemento.id).addClass('bordeRojo');
+				else
+					$('#'+elemento.id).removeClass('bordeRojo');
+			break;
+			case 'nombreFichaIndicador':
+				if (elemento.value == '')
+					$('#'+elemento.id).addClass('bordeRojo');
+				else
+					$('#'+elemento.id).removeClass('bordeRojo');				
+			break;
+			default:
+				if ($('#'+elemento.id).hasClass('tipoSelect'))
+				{						
+					if(elemento.value == 1)
+					{
+						
+						$('#'+elemento.id).addClass('bordeRojo');						
+						$('#'+elemento.id+' option:selected').val('');
+						$('#'+elemento.id).addClass('required');
+						$('#'+elemento.id).addClass('bordeRojo');			
+					}
+					else 
+					if (elemento.value == '')
+					{
+						
+						$('#'+elemento.id).addClass('bordeRojo');						
+						$('#'+elemento.id).addClass('required');							
+					}else						
+					{
+						$('#'+elemento.id).removeClass('bordeRojo');
+						
+					}
+				}else
+				{
+					if (elemento.value == '')
+					{
+						
+						if($('#'+elemento.id).hasClass('decimal'))
+						{			
+							if($('#'+elemento.id).hasClass('required'))
+							{
+								$('#'+elemento.id).addClass('bordeRojo');								
+							}
+							else
+							{
+								
+								$('#'+elemento.id).removeClass('bordeRojo');
+								$('#'+elemento.id).removeClass('required');
+							}
+						}else
+						{
+							$('#'+elemento.id).addClass('required');
+							$('#'+elemento.id).addClass('bordeRojo');							
+						}
+					}else						
+					{
+						$('#'+elemento.id).removeClass('required');
+						$('#'+elemento.id).removeClass('bordeRojo');
+					}
+				}					
+				break;
+		}
+		if($('#'+elemento.id).is(':disabled'))
+		{
+			$('#'+elemento.id).removeClass('bordeRojo');
+			$('#'+elemento.id).removeClass('required');
+		}
+		if($('#'+elemento.id).hasClass('decimal'))
+		{			
+			if(!$('#'+elemento.id).hasClass('required'))
+			{				
+				$('#'+elemento.id).removeClass('bordeRojo');
+				$('#'+elemento.id).removeClass('required');
+			}			
+		}
+		if($('#'+elemento.id).hasClass('noObliga'))
+		{
+			$('#'+elemento.id).removeClass('bordeRojo');
+			$('#'+elemento.id).removeClass('required');
+		}
+				 										
+	});
+	
+	$("#formFicha").find(':input').each(function() {
+		var elemento=this;
+		if($('#'+elemento.id).hasClass('bordeRojo'))
+		{
+			elementosFaltantes++;
+			if(banderaSeccionError == '3')
+			{
+				if ($('#'+elemento.id).hasClass('generales'))
+				{
+					banderaSeccionError = '83';
+				}
+				else 
+					if($('#'+elemento.id).hasClass('alineacion') && banderaSeccionError == '3')
+					{
+						banderaSeccionError = '84';
+					}
+					else 
+						if ($('#'+elemento.id).hasClass('variables') && banderaSeccionError == '3')
+						{
+							banderaSeccionError = '85';
+						}
+						else
+							if($('#'+elemento.id).hasClass('metas') && banderaSeccionError == '3')
+							{
+								banderaSeccionError = '86';
+							}
+			}	
+		}			
+	});
+	if(elementosFaltantes >0)
+		{
+			alerta(banderaSeccionError,'alert-error');
+		}
+	}else if(idBoton == 1) //Guardar Borrador
+	{
+
+	elementosFaltantes = 0;
+	errorDecimales = '';
+	errorMeta = '';
+	$("#formFicha").find(':input').each(function() {
+		var elemento=this;
+		
+		if (elemento.id != 'idCatTipoEvaluacion' && elemento.id != 'catEvaluacion_idCatEvaluacion' && elemento.id != 'nombreFichaIndicador')
+		{
+				if ($('#'+elemento.id).hasClass('tipoSelect'))
+				{	
+					if(elemento.id == 'meta')
+					{
+
+						if(elemento.id == 'meta' && (elemento.value == 1 || elemento.value == ''))
+						{
+							if(($('#idCatEje').val() != 1 && $('#idCatEje').val() != '' ))
+							{
+								$('#'+elemento.id+' option:selected').val('');
+								$('#'+elemento.id).addClass('required');
+								$('#'+elemento.id).addClass('bordeRojo');
+								//alert('Ha seleccionado un objetivo, necesita seleccionar una meta en la Alineación');
+								errorMeta +='Ha seleccionado un Eje, necesita seleccionar una meta en la Alineación';	
+							}
+							else
+							{
+								$('#'+elemento.id+' option:selected').val('1');
+								$('#'+elemento.id).removeClass('required');
+								$('#'+elemento.id).removeClass('bordeRojo')
+							}
+						}
+						else
+						{
+							$('#'+elemento.id).removeClass('required');
+							$('#'+elemento.id).removeClass('bordeRojo')
+						}						
+					}
+					else 
+					{
+						if($('#'+elemento.id).is(':disabled'))
+						{
+							$('#'+elemento.id).removeAttr('disabled','disabled')
+						}
+						if(elemento.value == '')
+						{
+							$('#'+elemento.id+' option:selected').val('1');
+							$('#'+elemento.id).removeClass('required');
+							$('#'+elemento.id).removeClass('bordeRojo');				
+						}	
+						else 
+						{
+							$('#'+elemento.id).removeClass('bordeRojo');
+							$('#'+elemento.id).removeClass('required');
+						}													
+					}					
+				} else
+				{	
+					if(!$('#'+elemento.id).is(':disabled') )
+					{
+						if($('#'+elemento.id).hasClass('decimal'))
+						{	
+							if(!$('#'+elemento.id).hasClass('required'))
+								{				
+								$('#'+elemento.id).removeClass('bordeRojo');
+								$('#'+elemento.id).removeClass('required');
+								}
+							else
+								if(elemento.value =='' )
+								{
+									//alert(elemento.id);
+									errorDecimales = "Error en el numero de Decimales no puede estar vacio\n"
+								}
+									
+						}
+						else
+						{
+							$('#'+elemento.id).removeClass('required');
+							$('#'+elemento.id).removeClass('bordeRojo');	
+						}						
+					}
+				}
+		}		
+	});	
+	$("#formFicha").find(':input').each(function() {
+		var elemento=this;
+		if($('#'+elemento.id).hasClass('required'))
+		{
+			if(elemento.value == '')
+			{
+				elementosFaltantes++;		
+				//alert(elemento.id+' sdaElemento'+errorDecimales);		
+			}
+		}
+	});
+	if(elementosFaltantes >0)
+		
+		//alert('Aun tiene campos sin llenar en el Formulario, para guardar un borrador son necesarios como minimo:\n Datos Generales:\n 1.- Tipo de Programa\n 2.- Nombre del Programa\n 3.- Nombre del Indicador\n '+errorDecimales);
+		if(errorMeta == '' && errorDecimales == '')
+		{
+			alerta('4','alert-error');
+		}
+		else
+			if(errorMeta != '' && errorDecimales == '')
+			{
+				alerta('5','alert-error');
+			}else
+			if(errorMeta == '' && errorDecimales != '')
+			{
+				alerta('6','alert-error');
+			}
+//		alerta('Aun tiene campos sin llenar en el Formulario Aun tiene campos sin llenar en el Formulario, para guardar un borrador son necesarios como minimo:\n Datos Generales:\n 1.- Tipo de Programa\n 2.- Nombre del Programa\n 3.- Nombre del Indicador\n ','alert-danger');
+	}
+	
+/*	if(validarLimites())
+	{
+		alert('limitesValidos');
+		document.formFicha.action=base+"index.php/abcIndicadores/altaIndicador_c/altaIndicador/";
+        document.formFicha.method= 'POST';
+	    $('#formFicha').validate();
+	}*/
+}
+
+//Verdadero si en un campo de texto hay solo espacios en blanco. Falso si no son solo espacios
+function soloEspacios(objetivo)
+{
+	cadena = objetivo.trim();
+		if(cadena == '')
+			return true;
+		else
+			return false;
+}
+/*Funcion Principal de Validacion de los Limites del Formulario**/
+function validarLimites()
+{
+	var nombreIndicador = $('#nombreFichaIndicador').val();
+	var objetivo = $('#justificacionFichaIndicador').val();
+	if($('#nombreFichaIndicador').val() != '')
+		if(validar(nombreIndicador)==false)
+		{
+			alerta('88','alert-error');
+			return false;
+		}
+	if($('#alineacionOtro').val() != '')
+	{
+		alineacion = $('#alineacionOtro').val();
+		if(soloEspacios(alineacion))
+		{	
+			alerta('91','alert-error');
+			return false;
+		}
+		if(!validar(alineacion))
+		{
+			alerta('88','alert-error');
+			return false;
+		}		
+	}
+	if($('#justificacionFichaIndicador').val() != '')
+	{
+		if(soloEspacios(objetivo))
+		{	
+			alerta('90','alert-error');
+			return false;
+		}
+		if(!validar(objetivo))
+		{
+			alerta('89','alert-error');
+			return false;
+		}
+	}
+		
+	numeroDeVariables = $('#numeroDeVariables').val();
+	descripcionErroresLimites = '';
+	for(i=1; i<=numeroDeVariables; i++)
+	{
+		if(!$('#checkConstante'+i).attr('checked') && $('#rango'+i).attr('checked'))
+		{
+			if(($('#selectValorNumerico'+i).val() =='' || $('#selectValorNumerico'+i).val() == 1) || ($('#selectCarga'+i).val() =='' || $('#selectCarga'+i).val() == 1))
+			{//Revisar que los limites tengan contenido
+				if($('#limiteSuperior'+i).val() != '' || $('#limiteInferior'+i).val() != '') 
+				{
+					//alert('Debe Seleccionar una Opcion de Carga y Valor Numerico Antes de Definir Limites de las Variables '+i);
+					if($('#selectValorNumerico'+i).val() =='' || $('#selectValorNumerico'+i).val() == 1)
+					{
+						$('#selectValorNumerico'+i).addClass('bordeRojo'); // Ponemos borde rojo debido al error
+					}
+					if($('#selectCarga'+i).val() =='' || $('#selectCarga'+i).val() == 1)
+					{
+						$('#selectCarga'+i).addClass('bordeRojo');//Ponemos borde Rojo debido al error					
+					}
+					//$('#limiteSuperior'+i).val('');//Limpiamos limites
+					//$('#limiteInferior'+i).val('');//Limpiamos limites
+					$('#limiteSuperior'+i).addClass('bordeRojo');
+					$('#limiteInferior'+i).addClass('bordeRojo');					
+					//Error si los limites tienen contenido y no han seleccionado carga y/o valor numerico
+					descripcionErroresLimites += 'Seleccionar Carga y valor numerico para limites de la Variable: '+$('#variable'+i).val()+'\n';
+				}
+			}
+			else
+			{//Se han seleccionado Carga y Valor Numerico
+				if($('#limiteSuperior'+i).val() == '' || $('#limiteInferior'+i).val() == '') //Se han seleccionado Carga y Valor Numerico y los limites estan vacios
+				{
+					//Error si los limites no tienen contenido y se ha seleccionado  carga y/o valor numerico															
+					$('#limiteSuperior'+i).addClass('bordeRojo');					
+					$('#limiteInferior'+i).addClass('bordeRojo');
+					descripcionErroresLimites += 'Selecciono limites para la Variable: '+$('#variable'+i).val()+' y no tienen contenido';
+				}
+				else // Se han seleccionado Carga y Valor Numerico y los limites no estan vacios
+				{
+					if($('#selectValorNumerico'+i).val() =='2')// Se han seleccionado Decimales
+					{						
+						if(!decimalesCorrectos($('#limiteSuperior'+i).val(), $('#limiteInferior'+i).val(), $('#numeroDecimales'+i).val()))
+						{
+							descripcionErroresLimites += 'El numero de Decimales no coincide con el especificado Variable: '+$('#variable'+i).val()+'\n';
+						}
+					}
+					if($('#limiteSuperior'+i).val() == $('#limiteInferior'+i).val())
+					{
+						descripcionErroresLimites += 'Los limites no deben ser iguales para la Variable: '+$('#variable'+i).val()+'\n';
+						$('#limiteSuperior'+i).addClass('bordeRojo');	
+						$('#limiteInferior'+i).addClass('bordeRojo');
+						
+					}
+					if(parseFloat($('#limiteSuperior'+i).val()) <= parseFloat($('#limiteInferior'+i).val()))
+					{
+						descripcionErroresLimites += 'Limite Superior debe ser mayor a Limite Inferior para la Variable: '+$('#variable'+i).val()+'\n';
+						$('#limiteSuperior'+i).addClass('bordeRojo');	
+						$('#limiteInferior'+i).addClass('bordeRojo');						
+					}
+					if($('#selectCarga'+i).val() == 2)//Positivos
+					{
+						if(parseFloat($('#limiteSuperior'+i).val()) < 0 || parseFloat($('#limiteInferior'+i).val()) < 0)
+						{
+							descripcionErroresLimites += 'Los limites deben de ser mayores o iguales a 0 debido que selecciono Positivos para la Variable: '+$('#variable'+i).val()+'\n';
+							$('#limiteSuperior'+i).addClass('bordeRojo');	
+							$('#limiteInferior'+i).addClass('bordeRojo');							
+						}
+					}
+					if($('#selectCarga'+i).val() == 3)//Negativos
+					{
+						if(parseFloat($('#limiteSuperior'+i).val()) >= 0 || parseFloat($('#limiteInferior'+i).val()) >= 0)
+						{
+							descripcionErroresLimites += 'Los limites deben de ser menores a 0 debido que selecciono Negativos para la Variable: '+$('#variable'+i).val()+'\n';
+							$('#limiteSuperior'+i).addClass('bordeRojo');	
+							$('#limiteInferior'+i).addClass('bordeRojo');							
+						}
+					}
+					if($('#selectValorNumerico'+i).val() == 3)//Entero
+						if(!isEntero($('#limiteSuperior'+i).val()) || !isEntero($('#limiteInferior'+i).val()) )
+						{
+							descripcionErroresLimites += 'Los limites deben ser enteros para la Variable: '+$('#variable'+i).val()+'\n';
+							$('#limiteSuperior'+i).addClass('bordeRojo');	
+							$('#limiteInferior'+i).addClass('bordeRojo');	
+					}
+				}
+			}
+		}
+		if(descripcionErroresLimites == '')// Borramos los bordes si no ha habido errores en los limites de la variable
+		{
+			$('#limiteSuperior'+i).removeClass('bordeRojo');	
+			$('#limiteInferior'+i).removeClass('bordeRojo');	
+		}
+	}
+if (descripcionErroresLimites == '')
+{
+	return true;
+}	
+else
+{
+	//alert(descripcionErroresLimites);
+	alerta(descripcionErroresLimites,'alert-error');
+	return false;
+}
+	
+}
+
+
+function decimalesCorrectos(limiteSuperior, limiteInferior, numeroDecimales)
+{	
+	numDec = parseInt(numeroDecimales);
+	superior = limiteSuperior.split(".");
+	inferior = limiteInferior.split(".");
+	puntoSuperior = superior.length;
+	puntoInferior = inferior.length;
+	if(puntoInferior > 1 && puntoSuperior > 1)
+	{
+		decSuperior = superior[1].length;    
+		decInferior = inferior[1].length;		
+	}
+	else
+	{
+		decSuperior = 0;    
+		decInferior = 0;
+	}
+
+	if(decSuperior > numDec || decInferior > numDec)
+		return false;
+	else
+		return true;
+} 
+
+/*Funciones para saber si un numero de un input es Real Entero Positivo o Negativo**/
+
+function isEntero(x) {
+	entero = parseInt(x);
+	real = parseFloat(x);
+	 
+	if(entero  == real)
+		return 1;
+	else
+		return 0; 
+}
+
+
+function confirmacionPublicar()
+{
+	if(confirm('El indicador esta siendo revisado por la dependencia. ¿Desea continuar?')){
+			return true;
+		}
+		else
+		{
+			return false;
+		}				
+}

@@ -1,0 +1,900 @@
+<?php
+class Etiquetas{
+
+/**
+ *				Sistema de monitoreo 
+ */
+ 	function mensajes(){
+ 		$mensajes=array(
+			'1'=>'Error en el alta-mensaje fereesd sdews wewesd wewqsad weswqewd sqdesdasdqe sd eqdad 3sadwe',
+			'2'=>'¡No se ha seleccionado un filtro!, se mostrarán todos los indicadores',
+			'3'=>'Aun tiene campos sin llenar en el Formulario.<br>Para Enviar a Revision el indicador, todos los campos son necesarios.<br>',
+			'4'=>'Para guardar un borrador son necesarios como minimo:<br> Datos Generales:<br> 1.- Tipo de Programa<br> 2.- Nombre del Programa<br> 3.- Nombre del Indicador<br>',
+			'5'=>'Ha seleccionado un objetivo, necesita seleccionar una meta en la Alineación.',
+			'6'=>'Error en el número de decimales no puede estar vacio.',
+			'7'=>'Usuario desactivado.',
+			'8'=>'El usuario no puede ser desactivado, consulte al administrador.',
+			'9'=>'Usuario activado.',
+			'10'=>'El usuario no puede ser activado, consulte al administrador.',
+			'11'=>'Error al consultar catalogo de tipos de usuario.',
+			'12'=>'Error al consultar catalogo de dependencias.',
+			'13'=>'Error al consultar usuario',
+			'14'=>'Verifique su información.',
+			'15'=>'Información de usuario actualizada',
+			'16'=>'Error al actualizar información del usuario, contacte al administrador.',
+			'17'=>'Verifique su información.',
+			'18'=>'Contraseña cambiada exitosamente.',
+			'19'=>'Error al actualizar la contraseña, contacte al administrador.',
+			'20'=>'Las contraseñas deben de ser iguales.',
+			'21'=>'Usted no puede acceder a este módulo.',
+			'22'=>'Verifique su información.',
+			'23'=>'Usuario registrado exitosamente.',
+			'24'=>'Error al registrar usuario, contacte al administrador.',
+			'25'=>'Usted es un usuario activo, registre su baja primero.',
+			'26'=>'Usuario registrado exitosamente.',
+			'27'=>'Error al registrar usuario, contacte al administrador.',
+			'28'=>'Usted es un usuario activo, registre su baja primero',
+			'29'=>'Las contraseñas deben de ser iguales.',
+			'30'=>'Seleccione un ente válido.',
+			'31'=>'No hay usuarios, dependencias y/o categorias de usuarios registrados',
+			'32'=>'No hay ecuaciones registradas en el sistema.',
+			'33'=>'Error contacte al administrador',
+			'34'=>'No hay variables registradas en el sistema.',
+			'35'=>'No hay variables registradas con este criterio de filtrado.',
+			'36'=>'No hay variables registradas para este ente',
+			'37'=>'Variable guardada exitosamente.',
+			'38'=>'Error al obtener los entes para asociar a la variable.',
+			'39'=>'Variable guardada exitosamente.',
+			'40'=>'ID no disponible.',
+			'41'=>'Variable desactivada.',
+			'42'=>'No es posible desactivar la variable, contacte al administrador.',
+			'43'=>'No es posible desactivar las relaciones con los entes para esta variable.',
+			'44'=>'No es posible desactivar la variable, tiene indicadores asociados.',
+			'45'=>'Variable activada.',
+			'46'=>'Variable no desactivada, contacte al administrador.',
+			'47'=>'No hay entes relacionados con esta variable.',
+			'48'=>'La variable se ha desvinculado de este ente.',
+			'49'=>'La variable no se pudo desvincular de este ente, contacte al administrador.',
+			'50'=>'La variable no se puede desvincular de este ente.',
+			'51'=>'Variable asociada exitosamente.',
+			'52'=>'Variable no asociada.',
+			'53'=>'Variable renombrada.',
+			'54'=>'Error al cambiar el nombre de la variable.',
+			'55'=>'Variable renombrada.',
+			'56'=>'Error al cambiar el nombre de la variable.',
+			'57'=>'Error en el número de Decimales, no puede estar vacio',
+			'58'=>'Error al insertar el indicador, intentelo nuevamente.',
+			'59'=>'Error al renombrar variable.',
+			'60'=>'Proporcione un nombre válido.',
+			'61'=>'Verifique la expresión algebraica.',
+			'62'=>'Proporcione un número de variables',
+			'63'=>'Error al validar la expresión algebraica.',
+			'64'=>'La ecuación se guardó exitosamente.',
+			'65'=>'Error al filtrar variables.',
+			'66'=>'Variable guardada exitosamente',
+			'67'=>'Error al filtrar variables para hacer la asociación.', 
+			'68'=>'Error al asociar la variable, verifique si ha seleccionado algún ente.',
+			'69'=>'Error al cargar contenido',
+			'70'=>'Seleccionar otro ente, el ente seleccionado ya tiene asignada una o mas metas',
+			'71'=>'No pueden existir valores y/o fechas de meta iguales para un mismo ente',
+			'72'=>'No hay ecuaciones con este criterio de busqueda',
+			'73'=>'Seleccione un criterio para filtrar las ecuaciones.',
+			'74'=>'Error al filtrar ecuaciones',
+			'75'=>'Ecuación activada',
+			'76'=>'Error al activar la ecuacion, contacte al administrador',
+			'77'=>'Para activar este Programa primero debe activar el Tipo de programa al que pertenece.',
+			'78'=>'Ecuación desactivada.',
+			'79'=>'La ecuación no puede ser desactivada, tiene indicadores asociados.',
+			'80'=>'Error al obtener datos de la ecuacion, contacte al administrador',
+			'81'=>'La ecuación no puede ser editada, tiene indicadores asociados',
+			'82'=>'Ecuación editada',
+			'83'=>'Existen datos sin llenar en la sección de Datos Generales',
+			'84'=>'Existen datos sin llenar en la sección de Alineación',
+			'85'=>'Existen datos sin llenar en la sección de Variables',
+			'86'=>'Existen datos sin llenar en la sección de Metas',
+			'87'=>'¡Existen caracteres inválidos en la expresión!',
+			'88'=>'¡Existen caracteres inválidos en el nombre del Indicador!',
+			'89'=>'¡Existen caracteres inválidos en las Observaciones de la seccion de Datos Generales',
+			'90'=>'¡Existen caracteres inválidos en las Observaciones de la seccion de Datos Generales<br>Descripcion: Solo espacios!',
+			'91'=>'¡Existen caracteres inválidos en la Descripcion de la seccion de Alineación<br>Descripcion: Solo espacios!',
+			'92'=>'¡Se debe ingresar un número entero MAYOR a cero y diferente a los índices existentes!',
+			'93'=>'¡Este índice ya se encuentra asociado a la meta seleccionada, debe cambiar el índice!',
+			'94'=>'¡Debe seleccionar una meta!',
+			'95'=>'Ya existe un tipo de programa con ese nombre',
+			'96'=>'Ya existe un programa con ese nombre',
+			'97'=>'El tipo de programa se agrego exitosamente',
+			'98'=>'Captura deshabilitada',
+			'99'=>'Error al deshabilitar la captura, contacte al administrador',
+			'100'=>'Captura habilitada',
+			'101'=>'¡El programa se agregó exitosamente!',
+			'102'=>'¡La meta sectorial se dio de alta exitosamente!',
+			'103'=>'¡La meta sectorial se actualizó exitosamente!',
+			'104'=>'El periodo de captura se actualizó exitosamente',
+			'105'=>'¡El indicador se ha guardado como borrador!',
+			'106'=>'¡El indicador se ha publicado!',
+			'107'=>'¡El indicador se ha enviado a revisión!',
+			'108'=>'¡El indicador ha sido aprobado!',
+			'109'=>'¡El indicador no ha sido aprobado!',
+			'110'=>'¡Ya existe una meta sectorial con ese nombre!',
+			'111'=>'¡Valores Guardados Correctamente!',
+			'112'=>'¡Error al Guardar los Valores, intentelo nuevamente!',
+			'113'=>'¡Error al evaluar la expreción algebraica, intentelo nuevamente!',
+			'114'=>'¡Para estas variables solo se aceptan números positivos.!',
+			'115'=>'¡Para estas variables solo se aceptan números negativos. !',
+			'116'=>'¡Error en valor de la variable:  !',
+			'117'=>'El año debe ser mayor al 2013 y menor al 9999',
+			'118'=>'Debe elegir un periodo faltante.',
+			'119'=>'Periodo actualizado correctamente.',
+			'120'=>'Error al enviar correo electrónico.',
+			'121'=>'La petición ha sido enviada al administrador de la CGMA y se ha informado al titular de la dependencia.',
+			'122'=>'El nombre del indicador ya existe',
+			'123'=>'No existen indicadores asociados a la selección',
+			'124'=>'Debe seleccionar al menos una consulta',
+			'125'=>'Debe seleccionar al menos una consulta para obtener el promedio, máximo o mínimo',
+			'126'=>'Ocurrio un error durante el proceso de actualización de datos, intente nuevamente o contacte con el administrador del sistema.',
+			'127'=>'El índice que se intenta asociar ya existe para otro programa.',
+			'128'=>'El número de días debe ser mayor a cero.',
+			'129'=>'La fecha final de captura debe ser mayor al día actual.',
+			'130'=>'Todos los campos son necesarios.',
+			'131'=>'¡Debe seleccionar un programa!',
+			'132'=>'¡La variable de gestión se ha guardado como borrador!',
+			'133'=>'¡La variable de gestión se ha publicado correctamente!',
+			'134'=>'¡La variable de gestión se ha actualizado correctamente!',
+			'135'=>'¡Error al guardar la variable de gestión, intentelo nuevamente!',
+			'136'=>'¡Ya existe una ficha publicada con esa variable generica, se mostrara el detalle!',
+			'137'=>'¡El ente se dio de alta exitosamente!',
+			'138'=>'¡El ente se actualizó exitosamente!',
+			'139'=>'¡Existen caracteres invalidos en el nombre del titular!',
+			'140'=>'¡Ya existe un ente con ese nombre!',
+			'141'=>'¡Ya existe el acrónimo!',
+			'142'=>'¡El titular ya se encuentra como responsable de otro ente!',	
+			'143'=>'Campos obligatorios para borrador: <br>Datos Generales: <br> 1.- Nombre<br> 2.- Tipo de Programa<br> 3.- Nombre del Programa<br> Entes asociados:<br> 1.- Asignar al menos un ente',
+			'144'=>'El ente seleccionado ya tiene fue elegido para esta ficha.',
+			'145'=>'Este nombre ya está en uso, proporcione otro',
+			'146'=>'El nombre de la variable generica ya existe, proporcione otro',
+			'147'=>'Valores guardados correctamente.',
+			'148'=>'Solo se pueden subir archivos .pdf, .doc, .docx, .xls, .xlsx, .txt. Intentelo nuevamente.',
+			'149'=>'El tamaño excede el máximo de 2MB. Intente con otro archivo.',
+			'150'=>'Valores guardados correctamente.',
+			'151'=>'Introduzca un valor numerico antes de guardar.',
+			'152'=>'Error en los limites.',
+			'153'=>'Error en número de decimales.',
+			'154'=>'Error en la carga del número.',
+			'155'=>'Error en tipo de dato.',
+			'156'=>'Seleccione al menos un criterio para la consulta (Usuario, Entidad o Accion)',
+			'157'=>'Campos de fecha de inicio y fin, son obligatorios',
+			'158'=>'El prefijo debe ser de tres caracteres',
+			'159'=>'El prefijo ya existe asociado a otro tipo de programa',
+			'160'=>'El índice numérico debe ser de tres dígitos',
+			'161'=>'Introducir un valor entero en los días de plazo (max 20)',
+			'162'=>'Ocurrió un error al actualizar el periodo, inténtelo nuevamente.'
+			
+		);
+		return $mensajes;
+ 	}
+ 	
+	//Etiquetas para las restricciones, las cuales se basan en el tipo de numero y carga
+	function restriccionesCarga()
+	{
+		$carga = array(
+			'1' =>'',
+			'2' =>'Solo números positivos.',
+			'3' =>'Solo números negativos',
+			'4' =>'Números positivos y negativos'
+			);
+		return $carga;
+	}
+
+	function tipoMeta()
+	{
+		$tipoMeta = array(
+						'sectorial'=> '0',
+						'institucional'=> '1'
+						);
+		return $tipoMeta;
+	}
+	function restriccionesTipoNumero()
+	{
+		$tipoNumero = array(
+			'1' =>'',
+			'2' =>'Solo números reales.',
+			'3' =>'Solo números enteros.'
+			);
+		return $tipoNumero;
+	}	
+	
+ 	function catProgramas(){
+ 		$etiquetas=array('tipoPrograma'=>'Tipo de programa',
+			'nombrePrograma'=>'Nombre de programa',
+			'adminProgramas'=>'Administración de programas',
+			'ingresarNuevo'=>'Ingresar nuevo',
+			'consultaPor'=>'Consulta por',
+			'selecPro'=>'Seleccione programa',
+			'estatus'=>'Estatus',
+			'selecStatus'=>'Seleccione un estatus',
+			'activo'=>'Activo',
+			'inactivo'=>'Inactivo',
+			'filtrar'=>'Filtrar',
+			'indice'=>'Índice',
+		);
+		return $etiquetas;
+ 	}
+
+ 
+ 	function catTipoPrograma(){
+ 		$etiquetas=array('tipoPrograma'=>'Tipo de programa',
+ 			'adminTipoPrograma'=>'Administración de tipos de programa',
+			'nombrePrograma'=>'Nombre del tipo de programa',
+			'perfilUsuario'=>'Perfil de usuario de captura'
+			
+		);
+		return $etiquetas;
+ 	} 
+
+ 
+	function tablas() {
+		$tablas = array(
+			'tb_cat_ente'=>'cat_ente',
+			'tb_cat_modulo'=>'cat_modulo',
+			'tb_cat_tipo_usuario'=>'cat_tipo_usuario',
+			'tb_permiso'=>'permiso',
+			'tb_usuario'=>'usuario',
+			'tb_cat_variable'=>'cat_variable',
+			'tb_cat_ente_has_variable'=>'cat_ente_has_variable',
+			'tb_cat_periodicidad'=>'cat_periodicidad',
+			'tb_cat_tipo_agrupacion'=>'cat_tipo_agrupacion',
+			'tb_cat_estatus'=>'cat_estatus',
+			'tb_cat_evaluacion'=>'cat_evaluacion',
+			'tb_ficha_indicador'=>'ficha_indicador',
+			'tb_cat_ente_has_indicador'=>'cat_ente_has_indicador',
+			'tb_cat_meta'=>'cat_meta',
+			'tb_cat_tipo_agrupacion'=>'cat_tipo_agrupacion',
+			'tb_cat_evaluacion_has_cat_indicador'=>'cat_evaluacion_has_cat_indicador',
+			'tb_cat_evaluacion'=>'cat_evaluacion',
+			'tb_cat_periodo'=>'cat_periodo',
+			'tb_cat_periodicidad'=>'cat_periodicidad',
+			'tb_cat_tipo_indicador'=>'cat_tipo_indicador',
+			'tb_cat_objetivo'=>'cat_objetivo',
+			'tb_cat_eje'=>'cat_eje',
+			'tb_cat_area_oportunidad'=>'cat_area_oportunidad',
+			'tb_cat_enfoque'=>'cat_enfoque',
+			'tb_cat_ecuacion'=>'cat_ecuacion',
+			'tb_cat_indicador_has_cat_variable'=>'cat_indicador_has_cat_variable',
+			'tb_cat_meta_ente_indicador'=>'cat_meta_ente_indicador',
+			'tb_cat_meta_sectorial'=>'cat_meta_programatica',
+			'tb_bitacora'=>'bitacora',
+			'tb_valor_historico_indicador'=>'valor_historico_indicador',
+			'tb_valor_historico_variable'=>'valor_historico_variable',
+			'tb_ficha_variable_generica'=>'ficha_variable_generica',
+			'tb_valor_historico_variable_generica'=>'valor_historico_variable_generica',
+			'tb_cat_accion'=>'cat_accion',
+			'tb_cat_entidad'=>'cat_entidad',
+					);
+		return $tablas;
+	}
+
+	function camposLoggin() {
+		$camposLoggin = array(
+			'titulo'=>'Accede al sistema',
+			'correo'=>'Correo electrónico:',
+			'placeHolderCorreo'=>'Correo electrónico',
+			'contrasenia'=>'Contraseña:',
+			'placeHolderContrasenia'=>'Contraseña',
+			'recuperar_contrasenia'=>'Recuperar contraseña',
+			'btnEntrar'=>'Entrar'
+		);
+		return $camposLoggin;
+	}
+
+	function camposAltaUsuario() {
+		$camposLoggin = array(
+			'titulo'=>'Alta de usuarios',
+			'tipoUsuario'=>'Tipo de usuario:',
+			'ente'=>'Ente:',
+			'nombre'=>'Nombre:',
+			'placeHolderNombre'=>'Nombre(s)',
+			'apPaterno'=>'Apellido paterno:',
+			'placeHolderApPaterno'=>'Apellido paterno',
+			'apMaterno'=>'Apellido materno:',
+			'cargo'=>'Cargo',
+			'placeHolderCargo'=>'Cargo',
+			'placeHolderApMaterno'=>'Apellido materno',
+			'correo'=>'Correo electrónico:',
+			'placeHolderCorreo'=>'Correo electrónico',
+			'telefono'=>'Teléfono:',
+			'placeHolderTelefono'=>'Puede incluir extensión',
+			'contrasenia'=>'Contraseña:',
+			'placeHolderContrasenia'=>'Contraseña',
+			'nuevaContrasenia'=>'Nueva contraseña',
+			'repetirContrasenia'=>'Repetir contraseña',
+			'placeHolderContrasenia2'=>'Repita su contraseña',
+			'btnEntrar'=>'Guardar'
+		);
+		return $camposLoggin;
+	}
+
+	function camposEdicionUsuario() {
+		$camposLoggin = array(
+			'titulo'=>'Editar usuario',
+			'tipoUsuario'=>'Tipo de usuario:',
+			'cargo'=>'Cargo:',
+			'ente'=>'Ente:',
+			'nombre'=>'Nombre:',
+			'apPaterno'=>'Apellido paterno:',
+			'apMaterno'=>'Apellido materno:',
+			'correo'=>'Correo electrónico:',
+			'telefono'=>'Teléfono:',
+			'contrasenia'=>'Contraseña:',			
+			'nva_contrasenia'=>'Nueva contraseña:',
+			'rpt_contrasenia'=>'Repetir contraseña:',
+			'btnEntrar'=>'Guardar'
+		);
+		return $camposLoggin;
+	}
+
+	function cabecera() {
+		$cabecera = array(
+			'titulo'=>'Cambiar contraseña',
+			'nva_contrasenia'=>'Nueva contraseña:',
+			'rpt_contrasenia'=>'Repetir contraseña:',
+			'btnEntrar'=>'Guardar',
+		);
+		return $cabecera;
+	}
+
+	function camposRegistrarVariable() {
+		$camposRegistrarVariable = array(
+			'titulo_modulo'=>'Administración de variables',
+			'titulo'=>'Registro de variables de indicador',
+			'ente'=>'Ente que reporta',
+			'descripcion'=>'Nombre',
+			'placeHolderNombre'=>'Nombre de la variable',
+			'btnEntrar'=>'Guardar',
+			'btnMasEntes'=>'Entes',
+		);
+		return $camposRegistrarVariable;
+	}
+
+	function camposAdminSubModulos() {
+		$camposAdminSubModulos = array(
+			'titulo'=>'Administración de variables',
+		);
+		return $camposAdminSubModulos;
+	}
+
+	function camposConsultarVariables() {
+		$camposConsultarVariables = array(
+			'titulo'=>'Administración de variables',
+			'col_numero'=>'No.',
+			'col_tipo'=>'Tipo',
+			'col_descripcion'=>'Variable',
+			'col_estatus'=>'Estatus',
+			'col_accion'=>'Acciones',
+			'ente'=>'Ente:',
+			'btnConsultar'=>'Consultar',
+			'btnAccion'=>'Acción',
+			'accionEditar'=>'Editar',
+			'accionActivar'=>'Activar',
+			'accionDesactivar'=>'Desactivar',
+			'accionEntesAsociados'=>'Entes asociados',
+			'btnMasEntes'=>'Entes',
+			'estatus'=>'Estatus:',
+			'titulo_modal'=>'Renombrar variable',
+			'btn_guardar_modal'=>'Guardar',
+		);
+		return $camposConsultarVariables;
+	}
+
+/*Aqui agrego Misa */
+
+	function letrasAbecedario() {
+		$abecedario = array(
+			'A' =>'A','B' =>'B','C' =>'C','D' =>'D','E' =>'E',
+			'F' =>'F','G' =>'G','H' =>'H','I' =>'I','J' =>'J',
+			'K' =>'K','L' =>'L','M' =>'M','N' =>'N','O' =>'O',
+			'P' =>'P','Q' =>'Q','R' =>'R','S' =>'S','T' =>'T',
+			'U' =>'U','V' =>'V','W' =>'W','X' =>'X','Y' =>'Y',
+			'Z' =>'Z');
+		return $abecedario;
+	}
+	function camposAltaIndicador() {
+		$camposAltaFicha = array(
+			'tituloDatosGenerales' =>'Datos generales del indicador',
+			'tituloAlineacion' =>'Alineación',
+			'tituloVariables' =>'Variables',
+			'tipoPrograma'=>'Tipo de programa',
+			'nombrePrograma'=>'Nombre del programa',
+			'nombreIndicador'=>'Nombre del indicador',
+			'tipoIndicador'=>'Tipo de indicador: ',
+			'observaciones'=>'Participantes: ',//observaciones cambiar
+			'periodicidad'=>'Periodicidad: ',
+			'eje'=>'Eje: ',
+			'objetivo'=>'Objetivo: ',
+			'areaOportunidad'=>'Área de oportunidad: ',
+			'placeHolderObjetivo'=>'Este campo no es obligatorio. Favor de llenarlo sólo si es necesaria alguna precisión sobre la información proporcionada.',
+			'meta'=>'Meta: ',
+			'metaPGD'=>'Meta del PGD: ',
+			'metaSectorial'=>'Meta sectorial: ',
+			'metaInstitucional'=>'Meta institucional: ',
+			'titEcuacion'=>'Ecuación de referencia',
+			'ente'=>'Ente: ',
+			'variable'=>'Variable: ',
+			'constante'=>'Constante: ',
+			'valor'=>'Valor: ',
+			'valorNumerico'=>'Valor numérico: ',
+			'carga'=>'Carga: ',
+			'definirLimites'=>'Definir limites',
+			'limiteSup'=>'Límite superior: ',
+			'limiteInf'=>'Límite inferior: ',			
+			'enfoque'=>'Enfoque',
+			'alineadoA'=>'Alineado a: ',
+			'placeHolderOtro' => 'Especifique la alineación, marco de referencia o alineación que da fundamento al programa',
+			'idPendiente'=>'20',
+			'idPublicado'=>'2',
+			'idInactivo'=>'21',
+			'idBorrador'=>'1'
+		);
+		return $camposAltaFicha;
+	}
+	
+	function carga() {
+		$carga = array(
+			'1' =>'Elegir',
+			'2' =>'Positivos',
+			'3' =>'Negativos',
+			'4' =>'Ambos'
+			);
+		return $carga;
+	}
+	
+	function tipoNumero() {
+		$tipoNumero = array(
+			'1' =>'Elegir',
+			'2' =>'Real',
+			'3' =>'Entero'
+			);
+		return $tipoNumero;
+	}
+/* **** Etiquetas para las vistas de consulta y filtro de indicadores  */
+
+	function camposConsultaIndicador(){
+		$camposConsulta=array(
+			'nombreEnte'=>'Ente',
+			'periodicidad'=>'Periodicidad',
+			'tipoEvaluacion'=>'Tipo de programa',
+			'estatus'=>'Estatus',
+			'accion'=>'Acción',
+			'identificador'=>'ID',
+			'nombreIndicador'=>'Nombre del indicador',
+			'periodoReportar'=>'Periodo a reportar',
+			'periodoCaptura'=>'Periodo de captura',
+			'nombreEvaluacion'=>'Nombre del programa',
+			'rango'=>'Rango de datos',
+			'estatusPendiente'=>'PENDIENTE',
+			'estatusInactivo'=>'INACTIVO',
+			'idPendiente'=>'20',
+			'idInactivo'=>'21'
+		);
+		return $camposConsulta;
+	}
+
+	function camposConsultaEntePorVariable(){
+		$camposConsultaEntePorVariable=array(
+			'col_numero'=>'No.',
+			'col_descripcion'=>'Ente',
+			'col_estatus'=>'Estatus',
+			'col_accion'=>'',
+			'titulo'=>'Administración de variables',
+			'accionDesvincular'=>'Desvincular',
+			'titulo_asociar'=>'Asociar entes a variable',
+			'btnMasEntes'=>'Entes',
+			'ente'=>'Ente: ',
+			'btnEntrar'=>'Asociar'
+		);
+		return $camposConsultaEntePorVariable;
+	}
+	
+	function catMeses(){
+		$meses=array(
+			'01'=>'Enero',
+			'02'=>'Febrero',
+			'03'=>'Marzo',
+			'04'=>'Abril',
+			'05'=>'Mayo',
+			'06'=>'Junio',
+			'07'=>'Julio',
+			'08'=>'Agosto',
+			'09'=>'Septiembre',
+			'10'=>'Octubre',
+			'11'=>'Noviembre',
+			'12'=>'Diciembre'
+			
+		);
+		
+		return $meses;
+	}
+
+
+	function camposConsultaEcuaciones(){
+		$camposConsultaEcuaciones=array(
+			'titulo'=>'Administración de ecuaciones',
+			'col_numero'=>'No.',
+			'col_nombre'=>'Nombre',
+			'col_ecuacion'=>'Expresión',
+			'col_numero_variables'=>'No. Variables',
+			'col_estatus'=>'Estatus',
+			'col_acciones'=>'Acciones',
+			'accionIndicadoresAsociados'=>'Indicadores asociados',
+			'titulo_asociar'=>'Asociar entes a variable',
+			'accionEditar'=>'Editar',
+			'accionDesactivar'=>'Desactivar',
+			'accionActivar'=>'Activar',
+			'btnMasEcuaciones'=>'+ Ecuaciones',
+			'btnAccion'=>'Acciones',
+			'btn_btn_filtrar'=>'Filtrar',
+			'btn_registrar_ecuacion'=>'Ecuación',
+			'btn_filtrar'=>'Filtrar',
+			'estatus'=>'Estatus',
+		);
+		return $camposConsultaEcuaciones;
+	}
+
+	function camposRegistrarEcuacion() {
+		$camposRegistrarEcuacion = array(
+			'titulo_modulo'=>'Administración de ecuaciones',
+			'titulo'=>'Registro de ecuaciones',
+			'ayuda'=>'<p class="lead">Ayuda</p><p>La expresión algebraica debe cumplir lo siguiente:</p>
+						<ul>
+							<li>&#149; Las variables deben ser únicamente letras, de la “a” a la “z” (No usar Ñ,ñ,ll,LL,ch,CH).</li>
+							<li>&#149; Se pueden usar mayúsculas y minúsculas indistintamente.</li>
+							<li>&#149; Cada paréntesis abierto debe ser cerrado y viceversa.</li>
+							<li>&#149; Siempre debe de haber un operador (+,-,*,/) entre variables y números.</li>
+							<li>&#149; Los números decimales siempre deben de tener un cero del lado izquierdo del punto (Correcto-> 0.565, Incorrecto-> .565).</li>
+							<li>&#149; El número de variables debe de coincidir con el número dado en el campo.</li>
+						</ul>',
+			'nombre'=>'Nombre de la ecuación:',
+			'placeHolderNombre'=>'Nombre de la ecuación',
+			'ecuacion'=>'Expresión algebraica:',
+			'placeHolderEcuacion'=>'Forma matemática de la ecuación',
+			'numero_variables'=>'Número de variables:',
+			'placeHolderVariables'=>'',
+			'btnValidarExpresion'=>'Validar expresión',
+			'btnGuardar'=>'Guardar expresión',
+		);
+		return $camposRegistrarEcuacion;
+	}
+
+
+	function constantes(){
+		$constantes=array(
+			'maximoListas'=>200,
+			//tipo usuario
+			'susuario'=>1,
+			'CGMA'=>2,
+			'Administrador'=>3,
+			'Consultor_dependencia'=>4,
+			'Planeacion'=>5,
+			'Administracion'=>6,
+			'Atencion_ciudadana'=>7,
+			//privilegios de captura
+			'cgma'=>0,
+			'dependencia'=>1,
+			//estatus ficha
+			'borrador'=>1,
+			'publicado'=>2,
+			'eliminado'=>3,
+			'revision'=>4,
+			'aprobado'=>5,
+			'noAprobado'=>6,
+			'inactivo'=>7,
+			'noBorrador'=>10,
+			//constantes para cargar vistas de indicadores
+			'vistaDetalle'=>0,
+			'vistaEdicion'=>1,
+			'vistaFiltro'=>0,
+			//valores iniciales en filtro de indicadores
+			'seleccionEnte'=>1,
+			'seleccionTipoEvaluacion'=>0,
+			'seleccionEvaluacion'=>0,
+			'seleccionPeriodicidad'=>1,
+			'seleccionEstatus'=>0,
+			//estatus indicador
+			'indicadorInactivo'=>0,
+			'indicadorActivo'=>1,
+			//constantes para redirect
+			'vistaDetalleIndicador'=>'abcIndicadores/consultaIndicador_c/detalleIndicador',
+			'cargarVistaConsultaUsuarios'=>'abcUsuarios/abcUsuarios_c/cargarVistaConsultaUsuarios',
+			'vistaMostrarIndicadores'=>'abcIndicadores/consultaIndicador_c/mostrarIndicadores',
+			'vistaConsultaMetasSectoriales'=>'abcCatalogos/abcMetasSectoriales_c/consultarMetasSectoriales',
+			'vistaCapturaVariables'=>'abcIndicadores/capturaVariablesIndicador_c/capturarVariables',
+			'vistaGraficaIndicador'=>'inicio/graficar_c/cargarGrafica',
+			'vistaConsultaEntes'=>'abcCatalogos/abcEntes_c/consultarEntes',
+			//filtro metas sectoriales
+			'seleccionEvaluacion'=>0,
+			'seleccionMetaPGD'=>1,
+			'seleccionEstatus'=>0,
+			'noFiltrar'=>0,
+			'filtrar'=>1,
+			'metaActiva'=>1,
+			'metaInactiva'=>0,
+			'seleccionEje'=>1,
+			'seleccionAreaOportunidad'=>1,
+			'seleccionObjetivo'=>1,
+			'seleccionMeta'=>1,			
+			//tipos de programa
+			'sectorial'=>1,
+			'institucional'=>3,
+			//vista alta/edicion metas sectoriales
+			'alta'=>0,
+			'edicion'=>1,
+			//estatus meta sectorial
+			'activo'=>1,
+			//banderas de captura de variables
+			'soloConsulta'=>0,
+			'soloCaptura'=>1,
+			'soloEdicion'=>2,
+			//modulo cerrado
+			'capturaCerrada'=>0,
+			'capturaAbierta'=>1,
+			'TIPO_USUARIO_ADMINISTRADOR'=>3,
+			'totalRegistros'=>20,
+			'sumarAnios'=>50,
+			'diasPlazo'=>15,
+			'actualizar'=>3,
+			'vistaInicioLogin'=>'index.php',
+		);
+		return $constantes;
+	}
+	
+	function camposEditarEcuacion() {
+		$camposEditarEcuacion = array(
+			'titulo_modulo'=>'Administración de ecuaciones',
+			'titulo'=>'Registro de ecuaciones',
+			'ayuda'=>'<p class="lead">Ayuda</p><p>La expresión algebraica debe cumplir lo siguiente:</p>
+						<ul>
+							<li>&#149; Las variables deben ser únicamente letras, de la “a” a la “z” (No usar Ñ,ñ,ll,LL,ch,CH).</li>
+							<li>&#149; Se pueden usar mayúsculas y minúsculas indistintamente.</li>
+							<li>&#149; Cada paréntesis abierto debe ser cerrado y viceversa.</li>
+							<li>&#149; Siempre debe de haber un operador (+,-,*,/) entre variables y números.</li>
+							<li>&#149; Los números decimales siempre deben de tener un cero del lado izquierdo del punto (Correcto-> 0.565, Incorrecto-> .565).</li>
+							<li>&#149; El número de variables debe de coincidir con el número dado en el campo.</li>
+						</ul>',
+			'nombre'=>'Nombre de la ecuación:',
+			'placeHolderNombre'=>'Nombre de la ecuación',
+			'ecuacion'=>'Expresión algebraica:',
+			'placeHolderEcuacion'=>'Forma matemática de la ecuación',
+			'numero_variables'=>'Número de variables:',
+			'placeHolderVariables'=>'',
+			'btnValidarExpresion'=>'Validar expresión',
+			'btnEditar'=>'Editar expresión',
+		);
+		return $camposEditarEcuacion;
+	}
+
+	function camposConsultaIndicadoresPorEcuacion() {
+		$camposConsultaIndicadoresPorEcuacion = array(
+			'col_numero'=>'No.',
+			'col_indicador'=>'Indicador',
+			'col_programa'=>'Programa',
+			'titulo'=>'Administración de ecuaciones',
+
+			);
+		return $camposConsultaIndicadoresPorEcuacion;
+	}
+
+	function urlRedireccionar() {
+		$urlRedireccionar = array(
+			'mensaje'=>'<b>Acceso denegado. </b>',
+			'liga'=>' Inicie sesion',
+			);
+		return $urlRedireccionar;
+	}
+
+
+	function constantesBitacora(){
+		$constantes=array(
+			'accion_no_registrada'=>'1',/*Asignado cuando no pertenece a un INSERT, DELETE o UPDATE*/
+			'insert_cat_tipo_indicador'=> '2',/*cat_tipo_indicador*/
+			'insert_cat_ente_has_indicador'=> '3',/*cat_ente_has_indicador*/
+			'insert_cat_meta_ente_indicador'=> '4',/*cat_meta_ente_indicador*/
+			'insert_ficha_indicador'=> '5',/*ficha_indicador*/
+			'insert_cat_evaluacion_has_cat_indicador'=> '6',/*cat_evaluacion_has_cat_indicador*/
+			'insert_comentario_revision'=> '7',/*comentario_revision*/
+			'insert_cat_tipo_agrupacion'=> '8',/*cat_tipo_agrupacion*/
+			'insert_cat_evaluacion'=> '9',/*cat_evaluacion*/
+			'insert_cat_ente_has_cat_evaluacion'=> '10',/*cat_ente_has_cat_evaluacion*/
+			'insert_usuario'=> '11',/*usuario*/
+			'insert_cat_ente_has_variable'=> '12',/*cat_ente_has_variable*/
+			'insert_cat_indicador_has_cat_variable'=> '13',/*cat_indicador_has_cat_variable*/
+			'insert_cat_ecuacion'=> '14',/*cat_ecuacion*/
+			'insert_cat_periodo'=> '15',/*cat_periodo*/
+			'insert_cat_periodicidad'=> '16',/*cat_periodicidad*/
+			'insert_comentario_historico_variable'=> '17',/*comentario_historico_variable*/
+			'insert_valor_historico_variable'=> '18',/*valor_historico_variable*/
+			'insert_valor_historico_indicador'=> '19',/*valor_historico_indicador*/
+			'insert_cat_variable'=> '20',/*cat_variable*/
+			'update_cat_tipo_indicador'=> '21',/*cat_tipo_indicador*/
+			'update_cat_ente_has_indicador'=> '22',/*cat_ente_has_indicador*/
+			'update_cat_meta_ente_indicador'=> '23',/*cat_meta_ente_indicador*/
+			'update_ficha_indicador'=> '24',/*ficha_indicador*/
+			'update_cat_evaluacion_has_cat_indicador'=> '25',/*cat_evaluacion_has_cat_indicador*/
+			'update_comentario_revision'=> '26',/*comentario_revision*/
+			'update_cat_tipo_agrupacion'=> '27',/*cat_tipo_agrupacion*/
+			'update_cat_evaluacion'=> '28',/*cat_evaluacion*/
+			'update_cat_ente_has_cat_evaluacion'=> '29',/*cat_ente_has_cat_evaluacion*/
+			'update_usuario'=> '30',/*usuario*/
+			'update_cat_ente_has_variable'=> '31',/*cat_ente_has_variable*/
+			'update_cat_indicador_has_cat_variable'=> '32',/*cat_indicador_has_cat_variable*/
+			'update_cat_ecuacion'=> '33',/*cat_ecuacion*/
+			'update_cat_periodo'=> '34',/*cat_periodo*/
+			'update_cat_periodicidad'=> '35',/*cat_periodicidad*/
+			'update_comentario_historico_variable'=> '36',/*comentario_historico_variable*/
+			'update_valor_historico_variable'=> '37',/*valor_historico_variable*/
+			'update_valor_historico_indicador'=> '38',/*valor_historico_indicador*/
+			'update_cat_variable'=> '39',/*cat_variable*/
+			'delete_cat_tipo_indicador'=> '40',/*cat_tipo_indicador*/
+			'delete_cat_ente_has_indicador'=> '41',/*cat_ente_has_indicador*/
+			'delete_cat_meta_ente_indicador'=> '42',/*cat_meta_ente_indicador*/
+			'delete_ficha_indicador'=> '43',/*ficha_indicador*/
+			'delete_cat_evaluacion_has_cat_indicador'=> '44',/*cat_evaluacion_has_cat_indicador*/
+			'delete_comentario_revision'=> '45',/*comentario_revision*/
+			'delete_cat_tipo_agrupacion'=> '46',/*cat_tipo_agrupacion*/
+			'delete_cat_evaluacion'=> '47',/*cat_evaluacion*/
+			'delete_cat_ente_has_cat_evaluacion'=> '48',/*cat_ente_has_cat_evaluacion*/
+			'delete_usuario'=> '49',/*usuario*/
+			'delete_cat_ente_has_variable'=> '50',/*cat_ente_has_variable*/
+			'delete_cat_indicador_has_cat_variable'=> '51',/*cat_indicador_has_cat_variable*/
+			'delete_cat_ecuacion'=> '52',/*cat_ecuacion*/
+			'delete_cat_periodo'=> '53',/*cat_periodo*/
+			'delete_cat_periodicidad'=> '54',/*cat_periodicidad*/
+			'delete_comentario_historico_variable'=> '55',/*comentario_historico_variable*/
+			'delete_valor_historico_variable'=> '56',/*valor_historico_variable*/
+			'delete_valor_historico_indicador'=> '57',/*valor_historico_indicador*/
+			'delete_cat_variable'=> '58',/*cat_variable*/
+			'insert_cat_meta_programatica'=> '59',/*cat_meta_programatica*/
+			'update_cat_meta_programatica'=> '60',/*cat_variable*/
+			'delete_cat_meta_programatica'=> '61',/*cat_variable*/
+			'cambio_variable'=>'62',/*Cuando el administrador edita una variable*/
+			'insert_cat_ente' =>'63', /*Inserción de un ente*/
+			'update_cat_ente' => 64, /*Actualizacion de un ente*/
+			'insert_ficha_variable_generica' => 65, /*Guardado de una variable generica*/
+			'update_ficha_variable_generica' => 66, /*Actualiza una ficha generica*/
+			'insert_valor_historico_variable_generica' => 67, /*Inserción un valor para la variable generica*/
+			'update_valor_historico_variable_generica' => 67, /*Actualización de un valor para la variable generica*/
+
+		);
+		return $constantes;
+	}
+
+	function metasSectoriales(){
+		$etiquetas=array(
+			'sectorial'=>'1',
+			'adminMetas'=>'Administración de metas programáticas',
+			'metaSec'=>'Meta sectorial',
+			'labelNombre'=>'Nombre del Programa Sectorial',
+			'selecPrograma'=>'Seleccionar programa',
+			'estatus'=>'Estatus',
+			'activo'=>'Activo',
+			'inactivo'=>'Inactivo',
+			'selecStatus'=>'Seleccionar estatus',
+			'filtrar'=>'Filtrar',
+			'consultaPor'=>'Consulta por',
+			'adminMetas'=>'Administración de metas programáticas',
+			'selecMetaPGD'=>'Seleccionar meta PGDDF',
+			'labelMetaPGD'=>'Meta del PGDDF',
+			'labelPS'=>'Programa Sectorial',
+			'acciones'=>'Acciones',
+			'indice'=>'Índice',
+		); 
+		return $etiquetas;
+	}
+
+	function metasInstitucionales(){
+		$etiquetas=array(
+			'labelPS'=>"Programa sectorial",
+			'labelMPGD'=>"Meta del PGDDF",
+			'labelMS'=>"Meta sectorial",
+			'tituloMI'=>'Metas institucionales',
+			'metaIns'=>'Meta institucional',
+			'estatus'=>'Estatus',
+			'activo'=>'Activo',
+			'inactivo'=>'Inactivo',
+			'filtrar'=>'Filtrar',
+			'labelPI'=>'Programa institucional',
+			'acciones'=>'Acciones',
+			'indice'=>'Índice',
+			'activo'=>'Activo',
+			'inactivo'=>'Inactivo',
+			'selecStatus'=>'Seleccionar',
+			'tituloAltaMI' => 'Alta de metas institucionales',
+			'nombrePI'=>'Nombre del programa institucional:',
+			'numeroMeta'=>'Número de meta institucional:',
+			'nombreMI'=>'Descripción de la meta institucional ',
+			'idsMetaInst'=>'Índices institucionales existentes',
+		); 
+		return $etiquetas;
+	}
+
+	function obtenerMeses(){
+		$meses=array(
+			'1'=>'Enero',
+			'2'=>'Febrero',
+			'3'=>'Marzo',
+			'4'=>'Abril',
+			'5'=>'Mayo',
+			'6'=>'Junio',
+			'7'=>'Julio',
+			'8'=>'Agosto',
+			'9'=>'Septiembre',
+			'10'=>'Octubre',
+			'11'=>'Noviembre',
+			'12'=>'Diciembre'
+			
+		);
+		
+		return $meses;
+	}	
+
+	function etiquetas(){
+		$datos=array(
+			'adminPeriodos'=>'Administración de periodo',
+			'agregarP'=>'Agregar Periodos.'
+		);
+		
+		return $datos;	
+	}
+
+	function etiquetasConfGrafica()
+	{
+		$datos = array(
+		'delPeriodo'=> '1',		
+		'alPeriodo'=> '2',
+		'historico'=> '3',
+		'id' => 'ID',
+		'indicador'=>'Indicador',
+		'avance_real' => 'Avance real',
+		'meta' => 'Alcance del plan',
+		'variacion' => 'Variación',
+		'grado_de_cumplimiento' => 'Grado de cumplimiento',
+		'avance_promedio' => 'Avance promedio',
+		'promedio' => 'Promedio',
+		'ente' => 'Ente',
+		'usrAdministrador' => '1',
+		'usrDependencia' => '2',
+		'historico' => 'Histórico'
+		);
+		
+		return $datos;
+		
+	}
+
+	function consultaVariblesGenericas(){
+		$datos = array(
+		'nombreVarGenerica'=> 'Nombre',		
+		'tipoEvaluacion'=> 'Tipo de programa',
+		'nombreEvaluacion'=> 'Nombre del programa',
+		'periodicidad' => 'Periodicidad',
+		'estatus'=>'Estatus',
+		'accion' => 'Acción',
+		'nombreEnte'=>'Ente',
+		'estatusPendiente'=>'PENDIENTE',
+		'estatusInactivo'=>'INACTIVO',
+		'idPendiente'=>'20',
+		'idInactivo'=>'21'		
+		);
+		
+		return $datos;		
+		
+	}
+	
+		function camposVG(){
+		$datos = array(
+		'datosGeneralesVG'=> 'Datos generales para la variable de gestión.',		
+		'entesAsociadosVG'=> 'Entes asociados.',
+		'restriccionesVG'=> 'Restricciones.',
+		'periodosVG'=> 'Periodos a reportar.'
+		);
+		return $datos;		
+	}
+}
+?>

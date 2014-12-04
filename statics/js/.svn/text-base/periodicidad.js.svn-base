@@ -1,0 +1,280 @@
+var diasPlazoMaximo = 60;
+
+function periodicidad(tipo){
+	var id_periodo=$('#selecPeriodicidad').val();
+	var enviar=1;
+	if(tipo==1){
+		cargarContenido(base+'index.php/abcCatalogos/abcPeriodicidad_c/consultaPeriodicidad/'+id_periodo);
+	}else{
+		refrescarFechaFin();
+		var id_periodicidad=$('#id_periodicidad').val();
+		var inicioCaptura=$('#inicioCaptura').val();
+		var finCaptura=$('#finCaptura').val();
+		var inicioPeriodo=$('#finPeriodo').val(); //para obtener el inicio del siguiente periodo
+		
+		var iCaptura=$('#inicioCaptura').val();
+		var fCaptura=$('#finCaptura').val();
+		var iPeriodo=$('#inicioPeriodo').val();
+		
+		var plazo=$('#plazo').val();
+		var meses=$('#meses').val();
+		var array_fecha = inicioPeriodo.split("/") 
+
+		var anio=array_fecha[2];
+		var mes=array_fecha[1];
+		var dia=array_fecha[0]; 
+		
+		inicioPeriodo=anio+'/'+mes+'/'+dia;
+
+		inicioPeriodo=new Date(inicioPeriodo);
+
+		var mesesNum=inicioPeriodo.getMonth()+parseInt(meses);
+		inicioPeriodo.setMonth(parseInt(mesesNum));
+		
+		if(Date.parse(finCaptura) < Date.parse(inicioCaptura)){	
+			alert("La fecha de inicio de captura no puede ser mayor a la fecha final de captura."); 
+			enviar=0;
+		} 
+		var fecha2 = finCaptura.split("/") 
+
+		var anio2=fecha2[2];
+		var mes2=fecha2[1];
+		var dia2=fecha2[0]; 
+		
+		finCaptura=anio2+'/'+mes2+'/'+dia2;
+
+		finCaptura=new Date(finCaptura);
+		
+		if(finCaptura>inicioPeriodo){
+			alert("La captura del periodo  no debe ser mayor a la fecha de inicio del siguiente periodo "); 
+			enviar=0;
+		}
+		
+		iCaptura=iCaptura.replace(/\//g,'-');
+		fCaptura=fCaptura.replace(/\//g,'-');
+		
+		if(enviar==1){
+			
+			var url = base+'index.php/abcCatalogos/abcPeriodicidad_c/actualizarPeriodicidad/'+id_periodo+'/'+iCaptura+'/'+fCaptura+'/'+plazo+'/'+id_periodicidad
+			var data = '';
+				$.ajax({
+			        url: url,
+			        data: data ,
+			        type: 'POST',               
+			        success: function(data){
+			        	alerta('104','alert-success');
+			        	cargarContenido(base + 'index.php/abcCatalogos/abcPeriodicidad_c/consultaPeriodicidad/'+id_periodo);
+			        },        
+			        error: function(){
+			           alert("Error al filtrar variables");
+			           alert(url);
+			        }
+			    });	
+			
+			cargarContenido(base+'index.php/abcCatalogos/abcPeriodicidad_c/actualizarPeriodicidad/'+id_periodo+'/'+iCaptura+'/'+fCaptura+'/'+plazo+'/'+id_periodicidad);
+		}
+	}	
+}
+
+function refrescarFechaFin(){
+	var plazo=$('#plazo').val();
+	var inicioCaptura=$('#inicioCaptura').val();
+	if(plazo >0){
+		var array_fecha = inicioCaptura.split("/") 
+		var fechaActual = new Date();
+
+		var anioA=fechaActual.getFullYear();
+		var mesA=fechaActual.getMonth()+1;
+		var diaA=fechaActual.getDate(); 
+		
+		if(mesA<10){
+			mesA='0'+mesA;
+		}
+		fechaActual=diaA+'/'+mesA+'/'+anioA;
+		
+		var anio=array_fecha[2];
+		var mes=array_fecha[1];
+		var dia=array_fecha[0]; 
+		
+		inicioCaptura=anio+'/'+mes+'/'+dia;
+
+		inicioCaptura=new Date(inicioCaptura);
+		
+		var diasNum=inicioCaptura.getDate()+parseInt(plazo);
+		inicioCaptura.setDate(parseInt(diasNum));		
+		
+		var mesF=inicioCaptura.getMonth()+1;
+		
+		if(mesF<10){
+			mesF='0'+mesF;
+		}
+		
+		fechaFin=inicioCaptura.getDate()+'/'+mesF+'/'+inicioCaptura.getFullYear();
+
+		if(compare_dates(fechaFin,fechaActual)){
+			$('#finCaptura').val(fechaFin);
+		}else{
+			alerta('129','alert-error');
+			$('#plazo').val('');
+		}
+		
+		
+		
+	}else{
+		alerta('128','alert-error');
+		$('#plazo').val('');
+	}
+	
+
+}
+function compare_dates(fecha, fecha2)
+      {
+        var xMonth=fecha.substring(3, 5);
+        var xDay=fecha.substring(0, 2);
+        var xYear=fecha.substring(6,10);
+        
+        var yMonth=fecha2.substring(3, 5);
+        var yDay=fecha2.substring(0, 2);
+        var yYear=fecha2.substring(6,10);
+        
+        
+        if (xYear > yYear)
+        {
+            return(true)
+        }
+        else
+        {
+           if (xMonth > yMonth)
+            {
+                return(true)
+            }
+            else
+            { 
+              if (xMonth == yMonth)
+              {
+                if (xDay > yDay)
+                  return(true);
+                else
+                  return(false);
+              }
+              else
+                return(false);
+            }
+        }
+    }
+
+
+function alerta(mensaje,tipo){
+
+	mensaje=mensaje.replace(',', "_");
+	window.open (base+"index.php/alerta_c/alert/"+mensaje+'/'+tipo,"mywindow","resizable=0,location=1,status=1,scrollbars=0,  width=500,height=350,left=500,top=200");
+}
+
+function cargarPeriodos(){
+	var anio=$('#anio').val();
+	
+	if(anio<2013 || anio>9999){
+		alerta('117','alert-error');
+		$('#anio').val('');
+	}else{
+		var url=base+'index.php/abcCatalogos/abcPeriodicidad_c/cargarPeriodosFaltantes/'+anio;
+		var data = '';
+		$.ajax({
+			url: url,
+			data: data ,
+			type: 'POST',               
+			success: function(data){
+				 $("#periodos").html(data);
+			},        
+			error: function(){
+				alert(url);
+			}
+		});	
+	}	
+}
+
+function guardarPeriodos(){
+	var anio=$('#anio').val();
+	var periodo=$('#periodos').val();
+	
+	if(periodo==0){		
+		alerta('118','alert-error');
+		$('#periodos').addClass('bordeRojo');
+	}else{
+		var url=base+'index.php/abcCatalogos/abcPeriodicidad_c/generarPeriodosFaltantes/'+periodo;
+		var data = '';
+		$.ajax({
+			url: url,
+			data: data ,
+			type: 'POST',               
+			success: function(data){
+				alerta('119','alert-success');
+				cargarContenido(base+'index.php/abcCatalogos/abcPeriodicidad_c/consultaPeriodicidad')
+			},        
+			error: function(){
+				alert(url);
+			}
+		});	
+	}
+}
+
+function actPeriodicidad()
+{
+	var fechaInicio = $("#inicioCaptura").val();
+	var idPeriodo = $("#idPeriodoSelect").val(); 
+	var diasDePlazo =$("#diasDePlazo").val();
+	var periodicidad =$("#selecPeriodicidad").val();
+	
+	if(comprobarEntero(diasDePlazo) == 1)
+	{
+		var url=base+'index.php/abcCatalogos/abcPeriodicidad_c/actualizarPeriodo/';
+		$.ajax({
+			url: url,
+			data: { 
+					fechaInicio:fechaInicio,
+				    idPeriodo:idPeriodo,
+				    diasDePlazo:diasDePlazo
+				  },
+			type: 'POST',
+			async:true,
+			success: function(data){
+				console.log(data);
+				if(data != '-1')
+				{
+					alerta('119','alert-success');
+					cargarContenido(base+'index.php/abcCatalogos/abcPeriodicidad_c/consultaPeriodicidad/'+periodicidad);					
+				}
+				else
+				{
+					alerta('162','alert-error');
+					cargarContenido(base+'index.php/abcCatalogos/abcPeriodicidad_c/consultaPeriodicidad/'+periodicidad);
+				}
+			},        
+			error: function(){
+				alert(url);
+			}
+		});
+	}
+	else	
+	{
+		alerta('161','alert-error');
+	}
+}
+
+function comprobarEntero(valor)
+{
+ if (isNaN(valor)){
+        return 0;
+    }
+    else{
+        if (valor % 1 == 0) {
+        	if(valor <= diasPlazoMaximo && valor > 0)
+            	return 1;
+            else
+            	return 0;
+        }
+        else{
+            return 0;
+        }
+    }
+  }

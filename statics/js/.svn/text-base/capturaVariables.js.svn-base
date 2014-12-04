@@ -1,0 +1,472 @@
+
+function cargaVariablesExtemporaneas(idIndicador, idValorHistoricoIndicador, descPeriodo, fechaFinCaptura){	
+	var url=base+'index.php/abcIndicadores/capturaVariablesIndicador_c/capturaExtemporanea/'+idIndicador+'/'+idValorHistoricoIndicador;
+	var datosCapturaExtemporanea=$.ajax({
+		url:url,
+		type:'POST',
+		async:false
+		});
+	datos = datosCapturaExtemporanea.responseText; // guarda los datos en la varibale "datos" que recibe del servidor
+	datosCapturaExtemporanea.onreadystatechange = cargarNuevasVariables(datos,idValorHistoricoIndicador,descPeriodo,fechaFinCaptura);
+}
+
+//Funcion que carga los valores cuando se trata de editar por parte de usuario de la dependencia.
+function cargarNuevasVariables(datos,idValorHistoricoIndicador,descPeriodo, fechaFinCaptura)
+{
+	var foco =0;
+	jsonR=$.parseJSON(datos);
+	pintaVariables ='';
+	//pintaVariables +='<div id = "divVariables" class = "divVariables" align="left">';
+	pintaVariables +="<label><b>Variables Correspondientes al Periodo:</b></label><br>";
+	pintaVariables +='<input name = "idValorHistoricoActual" type="hidden" value="'+idValorHistoricoIndicador+'" >';
+	pintaVariables +='<label><b>'+descPeriodo+'</b></label>';
+	pintaVariables +='<input type = "hidden" name = "descPeriodo" value = "'+descPeriodo+'" >';
+	pintaVariables +='<input type = "hidden" name = "fechaFinCaptura" value = "'+fechaFinCaptura+'" >';
+	pintaVariables +='<table>';
+	for(variable in jsonR)
+	{
+		restricciones=obtenerRestricciones(variable);
+		pintaVariables +='<script>$("#restric'+variable+'").tooltip();</script>';
+		pintaVariables +='<tr>';
+		pintaVariables +='<td><label>';
+		pintaVariables +='<a href="#" id="restric'+variable+'" data-toggle="tooltip" data-html="true" title="'+restricciones+'">'+variable;
+    	pintaVariables +=') '+jsonR[variable].descripcionVariable+'</a><label>';
+    	
+    	
+    	pintaVariables +='<input type = "hidden" name = "restricciones'+jsonR[variable].idIndicadorVariable+'" value = "'+restricciones+'" >';
+    	pintaVariables +='<input type = "hidden" name = "variable'+jsonR[variable].idIndicadorVariable+'" value = "'+variable+'" >';
+    	pintaVariables +='<input type = "hidden" name = "descripcion'+jsonR[variable].idIndicadorVariable+'" value = "'+jsonR[variable].descripcionVariable+'" >';
+    	pintaVariables +='</td>';
+    	
+    	if(jsonR[variable].valorConstante != null)
+    	{
+    		if(foco == 0)
+    			{
+    				foco = 'valorVariable'+variable;
+    				pintaVariables +='<td><input id = "valorVariable'+variable+'" name = "valorVariable['+jsonR[variable].idIndicadorVariable+']" readonly value = "'+jsonR[variable].valorConstante+'" type="number" min="-9999999999999" max="9999999999999" step="any" style="width: 100px" placeholder="Valor" autofocus></td>';
+    			}
+    			else
+    			{
+    				pintaVariables +='<td><input id = "valorVariable'+variable+'" name = "valorVariable['+jsonR[variable].idIndicadorVariable+']" readonly value = "'+jsonR[variable].valorConstante+'" type="number" min="-9999999999999" max="9999999999999" step="any" style="width: 100px" placeholder="Valor"></td>';
+    			}
+   				
+    	}
+    	else
+    	{
+	   		if(foco == 0)
+    			{
+    				foco = 'valorVariable'+variable;
+    				pintaVariables +='<td><input id = "valorVariable'+variable+'" name = "valorVariable['+jsonR[variable].idIndicadorVariable+']" type="number" step="any" min="-9999999999999" max="9999999999999" style="width: 100px" placeholder="Valor" autofocus></td>';
+    			}
+    			else
+    			{
+    				pintaVariables +='<td><input id = "valorVariable'+variable+'" name = "valorVariable['+jsonR[variable].idIndicadorVariable+']" type="number" step="any" min="-9999999999999" max="9999999999999" style="width: 100px" placeholder="Valor"></td>';	
+    			}
+    	}
+
+		pintaVariables +='</tr>';		
+		//pintaVariables +='</div>';		
+	}
+	pintaVariables +='</table>';
+	pintaComentario = ''; 
+	pintaComentario +='<label style="float:left;">Comentarios:</label>';	
+	pintaComentario +='<textarea id="comentarioVariable" name = "comentarioVariable" style="width: 450px;" rows="5" placeholder="Este campo no es obligatorio. Favor de llenarlo sólo si es necesaria alguna precisión sobre la información proporcionada."></textarea>';
+	
+	pintaComentario +='<div id="comentarioVariable1" class="labelChar">500</div><div class="leyendaCampo">Caracteres restantes.</div>';
+	pintaComentario +='<script>';
+	pintaComentario +='var art = $("#comentarioVariable1");';
+	pintaComentario +='$("#comentarioVariable").limiter(500, art);';		
+	pintaComentario +='</script>';
+	pintaComentario +='<br>Sólo se permiten archivos pdf, doc, txt y xls, de a lo más 2MB.';			
+	pintaComentario +='<input  style="float:left;" name="archivo" id="formatoFile" value = "CargarArchivo" type = "file" style="float: right;">';
+	pintaComentario +='<br><br>';
+	$("#divComentarios").empty();
+	$("#divComentarios").removeClass('ocultar');
+	$("#divComentarios").append(pintaComentario);
+	$("#divVariables").empty();
+	$("#divVariables").append(pintaVariables);
+	$("#divBotones").empty();		
+	$("#divBotones").append('<div class="btn-group" ><input class="btn btn-gris" type="submit" value="Guardar"></div>'); 		
+}
+
+
+function cargaVariablesEditar(idIndicador, idValorHistoricoIndicador, descPeriodo, fechaFinCaptura, idEnte){
+	//alert('Indicador'+idIndicador+' Ente'+idEnte);	
+		var url=base+'index.php/abcIndicadores/capturaVariablesIndicador_c/cargaDatosEditar/'+idIndicador+'/'+idValorHistoricoIndicador;
+	var datosEditar=$.ajax({
+		url:url,
+		type:'POST',
+		async:false
+		});
+	datos = datosEditar.responseText; // guarda los datos en la varibale "datos" que recibe del servidor
+	datosEditar.onreadystatechange = cargarNuevasVariablesEdicion(datos,idValorHistoricoIndicador,descPeriodo,fechaFinCaptura);
+}
+
+//Funcion que carga los valores cuando se trata de editar por parte del usuario Administrador
+function cargarNuevasVariablesEdicion(datos,idValorHistoricoIndicador,descPeriodo, fechaFinCaptura)
+{
+	jsonR=$.parseJSON(datos);
+	pintaVariables ='';
+	//pintaVariables +='<div id = "divVariables" class = "divVariables" align="left">';
+	pintaVariables +="<label><b>Variables Correspondientes al Periodo:</b></label><br>";
+	pintaVariables +='<input name = "idValorHistoricoActual" type="hidden" value="'+idValorHistoricoIndicador+'" >';
+	pintaVariables +='<label><b>'+descPeriodo+'</b></label>';
+	pintaVariables +='<input type = "hidden" name = "descPeriodo" value = "'+descPeriodo+'" >';
+	pintaVariables +='<input type = "hidden" name = "fechaFinCaptura" value = "'+fechaFinCaptura+'" >';
+	pintaVariables +='<table>';
+	for(variable in jsonR)
+	{				
+		comentario = jsonR[variable].comentario;
+		url = jsonR[variable].url;
+		
+		restricciones=obtenerRestricciones(variable);
+		pintaVariables +='<script>$("#restric'+variable+'").tooltip();</script>';
+		pintaVariables +='<tr>';
+		pintaVariables +='<td><label>';
+		pintaVariables +='<a href="#" id="restric'+variable+'" data-toggle="tooltip" data-html="true" title="'+restricciones+'">'+variable;
+    	pintaVariables +=') '+jsonR[variable].descripcionVariable+'</a><label></td>';
+    	if(jsonR[variable].valorConstante != null)
+    	{
+    		pintaVariables +='<td><input id = "valorVariable'+variable+'" name = "valorVariable['+jsonR[variable].idIndicadorVariable+']" readonly value = "'+jsonR[variable].valorConstante+'" type="number" step="any" min="-9999999999999" max="9999999999999" style="width: 100px" placeholder="Valor" required></td>';
+    		pintaVariables +='<input type = "hidden" name = "valorVariableEditar['+jsonR[variable].idValorHistoricoVariable+']"  value = "'+jsonR[variable].idIndicadorVariable+'">';
+    	}
+    	else
+    		if(jsonR[variable].valorVariable != null)
+    		{
+				pintaVariables +='<td><input id = "valorVariable'+variable+'" name = "valorVariable['+jsonR[variable].idIndicadorVariable+']" value = "'+jsonR[variable].valorVariable+'" type="number" step="any" min="-9999999999999" max="9999999999999" style="width: 100px" placeholder="Valor" required></td>';
+				pintaVariables +='<input type = "hidden" name = "valorVariableEditar['+jsonR[variable].idValorHistoricoVariable+']"  value = "'+jsonR[variable].idIndicadorVariable+'">';
+			}
+		pintaVariables +='</tr>';		
+		//pintaVariables +='</div>';		
+	}
+	pintaVariables +='</table>';
+	pintaComentario = ''; 
+	pintaComentario +='<label style="float:left;">Comentarios:</label>';
+	if(comentario != null)
+		pintaComentario +='<textarea id="comentarioVariable" name = "comentarioVariable" style="width: 450px;" rows="5" placeholder="Este campo no es obligatorio. Favor de llenarlo sólo si es necesaria alguna precisión sobre la información proporcionada.">'+comentario+'</textarea>';	
+	else
+		pintaComentario +='<textarea id="comentarioVariable" name = "comentarioVariable" style="width: 450px;" rows="5" placeholder="Este campo no es obligatorio. Favor de llenarlo sólo si es necesaria alguna precisión sobre la información proporcionada."></textarea>';
+	
+	pintaComentario +='<div id="comentarioVariable1" class="labelChar">500</div><div class="leyendaCampo">Caracteres restantes.</div>';
+	pintaComentario +='<script>';
+	pintaComentario +='var art = $("#comentarioVariable1");';
+	pintaComentario +='$("#comentarioVariable").limiter(500, art);';		
+	pintaComentario +='</script>';
+	pintaComentario +='<br>Sólo se permiten archivos pdf, doc, txt y xls, de a lo más 2MB.';
+	pintaComentario +='<input  style="float:left;" name="archivo" id="formatoFile" value = "CargarArchivo" type = "file" style="float: right;">';
+	pintaComentario +='<br><br>';
+	$("#divComentarios").empty();
+	$("#divComentarios").removeClass('ocultar');
+	$("#divComentarios").append(pintaComentario);
+	$("#divVariables").empty();
+	$("#divVariables").append(pintaVariables);
+	$("#divBotones").empty();
+	$("#divBotones").append('<input  type = "hidden" name ="guardarEdicion" value ="1"> ');
+	$("#divBotones").append('<div class="btn-group" ><input class="btn btn-gris" type="submit" value="Actualizar"></div>');
+	//$("#divBotones").append('<div class="btn-group" ><input class="btn btn-gris" type="submit" value="Actualizar"><a href="#" class = "btn btn-gris" onclick="cargarContenido(\''+base+'index.php/abcIndicadores/consultaIndicador_c/mostrarIndicadores\')">Regresar</a></div>'); 	
+
+}
+
+function obtenerRestricciones(variable)
+{
+		restriccion = '';
+		valorConstante = RESTRICCIONES[variable].valorConstante;
+		esReal = RESTRICCIONES[variable].esReal;
+		carga = RESTRICCIONES[variable].carga;
+		numeroDecimales = RESTRICCIONES[variable].numeroDecimales;
+		limiteSuperior = RESTRICCIONES[variable].limiteSuperior;
+		limiteInferior = RESTRICCIONES[variable].limiteInferior;
+		
+		if(valorConstante != null)
+		{
+			restriccion = 'Constante: '+valorConstante+'.<br>';
+		}
+		else
+		{
+			if (esReal != null)
+			{
+				if(esReal == '2')
+				{
+					restriccion += 'Solo números reales.<br>';
+				}
+				else
+					if(esReal == '3')
+					{
+						restriccion += 'Solo números enteros.<br>';
+					}
+			}
+			if(carga != null)
+			{
+				switch(carga)
+				{
+					case '2':
+						restriccion += 'Solo números positivos.<br>';
+						break;
+					case '3':
+						restriccion += 'Solo números negativos.<br>';
+						break;
+					default:
+						break;
+				}
+			}
+			if(numeroDecimales != null)
+			{
+				restriccion += 'Numero de decimales: '+numeroDecimales+'<br>';
+			}
+			if(limiteSuperior != null)
+			{
+				restriccion += 'Limite Superior: '+limiteSuperior+'<br>';
+			}	
+			if(limiteInferior != null)
+			{
+				restriccion += 'Limite Inferior: '+limiteInferior+'<br>';
+			}		
+		}
+	return restriccion;		
+}
+
+function validarContVariables()
+{	
+	if (confirm("Se guardarán los datos, ¿Desea continuar?") == true)
+	{ 
+		descErrores = '';
+		banderaError =0;
+		contComentario  = $('#comentarioVariable').val();
+		if(contComentario != '')
+			if (soloEspacios(contComentario))
+			{
+				if(banderaError == 0)
+					descErrores += 'Escribir valor valido en el comentario\n';
+				banderaError++;
+			}
+		
+		for(variable in RESTRICCIONES)
+		{
+			valorConstante = RESTRICCIONES[variable].valorConstante;
+			esReal = RESTRICCIONES[variable].esReal;
+			carga = RESTRICCIONES[variable].carga;
+			numeroDecimales = RESTRICCIONES[variable].numeroDecimales;
+			limiteSuperior = RESTRICCIONES[variable].limiteSuperior;
+			limiteInferior = RESTRICCIONES[variable].limiteInferior;
+			idInput = '#valorVariable'+variable;
+			
+			
+			valorVariable = $(idInput).val();
+			
+			if(agregarCeroIzquierda(valorVariable) != false)
+			{
+				nuevoValorVariable = agregarCeroIzquierda(valorVariable);
+				$(idInput).val(nuevoValorVariable);
+			}		
+			$(idInput).removeClass('bordeRojo');			
+			
+			//validarCeroIzquierdaPunto(valorVariable); //Valida si es decimal le pone un cero a la izquierda si no lo tiene antes del punto		
+			if(valorConstante == null)
+			{			
+				if(carga != null)
+				{
+					bandCarga = validarCarga(valorVariable, carga);// 0 si no hay errores en caso contrario el numero del error
+				//	alert(bandCarga);				
+					if(bandCarga != 0)
+					{
+						if(bandCarga == 2)
+						{
+							if(banderaError == 0)
+								descErrores +=  'Solo positivos para la variable: '+variable+'\n';
+							banderaError++;
+						}
+						else
+							if(bandCarga = 3)
+							{
+								if(banderaError == 0)
+									descErrores +=  'Solo negativos para la variable: '+variable+'\n';
+								banderaError++;
+							}
+								
+						$(idInput).addClass('bordeRojo');					
+					}
+				}
+				if(esReal != null)
+				{				
+					bandEntero = validarRealEntero(valorVariable, esReal);
+					if( bandEntero != 0)
+					{
+						if (bandEntero == 3)
+						{
+							if(banderaError == 0)
+								descErrores +=  'Solo enteros para la variable: '+variable+'\n';
+							banderaError++;
+						}
+							
+						$(idInput).addClass('bordeRojo');
+					}
+				}
+				if(numeroDecimales != null)
+				{				
+					bandDecimales = validarDecimales(valorVariable, numeroDecimales);
+					if(bandDecimales == 0) //No paso la validacion
+					{
+						if(banderaError == 0)
+							descErrores +=  'Error en el numero de decimales para la variable: '+variable+'\n';
+						banderaError++;	
+						
+						$(idInput).addClass('bordeRojo');
+					}
+				}
+				if(limiteSuperior != null)
+				{
+					bandLimiteSup = validarLimiteSup(valorVariable, limiteSuperior);
+					if( bandLimiteSup != 0)
+					{
+						if(banderaError == 0)
+							descErrores +=  'El valor excede el limite superior: Variable: '+variable+'\n';
+						banderaError++;
+						$(idInput).addClass('bordeRojo');
+					}
+				}
+				if(limiteInferior != null)
+				{
+					bandLimiteInf = validarLimiteInf(valorVariable, limiteInferior);
+					if(bandLimiteInf != 0)
+					{
+						if(banderaError == 0)
+							descErrores +=  'El valor introducido es menor que el valor permitido: Variable: '+variable+'\n';
+						banderaError++;
+						$(idInput).addClass('bordeRojo');
+					}
+				}
+				
+			}
+		}
+		
+		
+		if(descErrores == '')
+		{		
+			return true;
+		}
+		else
+		{
+			alerta(descErrores,'alert-error');
+			return false;
+		}
+    } 
+    else 
+    {
+        return false;
+    }
+}
+
+function validarLimiteSup(valorVariable, limiteSuperior)
+{
+	//alert('Entro a Supperio Valor: '+valorVariable+' '+limiteSuperior);
+	if(parseFloat(valorVariable) > parseFloat(limiteSuperior))
+		return 1;
+	else
+		return 0;
+}
+
+function validarLimiteInf(valorVariable, limiteInf)
+{
+	//alert('Entro a inferior Valor: '+valorVariable+' '+limiteInf);
+	if(parseFloat(valorVariable) < parseFloat(limiteInf))
+		return 1;
+	else
+		return 0;
+}
+
+function validarRealEntero(valorVariable, esReal)
+{
+	bandera = 0;
+	switch (esReal)
+	{
+		case '3'://entero
+			if(!esEntero(valorVariable))
+				bandera = 3;
+			break;
+		default:
+			break;
+	}
+	return bandera;
+}
+
+function validarCarga(valorVariable, carga)
+{
+	bandera = 0;
+	switch (carga)
+	{
+		case '2'://positivos
+			if(valorVariable < 0)
+				bandera = 2;
+			break;
+		case '3'://negativos
+			if(valorVariable >= 0)
+				bandera = 3;
+			break;
+		default:
+			break;
+	}
+	
+	return bandera;
+	
+}
+
+
+function validarDecimales(variable, numeroDecimales)
+{	
+
+	numDec = parseInt(numeroDecimales);
+	superior = variable.split(".");
+	
+	puntoSuperior = superior.length;
+
+	if( puntoSuperior > 1)
+	{
+		decSuperior = superior[1].length;    
+	}
+	else
+	{
+		decSuperior = 0;    
+	}
+
+	if(decSuperior > numDec)
+	{
+		return 0;		
+	}
+	else
+		return 1;
+}
+
+function agregarCeroIzquierda(valor)
+{
+	indicePunto = valor.indexOf(".");
+	
+	if(indicePunto == 0)//El punto esta al principio del numero
+	{
+		valor = '0'+valor;
+		return valor;
+	}
+	else
+		return false;
+	
+}
+
+function esEntero(x) {
+	entero = parseInt(x);
+	real = parseFloat(x);
+	 
+	if(entero  == real)
+		return 1;
+	else
+		return 0; 
+}
+
+function soloEspacios(objetivo)
+{
+	cadena = objetivo.trim();
+		if(cadena == '')
+			return true;
+		else
+			return false;
+}
+
+
