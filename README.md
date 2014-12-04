@@ -1,4 +1,4 @@
 panel_control
 =============
 
-dashboar para el gobierno del DF
+dashboard para el gobierno del DF
